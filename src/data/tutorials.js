@@ -1,0 +1,303 @@
+export const tutorials = [
+  {
+    id: 1,
+    title: "Macramé Wall Hanging",
+    description:
+      "Create a cozy bohemian macramé wall hanging using simple knots and natural cotton cords.",
+    video: "https://example.com/videos/macrame-wall-hanging.mp4",
+    products: [1, 2, 3, 4],
+    steps: [
+      {
+        stepNumber: 1,
+        title: "Prepare Materials",
+        description: "Cut cords and organize workspace.",
+      },
+      {
+        stepNumber: 2,
+        title: "Mount the Dowel",
+        description: "Attach cords using lark’s head knots.",
+      },
+      {
+        stepNumber: 3,
+        title: "Tie Square Knots",
+        description: "Make rows of square knots evenly.",
+      },
+      {
+        stepNumber: 4,
+        title: "Shape the Pattern",
+        description: "Form diamond shapes with alternating knots.",
+      },
+      {
+        stepNumber: 5,
+        title: "Finish with Fringe",
+        description: "Trim and brush the fringe for a soft finish.",
+      },
+    ],
+    creatorId: 1,
+    likes: 892,
+    dislikes: 12,
+    share: 134,
+    thumbnails: ["/images/tutorials/macrame-wall-hanging-thumb.jpg"],
+    comments: [
+      {
+        id: 1,
+        userId: 5,
+        text: "This was so relaxing to make!",
+        createdAt: "2025-04-01T15:00:00Z",
+        likes: 6,
+      },
+      {
+        id: 2,
+        userId: 3,
+        text: "Loved the color choices!",
+        createdAt: "2025-04-02T09:30:00Z",
+        likes: 3,
+      },
+    ],
+    reviews: [
+      {
+        id: 1,
+        userId: 5,
+        rating: 5,
+        title: "Great for beginners",
+        body: "Very clear and easy to follow.",
+      },
+    ],
+    createdAt: "2025-03-05T10:00:00Z",
+  },
+
+  {
+    id: 2,
+    title: "Rustic Coffee Table",
+    description:
+      "Learn to build a rustic wooden coffee table using simple tools and stain finishing.",
+    video: "https://example.com/videos/rustic-coffee-table.mp4",
+    products: [5, 6, 7, 8],
+    steps: [
+      {
+        stepNumber: 1,
+        title: "Cut Lumber",
+        description: "Measure and cut all wooden pieces.",
+      },
+      {
+        stepNumber: 2,
+        title: "Assemble Frame",
+        description: "Use screws to join legs and frame.",
+      },
+      {
+        stepNumber: 3,
+        title: "Attach Tabletop",
+        description: "Align boards and secure with nails.",
+      },
+      {
+        stepNumber: 4,
+        title: "Apply Stain",
+        description: "Brush on walnut stain evenly.",
+      },
+      {
+        stepNumber: 5,
+        title: "Seal the Surface",
+        description: "Finish with clear matte sealer.",
+      },
+    ],
+    creatorId: 2,
+    likes: 1304,
+    dislikes: 41,
+    share: 201,
+    thumbnails: ["/images/tutorials/rustic-coffee-table-thumb.jpg"],
+    comments: [
+      {
+        id: 3,
+        userId: 1,
+        text: "Turned out amazing, thanks!",
+        createdAt: "2025-04-04T10:00:00Z",
+        likes: 8,
+      },
+    ],
+    reviews: [
+      {
+        id: 2,
+        userId: 3,
+        rating: 5,
+        title: "Looks professional",
+        body: "Loved the simple step-by-step process.",
+      },
+    ],
+    createdAt: "2025-03-10T11:15:00Z",
+  },
+
+  {
+    id: 3,
+    title: "Paper Flower Bouquet",
+    description:
+      "Make beautiful paper flower bouquets perfect for gifts, weddings, or home décor.",
+    video: "https://example.com/videos/paper-flower-bouquet.mp4",
+    products: [9, 10, 11, 12],
+    steps: [
+      {
+        stepNumber: 1,
+        title: "Cut Petals",
+        description: "Use crepe paper to cut flower shapes.",
+      },
+      {
+        stepNumber: 2,
+        title: "Shape Petals",
+        description: "Curl and stretch for a realistic effect.",
+      },
+      {
+        stepNumber: 3,
+        title: "Attach Stems",
+        description: "Glue petals onto floral wire stems.",
+      },
+      {
+        stepNumber: 4,
+        title: "Bundle Flowers",
+        description: "Wrap finished flowers into a bouquet.",
+      },
+    ],
+    creatorId: 3,
+    likes: 642,
+    dislikes: 8,
+    share: 97,
+    thumbnails: ["/images/tutorials/paper-flower-bouquet-thumb.jpg"],
+    comments: [
+      {
+        id: 4,
+        userId: 4,
+        text: "Perfect wedding craft idea!",
+        createdAt: "2025-04-06T18:30:00Z",
+        likes: 9,
+      },
+    ],
+    reviews: [
+      {
+        id: 3,
+        userId: 1,
+        rating: 5,
+        title: "Beautiful and fun",
+        body: "My kids loved making these!",
+      },
+    ],
+    createdAt: "2025-03-20T09:45:00Z",
+  },
+
+  {
+    id: 4,
+    title: "Resin Keychain Art",
+    description:
+      "Create shiny personalized resin keychains with glitter, flowers, and initials.",
+    video: "https://example.com/videos/resin-keychain-art.mp4",
+    products: [16, 17, 18],
+    steps: [
+      {
+        stepNumber: 1,
+        title: "Mix Resin",
+        description: "Combine resin and hardener evenly.",
+      },
+      {
+        stepNumber: 2,
+        title: "Add Color",
+        description: "Mix in pigments or glitter flakes.",
+      },
+      {
+        stepNumber: 3,
+        title: "Pour Into Mold",
+        description: "Slowly pour to avoid bubbles.",
+      },
+      {
+        stepNumber: 4,
+        title: "Cure Overnight",
+        description: "Let resin set completely for 24 hours.",
+      },
+      {
+        stepNumber: 5,
+        title: "Attach Keyring",
+        description: "Drill small hole and insert metal ring.",
+      },
+    ],
+    creatorId: 4,
+    likes: 978,
+    dislikes: 19,
+    share: 154,
+    thumbnails: ["/images/tutorials/resin-keychain-thumb.jpg"],
+    comments: [
+      {
+        id: 5,
+        userId: 5,
+        text: "Turned out gorgeous with gold flakes!",
+        createdAt: "2025-04-07T14:20:00Z",
+        likes: 11,
+      },
+    ],
+    reviews: [
+      {
+        id: 4,
+        userId: 2,
+        rating: 5,
+        title: "Very creative",
+        body: "Easy to follow even for beginners.",
+      },
+    ],
+    createdAt: "2025-03-22T15:30:00Z",
+  },
+
+  {
+    id: 5,
+    title: "Candle Making for Beginners",
+    description:
+      "Learn to make scented soy candles with natural wax and essential oils.",
+    video: "https://example.com/videos/candle-making.mp4",
+    products: [19, 20, 21, 22],
+    steps: [
+      {
+        stepNumber: 1,
+        title: "Melt Wax",
+        description: "Heat soy wax flakes until fully melted.",
+      },
+      {
+        stepNumber: 2,
+        title: "Add Fragrance",
+        description: "Mix in your chosen essential oils.",
+      },
+      {
+        stepNumber: 3,
+        title: "Set Wicks",
+        description: "Place wicks in jars using glue dots.",
+      },
+      {
+        stepNumber: 4,
+        title: "Pour Wax",
+        description: "Carefully pour the mixture into jars.",
+      },
+      {
+        stepNumber: 5,
+        title: "Cool and Label",
+        description: "Let candles set for 24 hours before using.",
+      },
+    ],
+    creatorId: 2,
+    likes: 1210,
+    dislikes: 22,
+    share: 248,
+    thumbnails: ["/images/tutorials/candle-making-thumb.jpg"],
+    comments: [
+      {
+        id: 6,
+        userId: 3,
+        text: "Such a soothing hobby to pick up!",
+        createdAt: "2025-04-10T10:00:00Z",
+        likes: 7,
+      },
+    ],
+    reviews: [
+      {
+        id: 5,
+        userId: 5,
+        rating: 5,
+        title: "Loved it!",
+        body: "The scents are wonderful and easy to mix.",
+      },
+    ],
+    createdAt: "2025-03-25T12:00:00Z",
+  },
+];
