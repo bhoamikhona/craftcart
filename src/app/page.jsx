@@ -17,6 +17,11 @@ export default function Home() {
   // );
   return (
     <Container>
+      {/* <h1 className="text-3xl font-bold text-primary">
+        CraftCart Container Test
+      </h1>
+      <p>This text should be centered with padding on both sides.</p> */}
+
       <HeroSection />
       <FeaturesSection />
       <TutorialsCarousel />
