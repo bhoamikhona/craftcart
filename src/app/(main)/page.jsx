@@ -25,7 +25,7 @@ export default function Home() {
       <HeroSection />
       <FeaturesSection />
       <TutorialsCarousel />
-      <MarketplaceCarousel />
+      {/* <MarketplaceCarousel /> */}
       <CallToActionStrip />
     </Container>
   );
