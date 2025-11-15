@@ -17,7 +17,6 @@ export default function TutorialCarousel() {
     setIndex((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
-  // Calculate visible cards
   const visibleTutorials = tutorials.slice(
     index * ITEMS_PER_PAGE,
     index * ITEMS_PER_PAGE + ITEMS_PER_PAGE
@@ -32,7 +31,6 @@ export default function TutorialCarousel() {
 
         <div className="relative flex items-center justify-center">
 
-          {/* Left Arrow */}
           <button
             onClick={prevSlide}
             disabled={index === 0}
@@ -76,7 +74,6 @@ export default function TutorialCarousel() {
             ))}
           </div>
           
-          {/* Right Arrow */}
           <button
             onClick={nextSlide}
             disabled={index === maxIndex}

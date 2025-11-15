@@ -1,16 +1,15 @@
 "use client";
 import React from "react";
-import { tutorials } from "@/data/tutorials"; // update path if needed
+import { tutorials } from "@/data/tutorials"; 
 import { ArrowRight } from "lucide-react";
 
 export default function FeaturedSection() {
-  const featured = tutorials.slice(0, 3); // Pick top 3 featured tutorials
+  const featured = tutorials.slice(0, 3); 
 
   return (
-    <section className="py-16 bg-[var(--muted)]">
+    <section className="py-16 bg-muted">
       <div className="max-w-7xl mx-auto px-6">
         
-        {/* Heading */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-primary">Featured Tutorials</h2>
           <p className="text-gray-500 mt-2 text-lg">
@@ -18,7 +17,6 @@ export default function FeaturedSection() {
           </p>
         </div>
 
-        {/* Featured Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {featured.map((item) => (
             <div
