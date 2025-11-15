@@ -25,7 +25,7 @@ export default function FeaturedSection() {
               key={item.id}
               className="group bg-card-bg border border-border rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition hover:-translate-y-1"
             >
-              <div className="h-48 w-full overflow-hidden">
+              <div className="aspect-video w-full overflow-hidden">
                 {/* <img
                   src={item.thumbnails[0]}
                   alt={item.title}

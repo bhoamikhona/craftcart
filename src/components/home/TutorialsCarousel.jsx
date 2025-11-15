@@ -50,7 +50,7 @@ export default function TutorialCarousel() {
                 key={tut.id}
                 className="bg-white rounded-xl shadow hover:shadow-lg transition p-4 border border-gray-100"
               >
-                <div className="w-full h-48 bg-gray-200 rounded-lg overflow-hidden mb-4">
+                <div className="w-full aspect-video bg-gray-200 rounded-lg overflow-hidden mb-4">
                   {/* <img
                     src={tut.thumbnails[0]}
                     alt={tut.title}
@@ -75,7 +75,7 @@ export default function TutorialCarousel() {
               </div>
             ))}
           </div>
-
+          
           {/* Right Arrow */}
           <button
             onClick={nextSlide}
