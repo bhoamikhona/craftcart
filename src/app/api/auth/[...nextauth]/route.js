@@ -14,6 +14,9 @@ const handler = NextAuth({
       async authorize(credentials) {
         const { email, password } = credentials;
 
+        // Debug logs
+        console.log("Credentials received:", credentials);
+
         // 1. Look for the user in Supabase
         const { data: user, error } = await supabase
           .from("users")
@@ -21,19 +24,27 @@ const handler = NextAuth({
           .eq("email", email)
           .single();
 
-        // If email not found, login fails
+        // Debug logs
+        console.log("Supabase user found:", user);
+        console.log("Supabase error:", error);
+
+        // If email not found
         if (!user) {
+          console.log("No user found with this email");
           return null;
         }
 
-        // 2. Compare passwords (plain text for midterm project)
+        // 2. Compare passwords 
         if (user.password !== password) {
+          console.log("Password incorrect");
           return null;
         }
 
-        // 3. Login success,  return this user info
+        console.log("Login successful");
+
+        // 3. Login success 
         return {
-          id: user.id,
+          id: user.user_id,       
           name: user.name,
           email: user.email,
         };
