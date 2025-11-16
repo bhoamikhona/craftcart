@@ -1,36 +1,66 @@
+import supabase from "@/lib/supabaseClient";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const handler = NextAuth ({
-    providers: [
-        CredentialsProvider({
-            name: "Credentials",
-            credentials: {
-                email:{labale: "Email", type: "email"},
-                password: {lable: "Password", type: "password"},
-            },
-            async authorize(credentials){
-                const {email, password} = credentials;
+const handler = NextAuth({
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
 
-                //must be replaced with our real database:
-                if(email === "test@example.com" && password === "123456"){
-                    return{ id: 1, name: "Test User", email: "test@example.com"};
-                }
-                // if there is nothing matched the login will fail
-                return null;
-            },
-        }),
-    ],
+      async authorize(credentials) {
+        const { email, password } = credentials;
 
-    pages: {
-        signIn: "/login",
-    },
+        // Debug logs
+        console.log("Credentials received:", credentials);
 
-    sessions: {
-        strategy: "jwt",
-    },
+        // 1. Look for the user in Supabase
+        const { data: user, error } = await supabase
+          .from("users")
+          .select("*")
+          .eq("email", email)
+          .single();
 
-    secret: process.env.NEXTAUTH_SECRET,
+        // Debug logs
+        console.log("Supabase user found:", user);
+        console.log("Supabase error:", error);
+
+        // If email not found
+        if (!user) {
+          console.log("No user found with this email");
+          return null;
+        }
+
+        // 2. Compare passwords 
+        if (user.password !== password) {
+          console.log("Password incorrect");
+          return null;
+        }
+
+        console.log("Login successful");
+
+        // 3. Login success 
+        return {
+          id: user.user_id,       
+          name: user.name,
+          email: user.email,
+        };
+      },
+    }),
+  ],
+
+  pages: {
+    signIn: "/login",
+  },
+
+  session: {
+    strategy: "jwt",
+  },
+
+  secret: process.env.NEXTAUTH_SECRET,
 });
 
-export {handler as GET, handler as POST};
+export { handler as GET, handler as POST };
