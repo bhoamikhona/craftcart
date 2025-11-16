@@ -2,6 +2,8 @@
 import React from "react";
 import { tutorials } from "@/data/tutorials"; 
 import { ArrowRight } from "lucide-react";
+import { HeartIcon, ChatBubbleLeftIcon } from "@heroicons/react/24/solid";
+
 
 export default function FeaturedSection() {
   const featured = tutorials.slice(0, 3); 
@@ -21,7 +23,12 @@ export default function FeaturedSection() {
           {featured.map((item) => (
             <div
               key={item.id}
-              className="group bg-card-bg border border-border rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition hover:-translate-y-1"
+              className="w-96
+                        group bg-card-bg rounded-2xl overflow-hidden
+                        shadow-[0_2.4rem_4.8rem_rgba(0,0,0,0.075)]
+                        transition-all duration-400
+                        hover:-translate-y-3
+                        hover:shadow-[0_3.2rem_6.4rem_rgba(0,0,0,0.06)]"
             >
               <div className="aspect-video w-full overflow-hidden">
                 {/* <img
@@ -32,7 +39,7 @@ export default function FeaturedSection() {
                 <img
                   src='https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?w=800 '
                   alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition"
+                  className="w-full aspect-video object-cover rounded-xl group-hover:scale-105 transition"
                 />
               </div>
 
@@ -43,10 +50,17 @@ export default function FeaturedSection() {
                 </p>
 
                 <div className="flex items-center justify-between">
-                  <div className="text-sm text-gray-400">
-                    ❤️ {item.likes} • 💬 {item.comments.length}
-                  </div>
+                  <div className="flex items-center gap-4 text-gray-400 text-sm">
+                    <span className="flex items-center gap-1">
+                      <HeartIcon className="w-5 h-5" />
+                      {item.likes}
+                    </span>
 
+                    <span className="flex items-center gap-1">
+                      <ChatBubbleLeftIcon className="w-5 h-5" />
+                      {item.comments.length}
+                    </span>
+                  </div>
                   <a
                     href='#'
                     className="flex items-center gap-1 text-primary font-medium hover:underline"
