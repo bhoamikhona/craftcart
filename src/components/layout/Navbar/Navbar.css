@@ -1,9 +1,16 @@
+.external__container {
+  background-color: #fdf2e9;
+}
+
 /* NAV CONTAINER */
 .nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   /* padding: 1rem 3rem; */
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+  background-color: #fdf2e9;
 }
 
 /* NAV LEFT */

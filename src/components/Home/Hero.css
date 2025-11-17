@@ -1,0 +1,37 @@
+.section__hero {
+  background-color: #fdf2e9;
+  padding: 4.8rem 0 9.6rem 0;
+}
+
+.hero {
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 0 3.2rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9.6rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero__heading {
+  margin-bottom: 3.2rem;
+}
+
+.hero__description {
+  font-size: 2rem;
+  line-height: 1.6;
+  margin-bottom: 4.8rem;
+}
+
+.hero__img-container {
+  width: 44rem;
+  height: 44rem;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  justify-self: flex-end;
+}
+
+.hero-img {
+  width: 100%;
+}

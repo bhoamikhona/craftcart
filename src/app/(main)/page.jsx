@@ -1,7 +1,9 @@
+import Hero from "@/components/Home/Hero.jsx";
+
 export default function Home() {
   return (
     <div>
-      <div>Welcome to CraftCart!</div>
+      <Hero />
     </div>
   );
 }
