@@ -1,0 +1,37 @@
+/* NAV CONTAINER */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 3rem;
+}
+
+/* NAV LEFT */
+.nav__logo {
+  font-size: 4.2rem;
+  color: var(--accent);
+}
+
+/* NAV RIGHT */
+.nav__list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+
+  list-style: none;
+}
+
+.nav__link:link,
+.nav__link:visited {
+  text-decoration: none;
+  color: var(--dark-grey);
+  font-size: 1.8rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nav__link:hover,
+.nav__link:active {
+  color: var(--accent);
+}
