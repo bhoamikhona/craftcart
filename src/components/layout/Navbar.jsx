@@ -21,15 +21,19 @@ function Navbar() {
         <div className="hidden md:flex space-x-8 justify-center flex-1">
 
           <ul className="flex space-x-8 font-medium w-full justify-center">
-          <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
-              Watch
-          </li>
-          <Link href="/marketplace" passHref legacyBehavior>
-              <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
-                  Marketplace
-              </li>
-          </Link>
-            {/* <li className="hover:text-primary cursor-pointer">Workshops</li></Link> */}
+    
+        <li className="text-[var(--foreground)] hover:text-primary cursor-pointer transition-colors">
+            Watch
+        </li>
+    {/* Marketplace Link (Connects to /marketplace page) */}
+    <Link href="/marketplace" passHref >
+        {/* Marketplace Link: Default color is text-foreground, only primary on hover */}
+        <li className="text-[var(--foreground)] hover:text-primary cursor-pointer transition-colors">
+            Marketplace
+        </li>
+    </Link>
+    
+      {/* <li className="hover:text-primary cursor-pointer">Workshops</li></Link> */}
             {/* <li className="hover:text-primary cursor-pointer">Sell</li></Link> */}
           </ul>
         </div>
