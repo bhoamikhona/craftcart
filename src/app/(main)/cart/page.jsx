@@ -5,6 +5,7 @@ import CartSummary from "@/components/cart/CartSummary.jsx";
 export default function Cart() {
   <Container>
     <CartList />
+    CARTTTTTT
     <CartSummary />
   </Container>;
 }
