@@ -20,7 +20,7 @@ export default function Testimonials() {
             we needed. From candle making to simple home décor, we’ve created
             things we’re actually proud of! Such a warm and inspiring platform.
           </blockquote>
-          <p class="testimonial-author">— Mary and Sarah Johnson</p>
+          <p className="testimonial-author">— Mary and Sarah Johnson</p>
         </div>
       </div>
     </section>
