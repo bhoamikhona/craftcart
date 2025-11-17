@@ -34,7 +34,7 @@ const handler = NextAuth({
           return null;
         }
 
-        // 2. Compare passwords 
+        // 2. Compare passwords
         if (user.password !== password) {
           console.log("Password incorrect");
           return null;
@@ -42,11 +42,12 @@ const handler = NextAuth({
 
         console.log("Login successful");
 
-        // 3. Login success 
+        // 3. Login success
         return {
-          id: user.user_id,       
+          id: user.user_id,
           name: user.name,
           email: user.email,
+          avatar_url: user.avatar_url || null,
         };
       },
     }),
@@ -59,7 +60,23 @@ const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.name = user.name;
+        token.email = user.email;
+        token.avatar_url = user.avatar_url; //  added
+      }
+      return token;
+    },
 
+    async session({ session, token }) {
+      session.user.name = token.name;
+      session.user.email = token.email;
+      session.user.avatar_url = token.avatar_url; // added
+      return session;
+    },
+  },
   secret: process.env.NEXTAUTH_SECRET,
 });
 
