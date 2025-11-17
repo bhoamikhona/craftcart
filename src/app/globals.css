@@ -99,7 +99,7 @@ body {
 
 .btn--full:link,
 .btn--full:visited {
-  background-color: #e67e22;
+  background-color: var(--accent);
   color: #fff;
 }
 
@@ -137,7 +137,7 @@ body {
 .link:link,
 .link:visited {
   display: inline-block;
-  color: #e67e22;
+  color: var(--accent);
   text-decoration: none;
   border-bottom: 1px solid currentColor;
   padding-bottom: 2px;
