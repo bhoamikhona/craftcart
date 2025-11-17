@@ -40,10 +40,21 @@
 .video:hover > .video__details {
   padding: 0 2rem 1.5rem;
 }
+
+.video:hover > .video__link {
+  color: var(--accent);
+}
+
 .video__link:link,
 .video__link:visited {
   text-decoration: none;
   color: inherit;
+  transition: all 0.3s ease;
+}
+
+.video__link:hover,
+.video__title:active {
+  color: var(--accent);
 }
 
 .video__title {

@@ -1,4 +1,5 @@
 import "./Products.css";
+import Link from "next/link.js";
 
 const productsData = [
   {
@@ -42,7 +43,9 @@ function Product({ name, price, img }) {
       </div>
       <div className="product__details">
         <div className="product__details-left">
-          <h3 className="product__title">{name}</h3>
+          <Link href="/" className="product__link">
+            <h3 className="product__title">{name}</h3>
+          </Link>
           <p className="product__price">${price.toFixed(2)}</p>
         </div>
         <div className="product__details-right">

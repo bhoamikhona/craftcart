@@ -32,3 +32,15 @@
   font-weight: 700;
   color: #767676;
 }
+
+.product__link:link,
+.product__link:visited {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.product__link:hover,
+.product__title:active {
+  color: var(--accent);
+}
