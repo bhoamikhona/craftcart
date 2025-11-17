@@ -26,15 +26,18 @@ const featuresData = [
 
 export default function Features() {
   return (
-    <section className="section__features grid grid__3-cols">
-      {featuresData.map((f) => (
-        <Feature
-          key={f.title}
-          icon={f.icon}
-          title={f.title}
-          description={f.description}
-        />
-      ))}
+    <section className="section__features ">
+      <h2 className="section__title">What makes craftcart special</h2>
+      <div className="grid grid__3-cols">
+        {featuresData.map((f) => (
+          <Feature
+            key={f.title}
+            icon={f.icon}
+            title={f.title}
+            description={f.description}
+          />
+        ))}
+      </div>
     </section>
   );
 }

@@ -80,6 +80,12 @@ body {
   grid-template-columns: repeat(5, 1fr);
 }
 
+.section__title {
+  margin-bottom: 48px;
+  font-size: 36px;
+  letter-spacing: -0.5px;
+}
+
 .btn,
 .btn:link,
 .btn:visited {
