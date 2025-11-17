@@ -4,29 +4,21 @@
 import React, { useState, useEffect } from 'react';
 import { Filter, DollarSign, Tag, CheckSquare, Layers, Zap, X } from 'lucide-react';
 
-const CATEGORY_OPTIONS = [
-    'All Crafts', 'Craft Supplies', 'Woodworking', 'Tools', 'Resin Art', 'Candle Making' 
-];
-const TYPE_OPTIONS = [
-    'All', 'Supply', 'Finished Craft', 'Digital Kit' 
-];
-const SKILL_OPTIONS = [
-    'All', 'Beginner', 'Intermediate', 'Advanced'
-];
+const TYPE_OPTIONS = ['All', 'Supply', 'Finished Craft', 'Digital Kit'];
+const SKILL_OPTIONS = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
-const SidebarFilter = ({ currentFilters, onFilterChange }) => {
+// 🎯 Ensure categoryOptions is included in props 🎯
+const SidebarFilter = ({ currentFilters, onFilterChange, categoryOptions }) => { 
     const [localFilters, setLocalFilters] = useState(currentFilters);
-    const [priceInputChanged, setPriceInputChanged] = useState(false); // New state for price application
+    const [priceInputChanged, setPriceInputChanged] = useState(false); 
 
     useEffect(() => {
-        // Synchronize local state with external state (used for resetting filters)
         setLocalFilters(currentFilters);
     }, [currentFilters]);
 
-    // Function to apply filters to the parent component (MarketplacePage)
     const applyFilters = (newFilters) => {
         onFilterChange(newFilters);
-        setPriceInputChanged(false); // Reset price state after applying
+        setPriceInputChanged(false); 
     };
 
     const handleChange = (e) => {
@@ -38,9 +30,8 @@ const SidebarFilter = ({ currentFilters, onFilterChange }) => {
         } else if (type === 'radio') {
             newValue = value;
         } else {
-            // Price inputs
             newValue = type === 'number' ? parseFloat(value) : value;
-            setPriceInputChanged(true); // Flag that price inputs are dirty
+            setPriceInputChanged(true);
         }
 
         const updatedFilters = {
@@ -50,15 +41,16 @@ const SidebarFilter = ({ currentFilters, onFilterChange }) => {
         
         setLocalFilters(updatedFilters);
         
-        // --- 🎯 Instant Feedback Logic ---
-        // Apply changes immediately for radio buttons and checkboxes (smooth UX)
+        // 🎯 INSTANT APPLY: Only for radio and checkbox changes 🎯
         if (type === 'radio' || type === 'checkbox') {
-            applyFilters(updatedFilters);
+            // Apply only if the change is NOT price (handled by dedicated button)
+            if (name !== 'priceMin' && name !== 'priceMax') {
+                applyFilters(updatedFilters);
+            }
         }
     };
 
     const handleApplyPrice = () => {
-        // Apply only when the dedicated price button is pressed
         applyFilters(localFilters);
     };
 
@@ -70,7 +62,6 @@ const SidebarFilter = ({ currentFilters, onFilterChange }) => {
     };
 
     const FilterSection = ({ title, children, icon: Icon }) => (
-        // Use last:border-b-0 to remove the border on the final section
         <div className="border-b border-[var(--border-color)] py-6 last:border-b-0">
             <h3 className="flex items-center text-lg font-bold text-[var(--foreground)] mb-4">
                 <Icon className="w-5 h-5 mr-2 text-[var(--primary)]" />
@@ -82,12 +73,13 @@ const SidebarFilter = ({ currentFilters, onFilterChange }) => {
 
     const renderRadioGroup = (name, options) => (
         <div className="space-y-2">
-            {options.map(option => (
+            {/* 🎯 FIX APPLIED HERE: Ensure options is an array before mapping 🎯 */}
+            {(options || []).map(option => ( 
                 <div 
                     key={option} 
-                    className={`flex items-center p-2 rounded-lg transition-colors 
-                                ${localFilters[name] === option ? 'bg-[var(--muted)]' : 'hover:bg-gray-50 cursor-pointer'}`}
                     onClick={() => handleChange({ target: { name, value: option, type: 'radio' } })}
+                    className={`flex items-center p-2 rounded-lg transition-colors cursor-pointer
+                                ${localFilters[name] === option ? 'bg-[var(--muted)]' : 'hover:bg-gray-50'}`}
                 >
                     <input
                         id={`${name}-${option}`}
@@ -95,10 +87,10 @@ const SidebarFilter = ({ currentFilters, onFilterChange }) => {
                         type="radio"
                         value={option}
                         checked={localFilters[name] === option}
-                        onChange={handleChange} // onChange is still required for accessibility/forms
+                        onChange={handleChange} 
                         className="h-4 w-4 text-[var(--primary)] border-[var(--border-color)] focus:ring-[var(--primary)] cursor-pointer"
                     />
-                    <label htmlFor={`${name}-${option}`} className="ml-3 text-sm text-[var(--foreground)] cursor-pointer select-none">
+                    <label htmlFor={`${name}-${option}`} className="ml-3 text-sm text-[var(--foreground)] select-none cursor-pointer">
                         {option}
                     </label>
                 </div>
@@ -107,13 +99,13 @@ const SidebarFilter = ({ currentFilters, onFilterChange }) => {
     );
 
     return (
-        <div className="card sticky top-4 p-6 shadow-2xl"> {/* Enhanced Shadow */}
+        <div className="card sticky top-4 p-6 shadow-2xl">
             <h2 className="flex items-center text-2xl font-extrabold text-[var(--foreground)] mb-8 border-b pb-3 border-[var(--border-color)]">
                 <Filter className="w-6 h-6 mr-3 text-[var(--primary)]" />
                 Refine Your Craft
             </h2>
 
-            {/* Price Range Filter (Requires manual apply) */}
+            {/* Price Range Filter */}
             <FilterSection title="Price Range" icon={DollarSign}>
                 <div className="space-y-4">
                     <div className="flex justify-between items-center text-sm font-semibold text-[var(--primary)]">
@@ -124,26 +116,14 @@ const SidebarFilter = ({ currentFilters, onFilterChange }) => {
                     <div className="flex space-x-2">
                         {/* Min Price Input */}
                         <input
-                            type="number"
-                            id="priceMin"
-                            name="priceMin"
-                            min="0"
-                            max={localFilters.priceMax}
-                            value={localFilters.priceMin}
-                            onChange={handleChange}
-                            placeholder="Min"
+                            type="number" id="priceMin" name="priceMin" min="0" max={localFilters.priceMax} 
+                            value={localFilters.priceMin} onChange={handleChange} placeholder="Min"
                             className="w-1/2 border border-[var(--border-color)] rounded-md p-2 text-sm focus:ring-1 focus:ring-[var(--primary)] focus:border-[var(--primary)] transition-shadow"
                         />
                         {/* Max Price Input */}
                         <input
-                            type="number"
-                            id="priceMax"
-                            name="priceMax"
-                            min={localFilters.priceMin}
-                            max="1000"
-                            value={localFilters.priceMax}
-                            onChange={handleChange}
-                            placeholder="Max"
+                            type="number" id="priceMax" name="priceMax" min={localFilters.priceMin} max="1000" 
+                            value={localFilters.priceMax} onChange={handleChange} placeholder="Max"
                             className="w-1/2 border border-[var(--border-color)] rounded-md p-2 text-sm focus:ring-1 focus:ring-[var(--primary)] focus:border-[var(--primary)] transition-shadow"
                         />
                     </div>
@@ -152,8 +132,7 @@ const SidebarFilter = ({ currentFilters, onFilterChange }) => {
                 {/* Dedicated Apply Button for Price */}
                 <div className="mt-4">
                     <button
-                        onClick={handleApplyPrice}
-                        disabled={!priceInputChanged}
+                        onClick={handleApplyPrice} disabled={!priceInputChanged}
                         className={`w-full text-sm font-medium rounded-lg px-4 py-2 transition-all 
                                     ${priceInputChanged ? 'btn-primary' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
                     >
@@ -162,30 +141,29 @@ const SidebarFilter = ({ currentFilters, onFilterChange }) => {
                 </div>
             </FilterSection>
 
-            {/* Category Filter (Instant Apply) */}
+            {/* Category Filter */}
             <FilterSection title="Project Category" icon={Tag}>
-                {renderRadioGroup('category', CATEGORY_OPTIONS)}
+                {/* 🎯 FIX APPLIED HERE 🎯 */}
+                {renderRadioGroup('category', categoryOptions)} 
             </FilterSection>
 
-            {/* Product Type Filter (Future Ready - Instant Apply) */}
+            {/* Product Type Filter (Future Ready) */}
             <FilterSection title="Type" icon={Layers}>
                 {renderRadioGroup('productType', TYPE_OPTIONS)}
             </FilterSection>
 
-            {/* Skill Level Filter (Future Ready - Instant Apply) */}
+            {/* Skill Level Filter (Future Ready) */}
             <FilterSection title="Skill Level" icon={Zap}>
                 {renderRadioGroup('skillLevel', SKILL_OPTIONS)}
             </FilterSection>
 
-            {/* In Stock Filter (Instant Apply) */}
+            {/* In Stock Filter */}
             <FilterSection title="Availability" icon={CheckSquare}>
-                <div className="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                <div className="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                     onClick={() => handleChange({ target: { name: 'inStock', checked: !localFilters.inStock, type: 'checkbox' } })}>
                     <input
-                        id="inStock"
-                        name="inStock"
-                        type="checkbox"
-                        checked={localFilters.inStock}
-                        onChange={handleChange}
+                        id="inStock" name="inStock" type="checkbox" checked={localFilters.inStock} 
+                        onChange={handleChange} // Keep this for standard form updates
                         className="h-4 w-4 rounded text-[var(--primary)] border-[var(--border-color)] focus:ring-[var(--primary)] cursor-pointer"
                     />
                     <label htmlFor="inStock" className="ml-3 text-sm text-[var(--foreground)] select-none cursor-pointer">

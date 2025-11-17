@@ -1,7 +1,7 @@
 // File: src/app/(main)/marketplace/page.jsx
 
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Container from '@/components/layout/Container';
 import ProductCard from '@/components/marketplace/ProductCard'; 
 import SidebarFilter from '@/components/marketplace/SidebarFilter';
@@ -12,7 +12,8 @@ const fetchProducts = async (filters) => {
     await new Promise(resolve => setTimeout(resolve, 300)); 
     let filtered = [...mockProducts];
 
-    // --- MOCK FILTERING LOGIC ---
+    // --- MOCK FILTERING LOGIC (Must run before sorting) ---
+    // ... (Your existing filtering logic remains here) ...
     if (filters.search) {
         const query = filters.search.toLowerCase();
         filtered = filtered.filter(p => 
@@ -29,8 +30,23 @@ const fetchProducts = async (filters) => {
     }
     filtered = filtered.filter(p => p.price >= filters.priceMin && p.price <= filters.priceMax);
 
-    // SORTING (Remaining logic omitted for brevity, assume it works)
 
+    // 🎯 FIX: Implement Sorting Logic 🎯
+    if (filters.sort === 'priceAsc') {
+        // Sort by price ascending (Low to High)
+        filtered.sort((a, b) => a.price - b.price);
+    } else if (filters.sort === 'priceDesc') {
+        // Sort by price descending (High to Low)
+        filtered.sort((a, b) => b.price - a.price);
+    } else if (filters.sort === 'popular') {
+        // Sort by popularity (using reviewCount)
+        filtered.sort((a, b) => b.reviewCount - a.reviewCount); 
+    } else if (filters.sort === 'latest') {
+        // Sort by latest (using createdAt timestamp)
+        filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+    
+    // PAGINATION
     const start = (filters.page - 1) * filters.limit;
     const end = start + filters.limit;
     const paginated = filtered.slice(start, end);
@@ -60,6 +76,29 @@ const MarketplacePage = () => {
         limit: 12
     });
     const [totalPages, setTotalPages] = useState(1);
+    
+    // 🎯 FIX: Calculate Dynamic Categories from mockProducts 🎯
+    const CATEGORY_OPTIONS = useMemo(() => {
+        // Safe check for mockProducts array during build/initial load
+        if (!mockProducts || mockProducts.length === 0) return ['All Crafts']; 
+        
+        const categories = new Set();
+        mockProducts.forEach(product => {
+            if (product.category) {
+                categories.add(product.category);
+            }
+        });
+        
+        const uniqueCategories = Array.from(categories).sort();
+        
+        // Ensure 'All Crafts' is included and first
+        if (uniqueCategories.includes('All Crafts')) {
+            const index = uniqueCategories.indexOf('All Crafts');
+            uniqueCategories.splice(index, 1);
+        }
+        
+        return ['All Crafts', ...uniqueCategories];
+    }, [mockProducts]);
 
     useEffect(() => {
         const loadProducts = async () => {
@@ -107,7 +146,11 @@ const MarketplacePage = () => {
         if (filters.category && filters.category !== 'All Crafts') active.push({ key: 'category', label: `Category: ${filters.category}`, resetValue: 'All Crafts' });
         if (filters.inStock) active.push({ key: 'inStock', label: 'In Stock Only', resetValue: false });
         if (filters.priceMin > 0 || filters.priceMax < 1000) active.push({ key: 'priceMax', label: `Price: $${filters.priceMin} - $${filters.priceMax}`, resetValue: filters.priceMax });
-        // Include productType/skillLevel if they were used (placeholders)
+        
+        // Placeholder for future filters:
+        if (filters.productType && filters.productType !== 'All') active.push({ key: 'productType', label: `Type: ${filters.productType}`, resetValue: 'All' });
+        if (filters.skillLevel && filters.skillLevel !== 'All') active.push({ key: 'skillLevel', label: `Skill: ${filters.skillLevel}`, resetValue: 'All' });
+
         return active;
     };
 
@@ -155,6 +198,8 @@ const MarketplacePage = () => {
                         <SidebarFilter 
                             currentFilters={filters}
                             onFilterChange={handleFilterChange}
+                            // 🎯 FIX: Pass the CATEGORY_OPTIONS array 🎯
+                            categoryOptions={CATEGORY_OPTIONS} 
                         />
                     </div>
 
