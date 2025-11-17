@@ -1,4 +1,5 @@
 import "./globals.css";
+import Providers from "./providers"; 
 
 export const metadata = {
   title: "CraftCart",
@@ -9,7 +10,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="app-body">
-        <main className="app-main">{children}</main>
+        <Providers>   
+          <main className="app-main">{children}</main>
+        </Providers>
       </body>
     </html>
   );
