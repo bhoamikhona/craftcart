@@ -3,10 +3,10 @@ import "./Navbar.css";
 
 export default function Navbar() {
   return (
-    <nav className="nav">
+    <nav className="container nav">
       <div className="nav__left">
         <div className="nav__logo-container">
-          <h1 className="nav__logo">craftcart</h1>
+          <h3 className="nav__logo">craftcart</h3>
         </div>
       </div>
       <div className="nav__right">

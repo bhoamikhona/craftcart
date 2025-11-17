@@ -5,6 +5,7 @@
   --black: #000;
   --white: #fff
   --dark-grey: #333;
+  --light-grey: #767676;
   --accent: #ff751f;
 }
 
@@ -36,4 +37,36 @@ body {
 .h3 {
   font-size: 3.2rem;
   font-weight: 700;
+}
+
+.container {
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 0 3.2rem;
+}
+
+.grid {
+  display: grid;
+  row-gap: 9.6rem;
+  column-gap: 6.4rem;
+}
+
+.grid:not(:last-child) {
+  margin-bottom: 9.6rem;
+}
+
+.grid__2-cols {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid__3-cols {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid__4-cols {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid__5-cols {
+  grid-template-columns: repeat(5, 1fr);
 }
