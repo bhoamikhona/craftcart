@@ -86,6 +86,16 @@ body {
   letter-spacing: -0.5px;
 }
 
+.btn--primary {
+  background-color: var(--accent);
+  color: var(--white);
+}
+
+.btn--primary:hover {
+  background-color: #cf711f;
+  color: var(--white);
+}
+
 .btn,
 .btn:link,
 .btn:visited {
@@ -138,6 +148,11 @@ body {
 .btn--form:hover {
   background-color: #fff;
   color: #555;
+}
+
+.btn--sm {
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
 }
 
 .link:link,
