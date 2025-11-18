@@ -54,12 +54,12 @@ export default function Footer() {
           <p className="footer__heading">Account</p>
           <ul className="footer__nav">
             <li>
-              <Link className="footer__link" href="/">
+              <Link className="footer__link" href="/register">
                 Create Account
               </Link>
             </li>
             <li>
-              <Link className="footer__link" href="/">
+              <Link className="footer__link" href="/login">
                 Sign In
               </Link>
             </li>
