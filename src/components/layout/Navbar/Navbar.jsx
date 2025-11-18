@@ -18,7 +18,7 @@ export default function Navbar() {
               </Link>
             </li>
             <li className="nav__list-item">
-              <Link href="/" className="nav__link">
+              <Link href="/videos" className="nav__link">
                 Videos
               </Link>
             </li>

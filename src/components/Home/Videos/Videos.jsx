@@ -1,4 +1,4 @@
-import Link from "next/link.js";
+import Video from "../../Helpers/Video/Video.jsx";
 import "./Videos.css";
 
 const videoData = [
@@ -45,24 +45,5 @@ export default function Videos() {
         ))}
       </div>
     </section>
-  );
-}
-
-function Video({ src, user, title, views, date }) {
-  return (
-    <article className="video">
-      <div className="video__container">
-        <img src={src} alt={title} className="video__thumbnail" />
-      </div>
-      <div className="video__details">
-        <Link href="/" className="video__link">
-          <h3 className="video__title">{title}</h3>
-        </Link>
-        <p className="video__user">{user}</p>
-        <p className="video__stats">
-          {views} • {date}
-        </p>
-      </div>
-    </article>
   );
 }
