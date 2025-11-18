@@ -28,7 +28,13 @@ export default function Products() {
       <h2 className="section__title">Our bestselling products</h2>
       <div className="grid grid__3-cols">
         {productsData.map((p) => (
-          <Product key={p.id} name={p.name} price={p.price} img={p.img} />
+          <Product
+            key={p.id}
+            id={p.id}
+            name={p.name}
+            price={p.price}
+            img={p.img}
+          />
         ))}
       </div>
     </section>
