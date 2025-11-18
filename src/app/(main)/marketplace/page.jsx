@@ -182,15 +182,35 @@ const MarketplacePage = () => {
             <div className="pt-8 md:pt-12 pb-12">
                 
                 {/* GLOBAL SEARCH BAR - Prominent Marketplace Feature */}
-                <div className="mb-8 p-4 rounded-xl border-2 border-[var(--border-color)] bg-[var(--card-bg)] shadow-md">
-                    <input
-                        type="search"
-                        placeholder="Search for supplies, kits, or finished crafts..."
-                        value={filters.search}
-                        onChange={(e) => handleFilterChange({ search: e.target.value })}
-                        className="w-full text-lg border-none focus:ring-0 text-[var(--foreground)] bg-transparent placeholder-[var(--foreground)] opacity-60"
-                    />
-                </div>
+                {/* File: src/app/(main)/marketplace/page.jsx (Inside the return statement) */}
+
+<div className="mb-8 p-4 rounded-xl border-2 border-[var(--border-color)] bg-[var(--card-bg)] shadow-xl transition-shadow duration-300 hover:shadow-2xl">
+    <div className="flex items-center">
+        {/* Optional: Add a Search Icon for visual cue */}
+        <svg className="w-6 h-6 text-[var(--primary)] opacity-70 mr-3 shrink-0" 
+             fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+
+        <input
+            type="search"
+            placeholder="Search for supplies, kits, or finished crafts..."
+            value={filters.search}
+            onChange={(e) => handleFilterChange({ search: e.target.value })}
+            
+            // 🎯 ENHANCED CLASS LIST 🎯
+            className="w-full text-lg 
+                       text-[var(--foreground)] 
+                       bg-transparent 
+                       placeholder-[var(--foreground)] 
+                       opacity-80
+                       border-none 
+                       focus:ring-0 
+                       focus:border-none
+                       outline-none"
+        />
+    </div>
+</div>
 
                 <div className="flex flex-col md:flex-row gap-8">
                     {/* Left Sidebar for Filters */}
@@ -224,28 +244,34 @@ const MarketplacePage = () => {
                         )}
                         
                         {/* Header with Sort and Results Count */}
-                        <div className="flex justify-between items-center mb-6 border-b pb-4 border-[var(--border-color)]">
-                            <p className="text-base text-[var(--foreground)] font-semibold">
-                                {totalResults} Results Found
-                            </p>
-                            
-                            <div className="flex items-center space-x-2 relative">
-                                <label htmlFor="sort-by" className="text-sm text-[var(--foreground)] font-medium">Sort by:</label>
-                                <select
-                                    id="sort-by"
-                                    name="sort-by"
-                                    value={filters.sort}
-                                    onChange={handleSortChange}
-                                    className="block appearance-none w-full bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--foreground)] py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:ring-2 focus:ring-[var(--primary)] transition-shadow text-sm"
-                                >
-                                    <option value="latest">Latest</option>
-                                    <option value="popular">Popularity</option>
-                                    <option value="priceAsc">Price: Low to High</option>
-                                    <option value="priceDesc">Price: High to Low</option>
-                                </select>
-                                <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--foreground)] opacity-60" />
-                            </div>
-                        </div>
+<div className="flex justify-between items-center mb-6 border-b pb-4 border-[var(--border-color)]">
+    <p className="text-base text-[var(--foreground)] font-semibold">
+        {totalResults} Results Found
+    </p>
+    
+    <div className="flex items-center space-x-2 relative">
+        <label 
+            htmlFor="sort-by" 
+            className="text-sm text-[var(--foreground)] font-medium whitespace-nowrap"
+        >
+            Sort by:
+        </label>
+        
+        <select
+            id="sort-by"
+            name="sort-by"
+            value={filters.sort}
+            onChange={handleSortChange}
+            className="block appearance-none w-full bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--foreground)] py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:ring-2 focus:ring-[var(--primary)] transition-shadow text-sm"
+        >
+            <option value="latest">Latest</option>
+            <option value="popular">Popularity</option>
+            <option value="priceAsc">Price: Low to High</option>
+            <option value="priceDesc">Price: High to Low</option>
+        </select>
+        <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--foreground)] opacity-60" />
+    </div>
+</div>
 
 
                         {/* Product Grid */}
