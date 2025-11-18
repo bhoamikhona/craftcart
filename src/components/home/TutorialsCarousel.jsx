@@ -29,12 +29,12 @@ export default function TutorialCarousel() {
                   p-4"
                 >
                   <div className="w-full aspect-video rounded-xl overflow-hidden mb-4">
-                    {/* <img src={tut.thumbnails[0]} alt={tut.title} className="w-full h-full object-cover group-hover:scale-105 transition" /> */}
-                    <img
+                    <img src={tut.thumbnails[0]} alt={tut.title} className="w-full h-full object-cover group-hover:scale-105 transition" />
+                    {/* <img
                       src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=800"
                       alt={tut.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition"
-                    />
+                    /> */}
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{tut.title}</h3>
                   <p className="text-sm text-gray-600 mb-3 line-clamp-2">

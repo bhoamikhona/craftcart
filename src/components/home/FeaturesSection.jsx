@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
-import Link from "next/link"; // <-- import Link
+import Link from "next/link"; 
 import { tutorials } from "@/data/tutorials"; 
 import { ArrowRight } from "lucide-react";
 import { HeartIcon, ChatBubbleLeftIcon } from "@heroicons/react/24/solid";
 
 export default function FeaturedSection() {
-  const featured = tutorials.slice(0, 3); 
+  const featured = tutorials.slice(2, 5); 
 
   return (
     <section className="py-16 bg-muted">
@@ -30,11 +30,12 @@ export default function FeaturedSection() {
                            hover:shadow-[0_3.2rem_6.4rem_rgba(0,0,0,0.06)]"
               >
                 <div className="aspect-video w-full overflow-hidden">
-                  <img
+                  {/* <img
                     src='https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?w=800'
                     alt={item.title}
                     className="w-full aspect-video object-cover rounded-xl group-hover:scale-105 transition"
-                  />
+                  /> */}
+                  <img src={item.thumbnails[0]} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition" />
                 </div>
 
                 <div className="p-6">

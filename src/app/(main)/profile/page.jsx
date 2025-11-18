@@ -8,25 +8,25 @@ import Link from "next/link";
 
 // Dummy My Tutorials Data
 const myTutorialsData = [
-  { id: 1, title: "Macramé Plant Hanger Tutorial", duration: "15:23", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/video_post1.png", views: 12453 },
-  { id: 2, title: "Pottery Basics: Making Your First Bowl", duration: "28:32", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/videp_post4.png", views: 15678 },
-  { id: 3, title: "Woodworking 101: Creating a Cutting Board", duration: "20:15", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/videp_post3.png", views: 9234 },
-  { id: 4, title: "Advanced Macramé Knots and Patterns", duration: "18:45", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/videp_post2.png", views: 6734 },
-  { id: 5, title: "5 Easy Craft Projects You Can Do Today", duration: "22:10", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/videp_post5.png", views: 8921 },
+  { id: 1, title: "Macramé Plant Hanger Tutorial", duration: "15:23", image_url: "/images/thumbnail/planthanger.jpg", views: 12453 },
+  { id: 2, title: "Pottery Basics: Making Your First Bowl", duration: "28:32", image_url: "/images/thumbnail/potterybasic.jpg", views: 15678 },
+  { id: 3, title: "Woodworking 101: Creating a Cutting Board", duration: "20:15", image_url: "/images/thumbnail/woodworking.jpg", views: 9234 },
+  { id: 4, title: "Advanced Macramé Knots and Patterns", duration: "18:45", image_url: "/images/thumbnail/macrameknots.jpg", views: 6734 },
+  { id: 5, title: "5 Easy Craft Projects You Can Do Today", duration: "22:10", image_url: "/images/thumbnail/craft.jpg", views: 8921 },
 ];
 
 // Dummy Saved Tutorials Data
 const savedTutorialsData = [
-  { id: 11, title: "Ceramic Glazing Techniques", duration: "12:05", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/saved_1.jpg", views: 25000 },
-  { id: 12, title: "Home Decor Crochet Pattern", duration: "30:40", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/saved_2.png", views: 15000 },
-  { id: 13, title: "DIY Resin Art Coasters", duration: "10:15", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/saved_3.webp", views: 18000 },
+  { id: 1, title: "Ceramic Glazing Techniques", duration: "12:05", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/saved_1.jpg", views: 25000 },
+  { id: 2, title: "Home Decor Crochet Pattern", duration: "30:40", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/saved_2.png", views: 15000 },
+  { id: 3, title: "DIY Resin Art Coasters", duration: "10:15", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/saved_3.webp", views: 18000 },
 ];
 
 // Dummy Order Data
 const orders = [
-  { id: 'ORD-2024-001', date: 'March 15, 2024', status: 'Delivered', items: 2, price: 77, images: ["/images/order-1a.jpeg", "/images/order-1b.jpeg"] },
-  { id: 'ORD-2024-002', date: 'March 10, 2024', status: 'Shipped', items: 1, price: 78, images: ["/images/order-2a.jpeg"] },
-  { id: 'ORD-2024-003', date: 'March 5, 2024', status: 'Processing', items: 2, price: 99, images: ["/images/order-3a.jpeg", "/images/order-3b.jpeg"] },
+  { id: 'ORD-2024-001', date: 'March 15, 2024', status: 'Delivered', items: 2, price: 77, images: ["/images/products/candle-containers.jpg", "/images/products/candle-dye-chips.jpg"] },
+  { id: 'ORD-2024-002', date: 'March 10, 2024', status: 'Shipped', items: 1, price: 78, images: ["/images/products/resin-pigments.jpg"] },
+  { id: 'ORD-2024-003', date: 'March 5, 2024', status: 'Processing', items: 2, price: 99, images: ["/images/products/crepe-paper-pack.jpg", "/images/products/floral-wire.jpg"] },
 ];
 
 export default function ProfilePage() {
@@ -65,7 +65,7 @@ export default function ProfilePage() {
         {/* Avatar + Stats */}
         <div className="flex flex-col md:flex-row items-center gap-10 bg-card-bg rounded-2xl shadow p-6">
           {/* Avatar */}
-          <div className="relative flex-shrink-0">
+          <div className="relative shrink-0">
             <div className="w-32 h-32 rounded-full border border-gray-400 overflow-hidden flex items-center justify-center">
               {userData?.avatar_url ? (
                 <img src={userData.avatar_url} className="w-full h-full object-cover" />
@@ -113,7 +113,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Name + Bio */}
-        <div className="mt-4 pl-0 md:pl-[8rem]">
+        <div className="mt-4 pl-0 md:pl-32">
           <h1 className="text-lg font-semibold text-gray-800">{userData?.name || "User"}</h1>
           <div className="mt-1 text-sm text-gray-700 leading-relaxed">
             {userData?.bio && <p>{userData.bio}</p>}
