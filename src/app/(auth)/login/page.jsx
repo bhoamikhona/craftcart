@@ -7,11 +7,11 @@ export default function Login() {
         <h1>Login</h1>
         <div className="input__control">
           <label className="label">Email</label>
-          <input className="input" type="email" />
+          <input className="auth__input" type="email" />
         </div>
         <div className="input__control">
           <label className="label">Password</label>
-          <input className="input" type="password" />
+          <input className="auth__input" type="password" />
         </div>
         <button className="form__button btn btn--primary" type="submit">
           Submit

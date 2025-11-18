@@ -17,7 +17,7 @@
   background-color: var(--accent);
 }
 
-.input {
+.auth__input {
   margin-bottom: 2rem;
   height: 3rem;
   border: none;
@@ -27,7 +27,7 @@
   color: var(--white);
 }
 
-.input::placeholder {
+.auth__input::placeholder {
   color: #ffbe95;
 }
 

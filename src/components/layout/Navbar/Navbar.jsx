@@ -23,12 +23,12 @@ export default function Navbar() {
               </Link>
             </li>
             <li className="nav__list-item">
-              <Link href="/" className="nav__link">
+              <Link href="/products" className="nav__link">
                 Shop
               </Link>
             </li>
             <li className="nav__list-item">
-              <Link href="/" className="nav__link">
+              <Link href="/profile" className="nav__link">
                 Profile
               </Link>
             </li>
@@ -40,6 +40,11 @@ export default function Navbar() {
             <li className="nav__list-item">
               <Link href="/register" className="nav__link">
                 Register
+              </Link>
+            </li>
+            <li className="nav__list-item">
+              <Link href="/register" className="nav__link">
+                Cart
               </Link>
             </li>
           </ul>
