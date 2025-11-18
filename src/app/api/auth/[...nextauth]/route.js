@@ -14,27 +14,24 @@ const handler = NextAuth({
       async authorize(credentials) {
         const { email, password } = credentials;
 
-        // Debug logs
         console.log("Credentials received:", credentials);
 
-        // 1. Look for the user in Supabase
+        // 1) Look up the user in Supabase
         const { data: user, error } = await supabase
           .from("users")
           .select("*")
           .eq("email", email)
           .single();
 
-        // Debug logs
         console.log("Supabase user found:", user);
         console.log("Supabase error:", error);
 
-        // If email not found
         if (!user) {
-          console.log("No user found with this email");
+          console.log("No user found");
           return null;
         }
 
-        // 2. Compare passwords
+        // 2) Password check (simple text match for now)
         if (user.password !== password) {
           console.log("Password incorrect");
           return null;
@@ -42,9 +39,9 @@ const handler = NextAuth({
 
         console.log("Login successful");
 
-        // 3. Login success
+        // 3) Pass full user back into NextAuth
         return {
-          id: user.user_id,
+          id: user.user_id,       
           name: user.name,
           email: user.email,
           avatar_url: user.avatar_url || null,
@@ -60,23 +57,28 @@ const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
+
+  // CALLBACKS WITH USER ID
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+        token.id = user.id;                   
         token.name = user.name;
         token.email = user.email;
-        token.avatar_url = user.avatar_url; //  added
+        token.avatar_url = user.avatar_url;
       }
       return token;
     },
 
     async session({ session, token }) {
+      session.user.id = token.id;            
       session.user.name = token.name;
       session.user.email = token.email;
-      session.user.avatar_url = token.avatar_url; // added
+      session.user.avatar_url = token.avatar_url;
       return session;
     },
   },
+
   secret: process.env.NEXTAUTH_SECRET,
 });
 
