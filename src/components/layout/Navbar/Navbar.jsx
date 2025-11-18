@@ -32,6 +32,16 @@ export default function Navbar() {
                 Profile
               </Link>
             </li>
+            <li className="nav__list-item">
+              <Link href="/login" className="nav__link">
+                Login
+              </Link>
+            </li>
+            <li className="nav__list-item">
+              <Link href="/register" className="nav__link">
+                Register
+              </Link>
+            </li>
           </ul>
         </div>
       </nav>
