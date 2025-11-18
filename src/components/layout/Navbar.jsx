@@ -42,9 +42,12 @@ function Navbar() {
 
         <div className="hidden md:flex space-x-8 justify-center flex-1">
           <ul className="flex space-x-8 font-medium w-full justify-center">
-            <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
-              Watch
-            </li>
+            <Link href="/watch" passHref>
+              <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
+                Watch
+              </li>
+            </Link>
+            
             <Link href="/marketplace" passHref>
               <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
                 Marketplace
