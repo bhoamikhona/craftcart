@@ -6,7 +6,7 @@
   margin-top: 9.6rem;
 }
 
-.input {
+.search__section > .input__control > .input {
   font: inherit;
   border: none;
   border-bottom: 0.1rem solid var(--dark-grey);
@@ -19,7 +19,7 @@
   outline: none;
 }
 
-.input__control {
+.search__section > .input__control {
   position: relative;
 }
 
