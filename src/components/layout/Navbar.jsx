@@ -53,6 +53,12 @@ function Navbar() {
                 Marketplace
               </li>
             </Link>
+
+            {/* <Link href="/studio" passHref>
+              <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
+                Studio
+              </li>
+            </Link> */}
           </ul>
         </div>
         

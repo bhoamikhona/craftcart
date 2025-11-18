@@ -23,7 +23,7 @@ export const tutorials = [
     likes: 892,
     dislikes: 12,
     share: 134,
-    thumbnails: ["/images/tutorials/macrame-wall-hanging-thumb.jpg"],
+    thumbnails: ["/images/thumbnail/wallhanging.jpg"],
     comments: [
       { id: 1, userId: 5, text: "This was so relaxing to make!", createdAt: "2025-04-01T15:00:00Z", likes: 6 },
       { id: 2, userId: 3, text: "Loved the color choices!", createdAt: "2025-04-02T09:30:00Z", likes: 3 },
@@ -58,7 +58,7 @@ export const tutorials = [
     likes: 1304,
     dislikes: 41,
     share: 201,
-    thumbnails: ["/images/tutorials/rustic-coffee-table-thumb.jpg"],
+    thumbnails: ["/images/thumbnail/rusticcoffee.jpeg"],
     comments: [
       { id: 3, userId: 1, text: "Turned out amazing, thanks!", createdAt: "2025-04-04T10:00:00Z", likes: 8 },
     ],
@@ -91,7 +91,7 @@ export const tutorials = [
     likes: 642,
     dislikes: 8,
     share: 97,
-    thumbnails: ["/images/tutorials/paper-flower-bouquet-thumb.jpg"],
+    thumbnails: ["/images/thumbnail/paperflower.jpg"],
     comments: [
       { id: 4, userId: 4, text: "Perfect wedding craft idea!", createdAt: "2025-04-06T18:30:00Z", likes: 9 },
     ],
@@ -125,7 +125,7 @@ export const tutorials = [
     likes: 978,
     dislikes: 19,
     share: 154,
-    thumbnails: ["/images/tutorials/resin-keychain-thumb.jpg"],
+    thumbnails: ["/images/thumbnail/resinart.jpg"],
     comments: [
       { id: 5, userId: 5, text: "Turned out gorgeous with gold flakes!", createdAt: "2025-04-07T14:20:00Z", likes: 11 },
     ],
@@ -159,7 +159,7 @@ export const tutorials = [
     likes: 1210,
     dislikes: 22,
     share: 248,
-    thumbnails: ["/images/tutorials/candle-making-thumb.jpg"],
+    thumbnails: ["/images/thumbnail/candle.jpg"],
     comments: [
       { id: 6, userId: 3, text: "Such a soothing hobby to pick up!", createdAt: "2025-04-10T10:00:00Z", likes: 7 },
     ],
