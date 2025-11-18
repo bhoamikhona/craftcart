@@ -42,17 +42,17 @@ function Navbar() {
 
         <div className="hidden md:flex space-x-8 justify-center flex-1">
           <ul className="flex space-x-8 font-medium w-full justify-center">
-            <li className="text-[var(--foreground)] hover:text-primary cursor-pointer transition-colors">
+            <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
               Watch
             </li>
             <Link href="/marketplace" passHref>
-              <li className="text-[var(--foreground)] hover:text-primary cursor-pointer transition-colors">
+              <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
                 Marketplace
               </li>
             </Link>
           </ul>
         </div>
-
+        
         <div className="hidden md:flex items-center space-x-4 shrink-0">
 
           {session ? (
