@@ -75,7 +75,8 @@ function Navbar() {
                 </button>
               )}
 
-              <div className="cursor-pointer text-2xl">🛒</div>
+              <div className="cursor-pointer text-2xl"
+              onClick={() => (window.location.href = "/cart")}>🛒</div>
             </>
           ) : (
             <>
@@ -85,7 +86,9 @@ function Navbar() {
               >
                 Sign In
               </button>
-              <div className="cursor-pointer text-2xl">🛒</div>
+              <div className="cursor-pointer text-2xl"
+              onClick={() => (window.location.href = "/cart")}>🛒</div>
+              
             </>
           )}
 
