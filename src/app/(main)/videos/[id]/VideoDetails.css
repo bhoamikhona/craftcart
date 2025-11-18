@@ -1,0 +1,21 @@
+.page-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr; 
+  gap: 3.2rem;
+}
+
+.left-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem; 
+}
+
+.right-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.container {
+  padding: 5rem;
+}

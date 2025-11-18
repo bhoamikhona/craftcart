@@ -1,0 +1,36 @@
+.supplies-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+.supplies-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+.supply-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.add-all {
+  width: 100%;
+  background: #f66322;
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+  cursor: pointer;
+}
+.save-tutorial {
+  width: 100%;
+  background: white;
+  border: 2px solid #f66322;
+  color: #f66322;
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 0.8rem;
+}

@@ -1,0 +1,36 @@
+.steps-container h3 {
+  margin-bottom: 1.5rem;
+}
+
+.step-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 1.2rem;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  gap: 1rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: 0.2s ease;
+}
+.step-card.active {
+  border-color: #f66322;
+}
+.step-number {
+  background: #ddd;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+.step-card.active .step-number {
+  background: #f66322;
+  color: white;
+}
+.step-desc {
+  color: #555;
+  margin-top: 4px;
+}

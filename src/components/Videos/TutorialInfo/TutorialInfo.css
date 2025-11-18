@@ -1,0 +1,43 @@
+.info-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+.tags {
+  display: flex;
+  gap: 8px;
+}
+.tag {
+  padding: 4px 10px;
+  background: #eee;
+  border-radius: 12px;
+  font-size: 12px;
+}
+.tutorial-title {
+  font-size: 2.2rem;
+  margin-top: 8px;
+}
+.stats-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-icon {
+  color: #f66322; 
+  font-size: 16px;
+}
+
+.star-icon {
+  color: #facc15; 
+}
+
+.thumbs-icon {
+  color: #3b82f6; 
+}
