@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import supabase from "@/lib/supabaseClient";
-import ProfileTutorialCard from '@/components/profile/ProfileTutorialCard'; 
+import ProfileTutorialCard from "@/components/Profile/ProfileTutorialCard"; 
 
 // ----------------------------------------------------------------------------------
 // --- DUMMY DATA (RESTORED) ---
@@ -258,7 +258,7 @@ export default function ProfilePage() {
               <ProfileTutorialCard key={tutorial.id} tutorial={tutorial} />
             ))}
              {myTutorialsData.length === 0 && (
-                <p className="col-span-4 text-center text-gray-500 pt-10">You haven't uploaded any tutorials yet.</p>
+                <p className="col-span-4 text-center text-gray-500 pt-10">You have not uploaded any tutorials yet.</p>
             )}
           </div>
         )}
@@ -270,7 +270,7 @@ export default function ProfilePage() {
                     <ProfileTutorialCard key={tutorial.id} tutorial={tutorial} />
                 ))}
                 {savedTutorialsData.length === 0 && (
-                    <p className="col-span-4 text-center text-gray-500 pt-10">You haven't saved any tutorials yet.</p>
+                    <p className="col-span-4 text-center text-gray-500 pt-10">You have not saved any tutorials yet.</p>
                 )}
             </div>
         )}
