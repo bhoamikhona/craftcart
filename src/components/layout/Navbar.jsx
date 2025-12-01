@@ -1,112 +1,210 @@
-'use client';
+// 'use client';
 
-import React from "react";
-import Link from "next/link";
+// import React from "react";
+// import Link from "next/link";
+// import { useSession, signOut } from "next-auth/react";
+// import { usePathname } from "next/navigation";
+
+// function Avatar({ name, image }) {
+//   if (image) {
+//     return (
+//       <img
+//         src={image}
+//         alt={name}
+//         className="w-8 h-8 rounded-full object-cover"
+//       />
+//     );
+//   }
+
+//   return (
+//     <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
+//       {name.charAt(0).toUpperCase()}
+//     </div>
+//   );
+// }
+
+// function Navbar() {
+//   const { data: session } = useSession();
+//   const pathname = usePathname();
+//   const isProfilePage = pathname === "/profile";
+
+//   return (
+//     <nav className="bg-background border-b border-border sticky top-0 z-50">
+//       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+
+//         <div className="shrink-0">
+//           <Link href="/">
+//             <div className="text-2xl font-bold text-primary cursor-pointer">
+//               CraftCart
+//             </div>
+//           </Link>
+//         </div>
+
+//         <div className="hidden md:flex space-x-8 justify-center flex-1">
+//           <ul className="flex space-x-8 font-medium w-full justify-center">
+//             <Link href="/watch" passHref>
+//               <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
+//                 Watch
+//               </li>
+//             </Link>
+
+//             <Link href="/marketplace" passHref>
+//               <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
+//                 Marketplace
+//               </li>
+//             </Link>
+
+//             {/* <Link href="/studio" passHref>
+//               <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
+//                 Studio
+//               </li>
+//             </Link> */}
+//           </ul>
+//         </div>
+
+//         <div className="hidden md:flex items-center space-x-4 shrink-0">
+
+//           {session ? (
+//             <>
+//               {/* Avatar + Username */}
+//               <Link href="/profile" className="flex items-center space-x-2">
+//                 <Avatar name={session.user.name} image={session.user.image} />
+//                 <span className="cursor-pointer font-medium hover:text-primary">
+//                   {session.user.name}
+//                 </span>
+//               </Link>
+
+//               {/* Sign Out ONLY on Profile Page */}
+//               {isProfilePage && (
+//                 <button
+//                   className="btn-primary"
+//                   onClick={() => signOut({ callbackUrl: "/" })}
+//                 >
+//                   Sign Out
+//                 </button>
+//               )}
+
+//               <div className="cursor-pointer text-2xl"
+//               onClick={() => (window.location.href = "/cart")}>🛒</div>
+//             </>
+//           ) : (
+//             <>
+//               <button
+//                 className="btn-primary"
+//                 onClick={() => (window.location.href = "/login")}
+//               >
+//                 Sign In
+//               </button>
+//               <div className="cursor-pointer text-2xl"
+//               onClick={() => (window.location.href = "/cart")}>🛒</div>
+
+//             </>
+//           )}
+
+//         </div>
+
+//         <div className="md:hidden text-2xl text-primary ml-auto cursor-pointer">☰</div>
+//       </div>
+//     </nav>
+//   );
+// }
+
+// export default Navbar;
+
+"use client";
+import Link from "next/link.js";
+import { CgProfile } from "react-icons/cg";
+import { CgShoppingCart } from "react-icons/cg";
+import "./layout.css";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
-function Avatar({ name, image }) {
-  if (image) {
-    return (
-      <img
-        src={image}
-        alt={name}
-        className="w-8 h-8 rounded-full object-cover"
-      />
-    );
-  }
-
-  return (
-    <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
-      {name.charAt(0).toUpperCase()}
-    </div>
-  );
-}
-
-function Navbar() {
+export default function Navbar() {
   const { data: session } = useSession();
   const pathname = usePathname();
   const isProfilePage = pathname === "/profile";
 
   return (
-    <nav className="bg-background border-b border-border sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
-
-        <div className="shrink-0">
-          <Link href="/">
-            <div className="text-2xl font-bold text-primary cursor-pointer">
-              CraftCart
-            </div>
-          </Link>
+    <div className="sticky top-0 bg-white z-100">
+      <nav className="p-6 max-w-7xl mx-auto flex items-center justify-between gap-2">
+        <div className="nav__left">
+          <div className="shrink-0">
+            <Link href="/">
+              <div className="text-2xl md:text-3xl font-bold text-primary cursor-pointer">
+                craftcart
+              </div>
+            </Link>
+          </div>
         </div>
 
-        <div className="hidden md:flex space-x-8 justify-center flex-1">
-          <ul className="flex space-x-8 font-medium w-full justify-center">
-            <Link href="/watch" passHref>
-              <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
-                Watch
-              </li>
-            </Link>
-            
-            <Link href="/marketplace" passHref>
-              <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
-                Marketplace
-              </li>
-            </Link>
-
-            {/* <Link href="/studio" passHref>
-              <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
-                Studio
-              </li>
-            </Link> */}
+        <div className="nav__center">
+          <ul className="flex gap-4">
+            <li>
+              <Link className="nav__link md:text-base text-sm" href="/">
+                Explore
+              </Link>
+            </li>
+            <li>
+              <Link className="nav__link md:text-base text-sm" href="/">
+                Shop
+              </Link>
+            </li>
+            <li>
+              <Link className="nav__link md:text-base text-sm" href="/">
+                Create
+              </Link>
+            </li>
           </ul>
         </div>
-        
-        <div className="hidden md:flex items-center space-x-4 shrink-0">
+
+        <div className="nav__right flex items-center gap-2 md:gap-6">
+          <div className="cart">
+            <Link className="nav__link" href="/cart">
+              <CgShoppingCart className="text-xl md:text-2xl" />
+            </Link>
+          </div>
 
           {session ? (
-            <>
-              {/* Avatar + Username */}
-              <Link href="/profile" className="flex items-center space-x-2">
-                <Avatar name={session.user.name} image={session.user.image} />
-                <span className="cursor-pointer font-medium hover:text-primary">
-                  {session.user.name}
-                </span>
-              </Link>
+            <div className="profile-wrapper flex gap-2 md:gap-6 items-center">
+              <div className="profile relative group">
+                <div className="profile-btn">
+                  <Link className="nav__link" href="/profile">
+                    <CgProfile className="text-xl md:text-2xl hover:text-primary transition-colors duration-300 ease-in-out cursor-pointer" />
+                  </Link>
+                </div>
+                <div className="profile-dropdown hidden group-hover:block rounded border-gray-500 bg-white p-2 py-4 pt-6 md:pt-8 absolute w-[150px] z-100 right-[-60] top-5 md:top-6 shadow-[0_2.4rem_4.8rem_rgba(0,0,0,0.075)]">
+                  <ul className="flex flex-col items-center justify-center gap-2 ">
+                    <li>
+                      <Link className="nav__link md:text-base text-sm" href="/">
+                        Settings
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="nav__link md:text-base text-sm"
+                        href="/profile"
+                      >
+                        Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="nav__link md:text-base text-sm" href="/">
+                        Logout
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
 
-              {/* Sign Out ONLY on Profile Page */}
-              {isProfilePage && (
-                <button
-                  className="btn-primary"
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                >
-                  Sign Out
-                </button>
-              )}
-
-              <div className="cursor-pointer text-2xl"
-              onClick={() => (window.location.href = "/cart")}>🛒</div>
-            </>
+              <div className="greeting md:visible sm:invisible">
+                <p className="md:text-base text-sm">Hi, {session.user.name}!</p>
+              </div>
+            </div>
           ) : (
-            <>
-              <button
-                className="btn-primary"
-                onClick={() => (window.location.href = "/login")}
-              >
-                Sign In
-              </button>
-              <div className="cursor-pointer text-2xl"
-              onClick={() => (window.location.href = "/cart")}>🛒</div>
-              
-            </>
+            <button>sigin</button>
           )}
-
         </div>
-
-        <div className="md:hidden text-2xl text-primary ml-auto cursor-pointer">☰</div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }
-
-export default Navbar;

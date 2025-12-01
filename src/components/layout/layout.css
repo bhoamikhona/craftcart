@@ -1,3 +1,13 @@
+.nav__link:link,
+.nav__link:visited {
+  color: #333;
+}
+
+.nav__link:hover,
+.nav__link:active {
+  color: var(--primary);
+}
+
 .footer__link:link,
 .footer__link:visited {
   color: #767676;

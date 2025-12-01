@@ -1,6 +1,10 @@
 "use client";
 
-import { ClockIcon, StarIcon, HandThumbUpIcon } from "@heroicons/react/24/solid";
+import {
+  ClockIcon,
+  StarIcon,
+  HandThumbUpIcon,
+} from "@heroicons/react/24/solid";
 
 export default function TutorialInfoCard({ tutorial }) {
   return (
@@ -27,7 +31,9 @@ export default function TutorialInfoCard({ tutorial }) {
 
         <div className="flex items-center gap-1">
           <StarIcon className="w-5 h-5 text-yellow-400" />
-          <span>{tutorial.rating || "4.8"} ({tutorial.reviews?.length || 0} reviews)</span>
+          <span>
+            {tutorial.rating || "4.8"} ({tutorial.reviews?.length || 0} reviews)
+          </span>
         </div>
 
         <div className="flex items-center gap-1">
