@@ -1,20 +1,21 @@
 "use client";
-
-import React, { useState } from "react";            // added
-import Link from "next/link";
-import { signIn } from "next-auth/react";          // added
-import { useRouter } from "next/navigation";       // added
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 import AuthLayout from "../layout.jsx";
+import Link from "next/link.js";
+import { HiOutlineEnvelope, HiOutlineLockClosed } from "react-icons/hi2";
+import Image from "next/image";
+import { CgLogIn } from "react-icons/cg";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
-export default function LoginPage() {
-  // added: state for handling email, password, and error messages
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const router = useRouter();                      // added
+  const [error, setError] = useState("Invalid");
+  const router = useRouter();
 
-  // added: handles sending login request to NextAuth
-  async function handleSubmit(e) {
+  const handleSubmit = async function (e) {
     e.preventDefault();
 
     const result = await signIn("credentials", {
@@ -24,85 +25,89 @@ export default function LoginPage() {
     });
 
     if (result.error) {
-      setError("Invalid email or password.");
+      setError((e) => "Invalid email or password.");
+      toast.error(error);
     } else {
+      toast.success("Login successful.");
       router.push("/profile");
     }
-  }
+  };
 
   return (
     <AuthLayout>
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-bold text-primary mb-2">CraftCart</h1>
-        <p className="text-sm text-gray-500">
-          Welcome back! Please sign in to continue.
-        </p>
-      </div>
-
-      {/* added: optional error message display */}
-      {error && (
-        <p className="text-red-500 text-center font-medium mb-4">{error}</p>
-      )}
-
-      {/* changed: added onSubmit handler, style unchanged */}
-      <form onSubmit={handleSubmit} className="space-y-5 mt-0 mb-0">
-
-        {/* Email */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Email</label>
-
-          {/* changed: added value and onChange */}
-          <input
-            type="email"
-            placeholder="you@example.com"
-            className="w-full border border-border bg-white text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
-            required
-            value={email}                           /* added */
-            onChange={(e) => setEmail(e.target.value)} /* added */
+      <main className="bg-white rounded-2xl shadow-2xl flex md:flex-row flex-col max-w-4xl gap-2 md:gap-6">
+        <div className="auth__left overflow-hidden flex-1 rounded-tl-2xl md:rounded-bl-2xl md:rounded-tr-none rounded-tr-2xl">
+          <Image
+            src="/images/auth/heart-coffee-mug.png"
+            alt="hear coffee mug"
+            width="500"
+            height="500"
           />
         </div>
+        <div className="auth__right flex flex-col items-stretch justify-center p-6 md:pr-10 flex-1">
+          <h1 className="self-start text-gray-400 uppercase text-xs tracking-[5px] mb-4">
+            craftcart
+          </h1>
+          <h2 className="self-start text-2xl text-primary font-bold mb-4">
+            Welcome Back!
+          </h2>
 
-        {/* Password */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Password</label>
-
-          {/* changed: added value and onChange */}
-          <input
-            type="password"
-            placeholder="••••••••"
-            className="w-full border border-border bg-white text-black px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
-            required
-            value={password}                        /* added */
-            onChange={(e) => setPassword(e.target.value)} /* added */
-          />
-        </div>
-
-        {/* Submit button (unchanged) */}
-        <button
-          type="submit"
-          className="w-full btn-primary py-2 rounded-lg text-white font-semibold"
-        >
-          Sign In
-        </button>
-
-        {/* Links (unchanged) */}
-        <div className="text-center text-sm text-gray-500">
-          <p>
-            Don’t have an account?{" "}
-            <Link
-              href="/register"
-              className="text-primary hover:underline font-medium"
+          <form className="mb-4" onSubmit={handleSubmit}>
+            <div className="input-control flex items-center bg-gray-100 p-2 rounded-md mb-3">
+              <label htmlFor="email" className="sr-only">
+                Email
+              </label>
+              <HiOutlineEnvelope className="text-xl text-gray-600" />
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email"
+                className="ml-2 outline-none"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="input-control flex items-center bg-gray-100 p-2 rounded-md mb-5">
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
+              <HiOutlineLockClosed className="text-xl text-gray-600" />
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
+                className="ml-2 outline-none"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <button
+              type="submit"
+              className="bg-primary w-full text-white py-3 rounded-md hover:bg-orange-600 transision-color duration-300 ease-in-out cursor-pointer flex items-center justify-center gap-2 font-bold tracking-wider"
             >
-              Sign up
-            </Link>
-          </p>
-          <p className="mt-2">
-            <a href="#" className="text-secondary hover:underline">
-              Forgot password?
-            </a>
-          </p>
+              Login <CgLogIn className="font-bold text-2xl" />
+            </button>
+          </form>
+          <div className="text-center text-sm text-gray-500">
+            <p>
+              Don’t have an account?{" "}
+              <Link
+                href="/register"
+                className="text-primary hover:underline font-medium"
+              >
+                Register
+              </Link>
+            </p>
+            <p className="mt-2">
+              <Link href="/login" className="text-secondary hover:underline">
+                Forgot password?
+              </Link>
+            </p>
+          </div>
         </div>
-      </form>
+      </main>
     </AuthLayout>
   );
 }

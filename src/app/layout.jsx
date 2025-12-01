@@ -1,5 +1,6 @@
 import "./globals.css";
-import Providers from "./providers"; 
+import Providers from "./providers";
+import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "CraftCart",
@@ -10,7 +11,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="app-body">
-        <Providers>   
+        <Providers>
+          <Toaster position="top-right" />
           <main className="app-main">{children}</main>
         </Providers>
       </body>
