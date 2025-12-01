@@ -115,6 +115,7 @@
 import Link from "next/link.js";
 import { CgProfile } from "react-icons/cg";
 import { CgShoppingCart } from "react-icons/cg";
+import { CgLogIn } from "react-icons/cg";
 import "./layout.css";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
@@ -188,9 +189,13 @@ export default function Navbar() {
                       </Link>
                     </li>
                     <li>
-                      <Link className="nav__link md:text-base text-sm" href="/">
+                      <button
+                        onClick={() => signOut({ callbackUrl: "/" })}
+                        className="nav__link md:text-base text-sm cursor-pointer"
+                        href="/"
+                      >
                         Logout
-                      </Link>
+                      </button>
                     </li>
                   </ul>
                 </div>
@@ -201,7 +206,9 @@ export default function Navbar() {
               </div>
             </div>
           ) : (
-            <button>sigin</button>
+            <Link className="nav__link" href="/login">
+              <CgLogIn className="text-xl md:text-2xl" />
+            </Link>
           )}
         </div>
       </nav>
