@@ -1,0 +1,9 @@
+.footer__link:link,
+.footer__link:visited {
+  color: #767676;
+}
+
+.footer__link:hover,
+.footer__link:active {
+  color: #555;
+}
