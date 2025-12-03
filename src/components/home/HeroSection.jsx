@@ -2,7 +2,7 @@ import React from "react";
 
 function HeroSection() {
   return (
-    <section className="gradient-bg text-white py-32 flex justify-center items-center">
+    <section className="gradient-bg text-white py-25 flex justify-center items-center">
       <div className="text-center px-4 max-w-3xl">
         <h1 className="text-2xl md:text-6xl font-bold mb-6">
           Learn, Create, and Shop
@@ -11,7 +11,7 @@ function HeroSection() {
           Watch DIY tutorials, shop craft supplies, and join workshops to get hands-on experience.
         </p>
 
-        <div className="flex max-w-xl mx-auto">
+        {/* <div className="flex max-w-xl mx-auto">
           <input 
             type="text" 
             placeholder="Search tutorials, supplies...." 
@@ -32,7 +32,7 @@ function HeroSection() {
                 />
               </svg>
             </button>
-        </div>
+        </div> */}
       </div>
     </section>
   );
