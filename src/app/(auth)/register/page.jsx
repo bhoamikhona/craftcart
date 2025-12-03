@@ -1,7 +1,11 @@
 "use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const router = useRouter();
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -17,21 +21,38 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //////
-
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
 
-    const data = await res.json();
-    alert(data.message);
+    let data = {};
+    try {
+      data = await res.json();
+    } catch (error) {
+      alert("Server error. Please try again.");
+      return;
+    }
+
+    if (res.ok) {
+      alert("User created successfully");
+
+      // ⭐ Delay redirect so alert fully closes
+      setTimeout(() => {
+        router.push("/login");
+      }, 50);
+
+    } else {
+      alert(data.message || "Registration failed");
+    }
   };
 
   return (
     <div className="flex flex-col space-y-4">
-      <h1 className="text-2xl font-bold text-center text-primary">Create Account</h1>
+      <h1 className="text-2xl font-bold text-center text-primary">
+        Create Account
+      </h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
         <input

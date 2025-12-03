@@ -12,7 +12,6 @@ import { signIn } from "next-auth/react";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("Invalid");
   const router = useRouter();
 
   const handleSubmit = async function (e) {
@@ -25,10 +24,9 @@ export default function Login() {
     });
 
     if (result.error) {
-      setError((e) => "Invalid email or password.");
-      toast.error(error);
+      toast.error("Invalid email or password");
     } else {
-      toast.success("Login successful.");
+      toast.success("Login successful");
       router.push("/profile");
     }
   };
@@ -54,49 +52,41 @@ export default function Login() {
 
           <form className="mb-4" onSubmit={handleSubmit}>
             <div className="input-control flex items-center bg-gray-100 p-2 rounded-md mb-3">
-              <label htmlFor="email" className="sr-only">
-                Email
-              </label>
               <HiOutlineEnvelope className="text-xl text-gray-600" />
               <input
                 type="email"
                 name="email"
-                id="email"
                 placeholder="Email"
                 className="ml-2 outline-none"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
+
             <div className="input-control flex items-center bg-gray-100 p-2 rounded-md mb-5">
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
               <HiOutlineLockClosed className="text-xl text-gray-600" />
               <input
                 type="password"
                 name="password"
-                id="password"
                 placeholder="Password"
                 className="ml-2 outline-none"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+
             <button
               type="submit"
-              className="bg-primary w-full text-white py-3 rounded-md hover:bg-orange-600 transision-color duration-300 ease-in-out cursor-pointer flex items-center justify-center gap-2 font-bold tracking-wider"
+              className="bg-primary w-full text-white py-3 rounded-md hover:bg-orange-600 duration-300 ease-in-out flex items-center justify-center gap-2 font-bold tracking-wider"
             >
               Login <CgLogIn className="font-bold text-2xl" />
             </button>
           </form>
+
           <div className="text-center text-sm text-gray-500">
             <p>
               Don’t have an account?{" "}
-              <Link
-                href="/register"
-                className="text-primary hover:underline font-medium"
-              >
+              <Link href="/register" className="text-primary hover:underline font-medium">
                 Register
               </Link>
             </p>
