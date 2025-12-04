@@ -127,7 +127,7 @@ export default function Navbar() {
 
   return (
     <div className="sticky top-0 bg-white z-100">
-      <nav className="p-6 max-w-7xl mx-auto flex items-center justify-between gap-2">
+      <nav className="p-6 max-w-7xl mx-auto flex items-center gap-2">
         <div className="nav__left">
           <div className="shrink-0">
             <Link href="/">
@@ -138,8 +138,8 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="nav__center">
-          <ul className="flex gap-4">
+        <div className="nav__center flex-1">
+          <ul className="flex gap-4 justify-center">
             <li>
               <Link className="nav__link md:text-base text-sm" href="/">
                 Explore
@@ -158,7 +158,7 @@ export default function Navbar() {
           </ul>
         </div>
 
-        <div className="nav__right flex items-center gap-2 md:gap-6">
+        <div className="nav__right flex justify-end items-center gap-2 md:gap-6">
           <div className="cart">
             <Link className="nav__link" href="/cart">
               <CgShoppingCart className="text-xl md:text-2xl" />
@@ -176,11 +176,6 @@ export default function Navbar() {
                 <div className="profile-dropdown hidden group-hover:block rounded border-gray-500 bg-white p-2 py-4 pt-6 md:pt-8 absolute w-[150px] z-100 right-[-60] top-5 md:top-6 shadow-[0_2.4rem_4.8rem_rgba(0,0,0,0.075)]">
                   <ul className="flex flex-col items-center justify-center gap-2 ">
                     <li>
-                      <Link className="nav__link md:text-base text-sm" href="/">
-                        Settings
-                      </Link>
-                    </li>
-                    <li>
                       <Link
                         className="nav__link md:text-base text-sm"
                         href="/profile"
@@ -188,6 +183,22 @@ export default function Navbar() {
                         Profile
                       </Link>
                     </li>
+
+                    <li>
+                      <Link
+                        className="nav__link md:text-base text-sm"
+                        href="/orders"
+                      >
+                        Orders
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link className="nav__link md:text-base text-sm" href="/">
+                        Settings
+                      </Link>
+                    </li>
+
                     <li>
                       <button
                         onClick={() => signOut({ callbackUrl: "/" })}
@@ -201,8 +212,10 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <div className="greeting md:visible sm:invisible">
-                <p className="md:text-base text-sm">Hi, {session.user.name}!</p>
+              <div className="greeting">
+                <p className="md:text-base text-sm">
+                  Hi, {session.user.name.split(" ")[0]}!
+                </p>
               </div>
             </div>
           ) : (
