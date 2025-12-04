@@ -127,7 +127,7 @@ export default function Navbar() {
 
   return (
     <div className="sticky top-0 bg-white z-100">
-      <nav className="p-6 max-w-7xl mx-auto flex items-center justify-between gap-2">
+      <nav className="p-6 max-w-7xl mx-auto flex items-center gap-2">
         <div className="nav__left">
           <div className="shrink-0">
             <Link href="/">
@@ -138,8 +138,8 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="nav__center">
-          <ul className="flex gap-4">
+        <div className="nav__center flex-1">
+          <ul className="flex gap-4 justify-center">
             <li>
               <Link className="nav__link md:text-base text-sm" href="/">
                 Explore
@@ -158,7 +158,7 @@ export default function Navbar() {
           </ul>
         </div>
 
-        <div className="nav__right flex items-center gap-2 md:gap-6">
+        <div className="nav__right flex justify-end items-center gap-2 md:gap-6">
           <div className="cart">
             <Link className="nav__link" href="/cart">
               <CgShoppingCart className="text-xl md:text-2xl" />
@@ -212,8 +212,10 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <div className="greeting md:visible sm:invisible">
-                <p className="md:text-base text-sm">Hi, {session.user.name}!</p>
+              <div className="greeting">
+                <p className="md:text-base text-sm">
+                  Hi, {session.user.name.split(" ")[0]}!
+                </p>
               </div>
             </div>
           ) : (

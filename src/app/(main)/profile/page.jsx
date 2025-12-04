@@ -247,7 +247,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Tabs */}
-        <div className="mt-8 flex gap-6 border-b border-gray-300 text-gray-600">
+        <div className="mt-8 flex justify-center gap-6 border-b border-gray-300 text-gray-600 mb-16">
           <span
             className={`cursor-pointer pb-2 ${
               activeTab === "MY_TUTORIALS"
