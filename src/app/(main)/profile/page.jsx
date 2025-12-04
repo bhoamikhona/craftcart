@@ -1,4 +1,3 @@
-
 "use client";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -8,25 +7,103 @@ import Link from "next/link";
 
 // Dummy My Tutorials Data
 const myTutorialsData = [
-  { id: 1, title: "Macramé Plant Hanger Tutorial", duration: "15:23", image_url: "/images/thumbnail/planthanger.jpg", views: 12453 },
-  { id: 2, title: "Pottery Basics: Making Your First Bowl", duration: "28:32", image_url: "/images/thumbnail/potterybasic.jpg", views: 15678 },
-  { id: 3, title: "Woodworking 101: Creating a Cutting Board", duration: "20:15", image_url: "/images/thumbnail/woodworking.jpg", views: 9234 },
-  { id: 4, title: "Advanced Macramé Knots and Patterns", duration: "18:45", image_url: "/images/thumbnail/macrameknots.jpg", views: 6734 },
-  { id: 5, title: "5 Easy Craft Projects You Can Do Today", duration: "22:10", image_url: "/images/thumbnail/craft.jpg", views: 8921 },
+  {
+    id: 1,
+    title: "Macramé Plant Hanger Tutorial",
+    duration: "15:23",
+    image_url: "/images/thumbnail/planthanger.jpg",
+    views: 12453,
+  },
+  {
+    id: 2,
+    title: "Pottery Basics: Making Your First Bowl",
+    duration: "28:32",
+    image_url: "/images/thumbnail/potterybasic.jpg",
+    views: 15678,
+  },
+  {
+    id: 3,
+    title: "Woodworking 101: Creating a Cutting Board",
+    duration: "20:15",
+    image_url: "/images/thumbnail/woodworking.jpg",
+    views: 9234,
+  },
+  {
+    id: 4,
+    title: "Advanced Macramé Knots and Patterns",
+    duration: "18:45",
+    image_url: "/images/thumbnail/macrameknots.jpg",
+    views: 6734,
+  },
+  {
+    id: 5,
+    title: "5 Easy Craft Projects You Can Do Today",
+    duration: "22:10",
+    image_url: "/images/thumbnail/craft.jpg",
+    views: 8921,
+  },
 ];
 
 // Dummy Saved Tutorials Data
 const savedTutorialsData = [
-  { id: 1, title: "Ceramic Glazing Techniques", duration: "12:05", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/saved_1.jpg", views: 25000 },
-  { id: 2, title: "Home Decor Crochet Pattern", duration: "30:40", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/saved_2.png", views: 15000 },
-  { id: 3, title: "DIY Resin Art Coasters", duration: "10:15", image_url: "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/saved_3.webp", views: 18000 },
+  {
+    id: 1,
+    title: "Ceramic Glazing Techniques",
+    duration: "12:05",
+    image_url:
+      "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/saved_1.jpg",
+    views: 25000,
+  },
+  {
+    id: 2,
+    title: "Home Decor Crochet Pattern",
+    duration: "30:40",
+    image_url:
+      "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/saved_2.png",
+    views: 15000,
+  },
+  {
+    id: 3,
+    title: "DIY Resin Art Coasters",
+    duration: "10:15",
+    image_url:
+      "https://bwghxdlvuijbpsjjhnvx.supabase.co/storage/v1/object/public/craft-%20images/saved_3.webp",
+    views: 18000,
+  },
 ];
 
 // Dummy Order Data
 const orders = [
-  { id: 'ORD-2024-001', date: 'March 15, 2024', status: 'Delivered', items: 2, price: 77, images: ["/images/products/candle-containers.jpg", "/images/products/candle-dye-chips.jpg"] },
-  { id: 'ORD-2024-002', date: 'March 10, 2024', status: 'Shipped', items: 1, price: 78, images: ["/images/products/resin-pigments.jpg"] },
-  { id: 'ORD-2024-003', date: 'March 5, 2024', status: 'Processing', items: 2, price: 99, images: ["/images/products/crepe-paper-pack.jpg", "/images/products/floral-wire.jpg"] },
+  {
+    id: "ORD-2024-001",
+    date: "March 15, 2024",
+    status: "Delivered",
+    items: 2,
+    price: 77,
+    images: [
+      "/images/products/candle-containers.jpg",
+      "/images/products/candle-dye-chips.jpg",
+    ],
+  },
+  {
+    id: "ORD-2024-002",
+    date: "March 10, 2024",
+    status: "Shipped",
+    items: 1,
+    price: 78,
+    images: ["/images/products/resin-pigments.jpg"],
+  },
+  {
+    id: "ORD-2024-003",
+    date: "March 5, 2024",
+    status: "Processing",
+    items: 2,
+    price: 99,
+    images: [
+      "/images/products/crepe-paper-pack.jpg",
+      "/images/products/floral-wire.jpg",
+    ],
+  },
 ];
 
 export default function ProfilePage() {
@@ -55,20 +132,23 @@ export default function ProfilePage() {
     // placeholder for future upload logic
   };
 
-  if (status === "loading") return <p className="text-center mt-10">Loading...</p>;
+  if (status === "loading")
+    return <p className="text-center mt-10">Loading...</p>;
   if (!session) return <p className="text-center mt-10">Please login.</p>;
 
   return (
     <div className="min-h-screen pt-16 pb-16 bg-background">
       <div className="max-w-7xl mx-auto px-6">
-
         {/* Avatar + Stats */}
         <div className="flex flex-col md:flex-row items-center gap-10 bg-card-bg rounded-2xl shadow p-6">
           {/* Avatar */}
           <div className="relative shrink-0">
             <div className="w-32 h-32 rounded-full border border-gray-400 overflow-hidden flex items-center justify-center">
               {userData?.avatar_url ? (
-                <img src={userData.avatar_url} className="w-full h-full object-cover" />
+                <img
+                  src={userData.avatar_url}
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <div className="text-gray-400 text-sm">Profile Photo</div>
               )}
@@ -76,7 +156,11 @@ export default function ProfilePage() {
             <label
               htmlFor="avatarUpload"
               className={`absolute bottom-2 right-2 text-white text-xs px-3 py-1 rounded cursor-pointer
-                ${isUploading ? "bg-gray-500" : "bg-orange-500 hover:bg-orange-600"}`}
+                ${
+                  isUploading
+                    ? "bg-gray-500"
+                    : "bg-orange-500 hover:bg-orange-600"
+                }`}
             >
               {isUploading ? "Uploading..." : "Change"}
             </label>
@@ -114,7 +198,9 @@ export default function ProfilePage() {
 
         {/* Name + Bio */}
         <div className="mt-4 pl-0 md:pl-32">
-          <h1 className="text-lg font-semibold text-gray-800">{userData?.name || "User"}</h1>
+          <h1 className="text-lg font-semibold text-gray-800">
+            {userData?.name || "User"}
+          </h1>
           <div className="mt-1 text-sm text-gray-700 leading-relaxed">
             {userData?.bio && <p>{userData.bio}</p>}
             {userData?.location && (
@@ -124,7 +210,11 @@ export default function ProfilePage() {
             )}
             {userData?.website && (
               <a
-                href={userData.website.startsWith("http") ? userData.website : `https://${userData.website}`}
+                href={
+                  userData.website.startsWith("http")
+                    ? userData.website
+                    : `https://${userData.website}`
+                }
                 className="text-purple-600 hover:underline"
                 target="_blank"
               >
@@ -138,8 +228,18 @@ export default function ProfilePage() {
         <div className="flex justify-end w-full mt-4">
           <Link href="/upload">
             <button className="btn-primary flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
               </svg>
               Post Tutorial
             </button>
@@ -149,23 +249,35 @@ export default function ProfilePage() {
         {/* Tabs */}
         <div className="mt-8 flex gap-6 border-b border-gray-300 text-gray-600">
           <span
-            className={`cursor-pointer pb-2 ${activeTab === "MY_TUTORIALS" ? "font-bold border-b-2 border-primary text-black" : "hover:text-black"}`}
+            className={`cursor-pointer pb-2 ${
+              activeTab === "MY_TUTORIALS"
+                ? "font-bold border-b-2 border-primary text-black"
+                : "hover:text-black"
+            }`}
             onClick={() => setActiveTab("MY_TUTORIALS")}
           >
             MY TUTORIALS
           </span>
           <span
-            className={`cursor-pointer pb-2 ${activeTab === "SAVED" ? "font-bold border-b-2 border-primary text-black" : "hover:text-black"}`}
+            className={`cursor-pointer pb-2 ${
+              activeTab === "SAVED"
+                ? "font-bold border-b-2 border-primary text-black"
+                : "hover:text-black"
+            }`}
             onClick={() => setActiveTab("SAVED")}
           >
             SAVED
           </span>
-          <span
-            className={`cursor-pointer pb-2 ${activeTab === "ORDERS" ? "font-bold border-b-2 border-primary text-black" : "hover:text-black"}`}
+          {/* <span
+            className={`cursor-pointer pb-2 ${
+              activeTab === "ORDERS"
+                ? "font-bold border-b-2 border-primary text-black"
+                : "hover:text-black"
+            }`}
             onClick={() => setActiveTab("ORDERS")}
           >
             ORDERS
-          </span>
+          </span> */}
         </div>
 
         {/* Tab Content */}
@@ -188,24 +300,32 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* ORDERS */}
-          {activeTab === "ORDERS" && (
+          {/* {activeTab === "ORDERS" && (
             <div className="grid grid-cols-1 gap-6">
               {orders.map((order) => (
-                <div key={order.id} className="bg-card-bg rounded-2xl shadow p-4 flex justify-between">
-                  {/* Left */}
+                <div
+                  key={order.id}
+                  className="bg-card-bg rounded-2xl shadow p-4 flex justify-between"
+                >
                   <div>
-                    <div className="text-lg font-semibold">Order #{order.id}</div>
+                    <div className="text-lg font-semibold">
+                      Order #{order.id}
+                    </div>
                     <div className="text-sm text-gray-500">{order.date}</div>
                     <div className="flex mt-2 space-x-2">
                       {order.images.map((img, i) => (
-                        <img key={i} src={img} className="w-12 h-12 rounded object-cover" />
+                        <img
+                          key={i}
+                          src={img}
+                          className="w-12 h-12 rounded object-cover"
+                        />
                       ))}
                     </div>
-                    <div className="text-sm mt-2">{order.items} item{order.items > 1 ? "s" : ""}</div>
+                    <div className="text-sm mt-2">
+                      {order.items} item{order.items > 1 ? "s" : ""}
+                    </div>
                   </div>
 
-                  {/* Right */}
                   <div className="text-right">
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-medium ${
@@ -223,7 +343,7 @@ export default function ProfilePage() {
                 </div>
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>

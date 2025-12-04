@@ -176,11 +176,6 @@ export default function Navbar() {
                 <div className="profile-dropdown hidden group-hover:block rounded border-gray-500 bg-white p-2 py-4 pt-6 md:pt-8 absolute w-[150px] z-100 right-[-60] top-5 md:top-6 shadow-[0_2.4rem_4.8rem_rgba(0,0,0,0.075)]">
                   <ul className="flex flex-col items-center justify-center gap-2 ">
                     <li>
-                      <Link className="nav__link md:text-base text-sm" href="/">
-                        Settings
-                      </Link>
-                    </li>
-                    <li>
                       <Link
                         className="nav__link md:text-base text-sm"
                         href="/profile"
@@ -188,6 +183,22 @@ export default function Navbar() {
                         Profile
                       </Link>
                     </li>
+
+                    <li>
+                      <Link
+                        className="nav__link md:text-base text-sm"
+                        href="/orders"
+                      >
+                        Orders
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link className="nav__link md:text-base text-sm" href="/">
+                        Settings
+                      </Link>
+                    </li>
+
                     <li>
                       <button
                         onClick={() => signOut({ callbackUrl: "/" })}
