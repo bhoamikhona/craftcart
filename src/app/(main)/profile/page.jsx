@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import supabase from "@/lib/supabaseClient";
 import ProfileTutorialCard from "@/components/Profile/ProfileTutorialCard";
 import Link from "next/link";
-
 // Dummy My Tutorials Data
 const myTutorialsData = [
   {
@@ -137,7 +136,7 @@ export default function ProfilePage() {
   if (!session) return <p className="text-center mt-10">Please login.</p>;
 
   return (
-    <div className="min-h-screen pt-16 pb-16 bg-background">
+    <main className="min-h-screen pt-16 pb-16 bg-background">
       <div className="max-w-7xl mx-auto px-6">
         {/* Avatar + Stats */}
         <div className="flex flex-col md:flex-row items-center gap-10 bg-card-bg rounded-2xl shadow p-6">
@@ -346,6 +345,6 @@ export default function ProfilePage() {
           )} */}
         </div>
       </div>
-    </div>
+    </main>
   );
 }

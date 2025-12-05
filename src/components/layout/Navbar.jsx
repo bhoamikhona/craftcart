@@ -194,7 +194,10 @@ export default function Navbar() {
                     </li>
 
                     <li>
-                      <Link className="nav__link md:text-base text-sm" href="/">
+                      <Link
+                        className="nav__link md:text-base text-sm"
+                        href="/settings"
+                      >
                         Settings
                       </Link>
                     </li>
