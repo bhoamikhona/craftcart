@@ -1,6 +1,15 @@
 /* 🌀 Import Tailwind base layers */
 @import "tailwindcss";
 
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+  }
+}
+
 /* ──────────────────────────────
    🎨 THEME VARIABLES
    ────────────────────────────── */
@@ -93,4 +102,24 @@ a {
   .card {
     @apply bg-[var(--card-bg)] border border-[var(--border-color)] rounded-xl shadow-sm p-4;
   }
+
+  /* .pb-2 {
+    padding-bottom: 2rem;
+  }
+
+  .pb-4 {
+    padding-bottom: 4rem;
+  }
+
+  .pb-5 {
+    padding-bottom: 5rem;
+  }
+
+  .pb-6 {
+    padding-bottom: 6rem;
+  }
+
+  .pb-8 {
+    padding-bottom: 8rem;
+  } */
 }
