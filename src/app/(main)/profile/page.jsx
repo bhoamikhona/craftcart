@@ -115,13 +115,13 @@ export default function ProfilePage() {
     if (!session?.user?.email) return;
 
     async function fetchUser() {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("users")
         .select("*")
         .eq("email", session.user.email)
         .single();
 
-      if (!error) setUserData(data);
+      setUserData(data);
     }
 
     fetchUser();
@@ -144,25 +144,21 @@ export default function ProfilePage() {
           <div className="relative shrink-0">
             <div className="w-32 h-32 rounded-full border border-gray-400 overflow-hidden flex items-center justify-center">
               {userData?.avatar_url ? (
-                <img
-                  src={userData.avatar_url}
-                  className="w-full h-full object-cover"
-                />
+                <img src={userData.avatar_url} className="w-full h-full object-cover" />
               ) : (
                 <div className="text-gray-400 text-sm">Profile Photo</div>
               )}
             </div>
+
             <label
               htmlFor="avatarUpload"
-              className={`absolute bottom-2 right-2 text-white text-xs px-3 py-1 rounded cursor-pointer
-                ${
-                  isUploading
-                    ? "bg-gray-500"
-                    : "bg-orange-500 hover:bg-orange-600"
-                }`}
+              className={`absolute bottom-2 right-2 text-white text-xs px-3 py-1 rounded cursor-pointer ${
+                isUploading ? "bg-gray-500" : "bg-orange-500 hover:bg-orange-600"
+              }`}
             >
               {isUploading ? "Uploading..." : "Change"}
             </label>
+
             <input
               id="avatarUpload"
               type="file"
@@ -173,7 +169,6 @@ export default function ProfilePage() {
             />
           </div>
 
-          {/* Stats */}
           <div className="flex flex-wrap gap-10 text-base font-semibold text-gray-800">
             <div>
               <p>{userData?.projects_count || 0}</p>
@@ -197,16 +192,11 @@ export default function ProfilePage() {
 
         {/* Name + Bio */}
         <div className="mt-4 pl-0 md:pl-32">
-          <h1 className="text-lg font-semibold text-gray-800">
-            {userData?.name || "User"}
-          </h1>
+          <h1 className="text-lg font-semibold text-gray-800">{userData?.name}</h1>
+
           <div className="mt-1 text-sm text-gray-700 leading-relaxed">
             {userData?.bio && <p>{userData.bio}</p>}
-            {userData?.location && (
-              <p className="flex items-center gap-1 text-gray-600">
-                <span>📍</span> {userData.location}
-              </p>
-            )}
+            {userData?.location && <p>📍 {userData.location}</p>}
             {userData?.website && (
               <a
                 href={
@@ -227,18 +217,8 @@ export default function ProfilePage() {
         <div className="flex justify-end w-full mt-4">
           <Link href="/upload">
             <button className="btn-primary flex items-center gap-2">
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
               </svg>
               Post Tutorial
             </button>
@@ -249,34 +229,21 @@ export default function ProfilePage() {
         <div className="mt-8 flex justify-center gap-6 border-b border-gray-300 text-gray-600 mb-16">
           <span
             className={`cursor-pointer pb-2 ${
-              activeTab === "MY_TUTORIALS"
-                ? "font-bold border-b-2 border-primary text-black"
-                : "hover:text-black"
+              activeTab === "MY_TUTORIALS" ? "font-bold border-b-2 border-primary text-black" : ""
             }`}
             onClick={() => setActiveTab("MY_TUTORIALS")}
           >
             MY TUTORIALS
           </span>
+
           <span
             className={`cursor-pointer pb-2 ${
-              activeTab === "SAVED"
-                ? "font-bold border-b-2 border-primary text-black"
-                : "hover:text-black"
+              activeTab === "SAVED" ? "font-bold border-b-2 border-primary text-black" : ""
             }`}
             onClick={() => setActiveTab("SAVED")}
           >
             SAVED
           </span>
-          {/* <span
-            className={`cursor-pointer pb-2 ${
-              activeTab === "ORDERS"
-                ? "font-bold border-b-2 border-primary text-black"
-                : "hover:text-black"
-            }`}
-            onClick={() => setActiveTab("ORDERS")}
-          >
-            ORDERS
-          </span> */}
         </div>
 
         {/* Tab Content */}
@@ -290,7 +257,6 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* SAVED */}
           {activeTab === "SAVED" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {savedTutorialsData.map((tutorial) => (
