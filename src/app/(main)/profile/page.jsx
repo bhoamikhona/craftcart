@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import supabase from "@/lib/supabaseClient";
 import ProfileTutorialCard from "@/components/Profile/ProfileTutorialCard";
 import Link from "next/link";
+import Loader from "@/components/ui/loader";
+
 // Dummy My Tutorials Data
 const myTutorialsData = [
   {
@@ -132,7 +134,8 @@ export default function ProfilePage() {
   };
 
   if (status === "loading")
-    return <p className="text-center mt-10">Loading...</p>;
+    // return <p className="text-center mt-10">Loading...</p>;
+    return <Loader />;
   if (!session) return <p className="text-center mt-10">Please login.</p>;
 
   return (
@@ -144,7 +147,10 @@ export default function ProfilePage() {
           <div className="relative shrink-0">
             <div className="w-32 h-32 rounded-full border border-gray-400 overflow-hidden flex items-center justify-center">
               {userData?.avatar_url ? (
-                <img src={userData.avatar_url} className="w-full h-full object-cover" />
+                <img
+                  src={userData.avatar_url}
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <div className="text-gray-400 text-sm">Profile Photo</div>
               )}
@@ -153,7 +159,9 @@ export default function ProfilePage() {
             <label
               htmlFor="avatarUpload"
               className={`absolute bottom-2 right-2 text-white text-xs px-3 py-1 rounded cursor-pointer ${
-                isUploading ? "bg-gray-500" : "bg-orange-500 hover:bg-orange-600"
+                isUploading
+                  ? "bg-gray-500"
+                  : "bg-orange-500 hover:bg-orange-600"
               }`}
             >
               {isUploading ? "Uploading..." : "Change"}
@@ -192,7 +200,9 @@ export default function ProfilePage() {
 
         {/* Name + Bio */}
         <div className="mt-4 pl-0 md:pl-32">
-          <h1 className="text-lg font-semibold text-gray-800">{userData?.name}</h1>
+          <h1 className="text-lg font-semibold text-gray-800">
+            {userData?.name}
+          </h1>
 
           <div className="mt-1 text-sm text-gray-700 leading-relaxed">
             {userData?.bio && <p>{userData.bio}</p>}
@@ -217,8 +227,18 @@ export default function ProfilePage() {
         <div className="flex justify-end w-full mt-4">
           <Link href="/upload">
             <button className="btn-primary flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
               </svg>
               Post Tutorial
             </button>
@@ -229,7 +249,9 @@ export default function ProfilePage() {
         <div className="mt-8 flex justify-center gap-6 border-b border-gray-300 text-gray-600 mb-16">
           <span
             className={`cursor-pointer pb-2 ${
-              activeTab === "MY_TUTORIALS" ? "font-bold border-b-2 border-primary text-black" : ""
+              activeTab === "MY_TUTORIALS"
+                ? "font-bold border-b-2 border-primary text-black"
+                : ""
             }`}
             onClick={() => setActiveTab("MY_TUTORIALS")}
           >
@@ -238,7 +260,9 @@ export default function ProfilePage() {
 
           <span
             className={`cursor-pointer pb-2 ${
-              activeTab === "SAVED" ? "font-bold border-b-2 border-primary text-black" : ""
+              activeTab === "SAVED"
+                ? "font-bold border-b-2 border-primary text-black"
+                : ""
             }`}
             onClick={() => setActiveTab("SAVED")}
           >
