@@ -227,7 +227,7 @@ export default function ProfilePage() {
             <Image
               src={
                 userData?.avatar_url
-                  ? "/images/default-avatar.png"
+                  ? userData.avatar_url
                   : "/images/users/default-avatar.png"
               }
               alt={`${userData?.name}'s headshot` || "User Avatar"}
