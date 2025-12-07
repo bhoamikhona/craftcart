@@ -225,7 +225,11 @@ export default function ProfilePage() {
         <div className="flex md:flex-row flex-col items-center justify-center gap-6 my-12">
           <div className="border-20 rounded-full border-orange-100">
             <Image
-              src={userData?.avatar_url || "/images/default-avatar.png"}
+              src={
+                userData?.avatar_url
+                  ? "/images/default-avatar.png"
+                  : "/images/users/default-avatar.png"
+              }
               alt={`${userData?.name}'s headshot` || "User Avatar"}
               width={180}
               height={180}
