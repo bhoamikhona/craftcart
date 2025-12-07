@@ -141,17 +141,17 @@ export default function Navbar() {
         <div className="nav__center flex-1">
           <ul className="flex gap-4 justify-center">
             <li>
-              <Link className="nav__link md:text-base text-sm" href="/">
+              <Link className="nav__link md:text-base text-sm" href="/videos">
                 Explore
               </Link>
             </li>
             <li>
-              <Link className="nav__link md:text-base text-sm" href="/">
+              <Link className="nav__link md:text-base text-sm" href="/shop">
                 Shop
               </Link>
             </li>
             <li>
-              <Link className="nav__link md:text-base text-sm" href="/">
+              <Link className="nav__link md:text-base text-sm" href="/studio">
                 Create
               </Link>
             </li>
