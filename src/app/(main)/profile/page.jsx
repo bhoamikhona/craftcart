@@ -1,4 +1,5 @@
 "use client";
+
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import supabase from "@/lib/supabaseClient";
@@ -8,46 +9,7 @@ import Image from "next/image";
 import { CiLocationOn, CiGlobe } from "react-icons/ci";
 import Loader from "@/components/ui/loader";
 
-// Dummy My Tutorials Data
-const myTutorialsData = [
-  {
-    id: 1,
-    title: "Macramé Plant Hanger Tutorial",
-    duration: "15:23",
-    image_url: "/images/thumbnail/planthanger.jpg",
-    views: 12453,
-  },
-  {
-    id: 2,
-    title: "Pottery Basics: Making Your First Bowl",
-    duration: "28:32",
-    image_url: "/images/thumbnail/potterybasic.jpg",
-    views: 15678,
-  },
-  {
-    id: 3,
-    title: "Woodworking 101: Creating a Cutting Board",
-    duration: "20:15",
-    image_url: "/images/thumbnail/woodworking.jpg",
-    views: 9234,
-  },
-  {
-    id: 4,
-    title: "Advanced Macramé Knots and Patterns",
-    duration: "18:45",
-    image_url: "/images/thumbnail/macrameknots.jpg",
-    views: 6734,
-  },
-  {
-    id: 5,
-    title: "5 Easy Craft Projects You Can Do Today",
-    duration: "22:10",
-    image_url: "/images/thumbnail/craft.jpg",
-    views: 8921,
-  },
-];
-
-// Dummy Saved Tutorials Data
+// SAVED dummy tutorials remain
 const savedTutorialsData = [
   {
     id: 1,
@@ -75,65 +37,37 @@ const savedTutorialsData = [
   },
 ];
 
-// Dummy Order Data
-const orders = [
-  {
-    id: "ORD-2024-001",
-    date: "March 15, 2024",
-    status: "Delivered",
-    items: 2,
-    price: 77,
-    images: [
-      "/images/products/candle-containers.jpg",
-      "/images/products/candle-dye-chips.jpg",
-    ],
-  },
-  {
-    id: "ORD-2024-002",
-    date: "March 10, 2024",
-    status: "Shipped",
-    items: 1,
-    price: 78,
-    images: ["/images/products/resin-pigments.jpg"],
-  },
-  {
-    id: "ORD-2024-003",
-    date: "March 5, 2024",
-    status: "Processing",
-    items: 2,
-    price: 99,
-    images: [
-      "/images/products/crepe-paper-pack.jpg",
-      "/images/products/floral-wire.jpg",
-    ],
-  },
-];
-
 export default function ProfilePage() {
   const { data: session, status } = useSession();
   const [userData, setUserData] = useState(null);
+  const [userTutorials, setUserTutorials] = useState([]); // NEW
   const [activeTab, setActiveTab] = useState("MY_TUTORIALS");
-  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (!session?.user?.email) return;
 
-    async function fetchUser() {
-      const { data, error } = await supabase
+    async function loadUser() {
+      const { data } = await supabase
         .from("users")
         .select("*")
         .eq("email", session.user.email)
         .single();
 
-      if (!error) setUserData(data);
+      setUserData(data);
     }
 
-    fetchUser();
-  }, [session]);
+    async function loadTutorials() {
+      const { data } = await supabase
+        .from("tutorials")
+        .select("*")
+        .eq("creator_id", session.user.id);
 
-  const handleAvatarUpload = async (e) => {
-    // placeholder for future upload logic
-  };
+      setUserTutorials(data || []);
+    }
+
+    loadUser();
+    loadTutorials();
+  }, [session]);
 
   if (status === "loading") return <Loader />;
   if (!session) return <p className="text-center mt-10">Please login.</p>;
@@ -141,87 +75,8 @@ export default function ProfilePage() {
   return (
     <main className="min-h-screen pt-16 pb-16 bg-background">
       <div className="max-w-7xl mx-auto px-6">
-        {/* <div className="flex flex-col md:flex-row items-center gap-10 bg-card-bg rounded-2xl shadow p-6">
-          <div className="relative shrink-0">
-            <div className="w-32 h-32 rounded-full border border-gray-400 overflow-hidden flex items-center justify-center">
-              {userData?.avatar_url ? (
-                <img
-                  src={userData.avatar_url}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="text-gray-400 text-sm">Profile Photo</div>
-              )}
-            </div>
-            <label
-              htmlFor="avatarUpload"
-              className={`absolute bottom-2 right-2 text-white text-xs px-3 py-1 rounded cursor-pointer
-                ${
-                  isUploading
-                    ? "bg-gray-500"
-                    : "bg-orange-500 hover:bg-orange-600"
-                }`}
-            >
-              {isUploading ? "Uploading..." : "Change"}
-            </label>
-            <input
-              id="avatarUpload"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleAvatarUpload}
-              disabled={isUploading}
-            />
-          </div>
 
-          <div className="flex flex-wrap gap-10 text-base font-semibold text-gray-800">
-            <div>
-              <p>{userData?.projects_count || 0}</p>
-              <p className="text-gray-700 text-sm">projects</p>
-            </div>
-            <div>
-              <p>{userData?.followers_count || 0}</p>
-              <p className="text-gray-700 text-sm">followers</p>
-            </div>
-            <div>
-              <p>{userData?.following_count || 0}</p>
-              <p className="text-gray-700 text-sm">following</p>
-            </div>
-            <div className="flex items-center gap-1 text-purple-700">
-              <p className="font-bold text-lg">★</p>
-              <p>{userData?.rating || 0}</p>
-              <p className="text-gray-700 text-sm">rating</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-4 pl-0 md:pl-32">
-          <h1 className="text-lg font-semibold text-gray-800">
-            {userData?.name || "User"}
-          </h1>
-          <div className="mt-1 text-sm text-gray-700 leading-relaxed">
-            {userData?.bio && <p>{userData.bio}</p>}
-            {userData?.location && (
-              <p className="flex items-center gap-1 text-gray-600">
-                <span>📍</span> {userData.location}
-              </p>
-            )}
-            {userData?.website && (
-              <a
-                href={
-                  userData.website.startsWith("http")
-                    ? userData.website
-                    : `https://${userData.website}`
-                }
-                className="text-purple-600 hover:underline"
-                target="_blank"
-              >
-                🔗 {userData.website}
-              </a>
-            )}
-          </div>
-        </div> */}
-
+        {/* Profile header remains identical */}
         <div className="flex md:flex-row flex-col items-center justify-center gap-6 my-12">
           <div className="border-20 rounded-full border-orange-100">
             <Image
@@ -230,45 +85,51 @@ export default function ProfilePage() {
                   ? userData.avatar_url
                   : "/images/users/default-avatar.png"
               }
-              alt={`${userData?.name}'s headshot` || "User Avatar"}
+              alt={`${userData?.name}'s headshot`}
               width={180}
               height={180}
               className="rounded-full"
             />
           </div>
+
           <div className="flex flex-col">
             <div className="pb-3 border-b border-gray-300">
               <h1 className="text-lg font-bold mb-1 text-center md:text-left">
-                {userData?.name || "User"}
+                {userData?.name}
               </h1>
               <p className="flex justify-center md:justify-start items-center gap-1 text-sm">
                 <CiLocationOn className="text-lg text-primary" />
                 {userData?.location || "New York"}
               </p>
             </div>
+
             <div className="grid grid-cols-3 gap-10 py-3 border-b border-gray-300">
-              <div className="flex flex-col items-center justify-center">
-                <p className="font-bold">{userData?.projects_count || 0}</p>
+              <div className="flex flex-col items-center">
+                <p className="font-bold">{userTutorials.length}</p>
                 <h3 className="text-sm">Posts</h3>
               </div>
-              <div className="flex flex-col items-center justify-center">
+
+              <div className="flex flex-col items-center">
                 <p className="font-bold">{userData?.followers_count || 0}</p>
                 <h3 className="text-sm">Followers</h3>
               </div>
-              <div className="flex flex-col items-center justify-center">
+
+              <div className="flex flex-col items-center">
                 <p className="font-bold">{userData?.following_count || 0}</p>
                 <h3 className="text-sm">Following</h3>
               </div>
             </div>
+
             <div className="max-w-xs">
               <p className="mt-3 text-gray-700 text-sm text-center md:text-left mb-3">
                 {userData?.bio}
               </p>
+
               {userData?.website && (
-                <p className="flex justify-center mb-2 md:justify-start items-center gap-1 text-sm">
+                <p className="flex justify-center md:justify-start items-center gap-1 text-sm">
                   <CiGlobe className="text-lg text-primary" />
-                  <a className="footer__link" href={userData?.website}>
-                    {userData?.website}
+                  <a className="footer__link" href={userData.website}>
+                    {userData.website}
                   </a>
                 </p>
               )}
@@ -280,18 +141,8 @@ export default function ProfilePage() {
         <div className="flex justify-end w-full mt-4">
           <Link href="/upload">
             <button className="btn-primary flex items-center gap-2">
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
               Post Tutorial
             </button>
@@ -310,6 +161,7 @@ export default function ProfilePage() {
           >
             MY TUTORIALS
           </span>
+
           <span
             className={`cursor-pointer pb-2 ${
               activeTab === "SAVED"
@@ -320,30 +172,35 @@ export default function ProfilePage() {
           >
             SAVED
           </span>
-          {/* <span
-            className={`cursor-pointer pb-2 ${
-              activeTab === "ORDERS"
-                ? "font-bold border-b-2 border-primary text-black"
-                : "hover:text-black"
-            }`}
-            onClick={() => setActiveTab("ORDERS")}
-          >
-            ORDERS
-          </span> */}
         </div>
 
-        {/* Tab Content */}
+        {/* Content */}
         <div className="mt-4">
-          {/* MY TUTORIALS */}
+          {/* MY TUTORIALS — REAL DATA */}
           {activeTab === "MY_TUTORIALS" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {myTutorialsData.map((tutorial) => (
-                <ProfileTutorialCard key={tutorial.id} tutorial={tutorial} />
+              {userTutorials.length === 0 && (
+                <p className="text-center text-gray-500 col-span-full">
+                  You haven't uploaded any tutorials yet.
+                </p>
+              )}
+
+              {userTutorials.map((tutorial) => (
+                <ProfileTutorialCard
+                  key={tutorial.tutorial_id}
+                  tutorial={{
+                    id: tutorial.tutorial_id,
+                    title: tutorial.title,
+                    image_url: tutorial.thumbnail_url || "/images/thumbnail/craft.jpg",
+                    duration: tutorial.duration || "00:00",
+                    views: tutorial.likes || 0,
+                  }}
+                />
               ))}
             </div>
           )}
 
-          {/* SAVED */}
+          {/* SAVED — dummy data stays */}
           {activeTab === "SAVED" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {savedTutorialsData.map((tutorial) => (
@@ -351,51 +208,6 @@ export default function ProfilePage() {
               ))}
             </div>
           )}
-
-          {/* {activeTab === "ORDERS" && (
-            <div className="grid grid-cols-1 gap-6">
-              {orders.map((order) => (
-                <div
-                  key={order.id}
-                  className="bg-card-bg rounded-2xl shadow p-4 flex justify-between"
-                >
-                  <div>
-                    <div className="text-lg font-semibold">
-                      Order #{order.id}
-                    </div>
-                    <div className="text-sm text-gray-500">{order.date}</div>
-                    <div className="flex mt-2 space-x-2">
-                      {order.images.map((img, i) => (
-                        <img
-                          key={i}
-                          src={img}
-                          className="w-12 h-12 rounded object-cover"
-                        />
-                      ))}
-                    </div>
-                    <div className="text-sm mt-2">
-                      {order.items} item{order.items > 1 ? "s" : ""}
-                    </div>
-                  </div>
-
-                  <div className="text-right">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        order.status === "Delivered"
-                          ? "bg-green-100 text-green-800"
-                          : order.status === "Shipped"
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}
-                    >
-                      {order.status}
-                    </span>
-                    <div className="mt-2 text-lg font-bold">${order.price}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )} */}
         </div>
       </div>
     </main>

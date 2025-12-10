@@ -1,19 +1,36 @@
-
 import React from "react";
 
 const ProfileTutorialCard = ({ tutorial }) => {
+  // const image = tutorial.image_url;
+  const image =
+    tutorial.thumbnail_url ||
+    tutorial.image_url ||
+    "/images/thumbnail/default.jpg";
+
+  // const duration = tutorial.duration;
+  const duration = tutorial.duration || "00:00";
+
+  // const views = tutorial.views.toLocaleString();
+  const views =
+    (tutorial.views ||
+      tutorial.likes ||
+      0).toLocaleString();
+
+  // const tutorialLink = `/tutorial/${tutorial.id}`;
+  const tutorialLink = `/tutorial/${tutorial.tutorial_id}`;
+
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow border border-gray-100">
       
       {/* Image / Thumbnail */}
       <div className="relative w-full aspect-video overflow-hidden">
+        {/* <img src={tutorial.image_url} alt={tutorial.title} className="w-full h-full object-cover" /> */}
         <img
-          src={tutorial.image_url}
+          src={image}
           alt={tutorial.title}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
 
-        {/* Play Button Overlay */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-16 h-16 bg-black/50 rounded-full flex items-center justify-center cursor-pointer hover:bg-black/60 transition">
             <svg
@@ -26,13 +43,12 @@ const ProfileTutorialCard = ({ tutorial }) => {
           </div>
         </div>
 
-        {/* Duration Badge */}
         <span className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-0.5 rounded-sm">
-          {tutorial.duration}
+          {/* {tutorial.duration} */}
+          {duration}
         </span>
       </div>
 
-      {/* Title & Views */}
       <div className="p-3">
         <h3 className="text-base font-semibold text-gray-800 line-clamp-1">
           {tutorial.title}
@@ -59,11 +75,14 @@ const ProfileTutorialCard = ({ tutorial }) => {
                 d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
               />
             </svg>
-            {tutorial.views.toLocaleString()} views
+
+            {/* {tutorial.views.toLocaleString()} views */}
+            {views} views
           </span>
 
+          {/* <a href={`/tutorial/${tutorial.id}`}> */}
           <a
-            href={`/tutorial/${tutorial.id}`}
+            href={tutorialLink}
             className="text-orange-500 hover:text-orange-600 font-medium"
           >
             Details →
