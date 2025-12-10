@@ -55,9 +55,27 @@ export default function ProductDetailPage() {
       image: activeImage
     };
 
+    const existingCart =
+      JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existingItemIndex = existingCart.findIndex(
+      item => item.id === product.id
+    );
+
+    if (existingItemIndex !== -1) {
+      existingCart[existingItemIndex].quantity += quantity;
+    } else {
+      existingCart.push(cartItem);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(existingCart));
+
     console.log("Added to cart:", cartItem);
 
     setQuantity(0);
+
+    // go to cart page
+    window.location.href = "/cart";
   };
 
   return (
