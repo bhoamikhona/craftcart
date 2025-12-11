@@ -1,9 +1,11 @@
 import Sidebar, { SidebarItem } from "@/components/ui/Sidebar.jsx";
 import { LayoutGrid, Box, Tag, CheckCircle } from "lucide-react";
+import { productsData as data } from "@/data/newProductsData.js";
+import ProductCard from "@/components/ui/ProductCard.jsx";
 
 export default function Shop() {
   return (
-    <main className="flex gap-2 my-12">
+    <main className="flex gap-6 my-12">
       <Sidebar>
         <SidebarItem
           icon={<LayoutGrid size={20} />}
@@ -31,7 +33,11 @@ export default function Shop() {
           checkList={["In Stock", "Out of Stock"]}
         />
       </Sidebar>
-      <div>MAIN SHOP</div>
+      <div className="max-w-7xl m-auto grid md:grid-cols-3 grid-cols-2 gap-12">
+        {data.map((p) => (
+          <ProductCard key={p.productId} product={p} />
+        ))}
+      </div>
     </main>
   );
 }

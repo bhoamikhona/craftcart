@@ -54,20 +54,23 @@ export default function UploadPage() {
 
       const videoUrl = urlData.publicUrl;
 
-      // Save metadata
+      // Insert tutorial into database
       const { error: insertErr } = await supabase
         .from("tutorials")
         .insert({
-          user_id: userId,
+          creator_id: userId,
           title,
           description,
           video_url: videoUrl,
+          thumbnail_url: null,  // optional
+          duration: null        // optional
         });
 
       if (insertErr) throw insertErr;
 
-      alert("Uploaded successfully");
+      alert("Uploaded successfully!");
       router.push("/profile");
+
     } catch (err) {
       console.error("Upload failed:", err);
       setUploadError("Upload failed.");
