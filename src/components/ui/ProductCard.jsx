@@ -10,7 +10,7 @@ export default function ProductCard({
     description,
     inStock,
     price,
-    image,
+    images,
     rating,
     category,
     material,
@@ -18,9 +18,9 @@ export default function ProductCard({
 }) {
   return (
     <Link className="product-link" href={`/shop/${productId}`}>
-      <article className="flex flex-col h-full gap-4 items-stretch justify-stretch p-5 rounded-2xl bg-orange-200">
+      <article className="flex flex-col h-full gap-4 items-stretch justify-stretch p-5 rounded-2xl shadow-[0_2.4rem_4.8rem_rgba(0,0,0,0.075)]">
         <div className="product-img-container rounded-lg overflow-hidden shadow-sm">
-          <img src={image} alt={name} className="product-img" />
+          <img src={images[0]} alt={name} className="product-img" />
         </div>
         <div className="product-info-container h-auto w-full flex flex-col justify-between flex-1">
           <div>
