@@ -18,8 +18,11 @@ export default function ProductCard({
 }) {
   return (
     <Link className="product-link" href={`/shop/${productId}`}>
-      <article className="flex flex-col h-full gap-4 items-stretch justify-stretch p-5 rounded-2xl bg-orange-200">
-        <div className="product-img-container rounded-lg overflow-hidden shadow-sm">
+      <article className="flex flex-col h-full gap-4 items-stretch justify-stretch p-5 rounded-2xl bg-[#fffdf7] shadow-[0_6px_20px_rgba(0,0,0,0.1)] border border-[#f8eada]">
+        <div className="product-img-container 
+                        rounded-lg overflow-hidden shadow-sm 
+                        bg-linear-to-br from-[#FFEAD1] to-[#FFB56B] 
+                        p-4">
           <img src={image} alt={name} className="product-img" />
         </div>
         <div className="product-info-container h-auto w-full flex flex-col justify-between flex-1">
