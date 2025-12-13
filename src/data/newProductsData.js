@@ -1,7 +1,7 @@
 export const productsData = [
   {
     productId: "prod-001",
-    name: "Stainless Steel Craft Scissors",
+    name: "Stainless Steel Scissors",
     description:
       "8-inch stainless steel scissors with soft-grip handles, ideal for precision cutting of paper, cardstock, and light fabric.",
     measurements: "8 in length, 3 mm blade thickness",
@@ -107,7 +107,7 @@ export const productsData = [
   },
   {
     productId: "prod-005",
-    name: "Double-Sided Foam Tape Roll",
+    name: "Double-Sided Foam Tape",
     description:
       "High-bond double-sided foam tape ideal for mounting photos, creating shaker cards, and adding dimension to paper projects.",
     measurements: "10 mm width, 5 m length, 1.5 mm thickness",
@@ -407,7 +407,7 @@ export const productsData = [
   // },
   {
     productId: "prod-016",
-    name: "Assorted Desk Stationery Set",
+    name: "Assorted Stationery Set",
     description:
       "Pink stationery set perfect for craft rooms and DIY projects, ideal for organizing patterns, scrapbooks, planners, and inspiration boards.",
     inStock: true,

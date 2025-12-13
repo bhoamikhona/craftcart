@@ -33,10 +33,17 @@ export default function Shop() {
           checkList={["In Stock", "Out of Stock"]}
         />
       </Sidebar>
-      <div className="max-w-7xl mx-auto grid md:grid-cols-3 grid-cols-2 gap-24 items-stretch auto-rows-fr">
+      {/* <div className="max-w-7xl mx-auto grid md:grid-cols-3 grid-cols-2 gap-24 items-stretch auto-rows-fr">
         {data.map((p) => (
           <ProductCard key={p.productId} product={p} />
         ))}
+      </div> */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-24 sm:grid-cols-2 lg:grid-cols-3">
+          {data.map((p) => (
+            <ProductCard key={p.productId} product={p} />
+          ))}
+        </div>
       </div>
     </main>
   );
