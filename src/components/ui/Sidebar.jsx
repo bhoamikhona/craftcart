@@ -1,7 +1,6 @@
-
 "use client";
 
-import { ChevronRight, ChevronLeft } from "lucide-react";
+import { ChevronRight, ChevronLeft, Check } from "lucide-react";
 import { useContext, useState, createContext } from "react";
 
 const SidebarContext = createContext();
@@ -10,150 +9,100 @@ export default function Sidebar({ children }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <aside
-      className={`
-        h-screen
-        transition-all duration-300
-        ${expanded ? "w-64" : "w-20"}
-        bg-[#FFF8F1]
-      `}
-    >
-      <nav
-        className="
-          sticky top-0 h-full flex flex-col
-          bg-[#FFF8F1]
-          rounded-r-3xl
-          shadow-[4px_0_30px_rgba(0,0,0,0.05)]
-          py-4
-        "
-      >
-        {/* TOGGLE BUTTON */}
-        <div className="px-4 pb-4 flex justify-end">
+    <aside className="h-[80vh] fixed left-0">
+      {/* <nav className="sticky top-0 h-full flex flex-col bg-orange-50 border-2 border-l-0 border-orange-100 rounded-r-lg"> */}
+      <nav className="sticky top-0 h-full flex flex-col shadow-[0_0_48px_rgba(0,0,0,0.15)] rounded-r-4xl">
+        <div className="p-4 pb-2 flex justify-end items-center">
           <button
             onClick={() => setExpanded((e) => !e)}
-            className="
-              p-2 rounded-full
-              bg-white
-              shadow-sm
-              hover:bg-[#FFF2E6]
-              transition
-            "
+            className="p-1.5 rounded-full shadow-md bg-gray-100 hover:bg-gray-200 cursor-pointer mb-2"
           >
-            {expanded ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+            {expanded ? <ChevronLeft /> : <ChevronRight />}
           </button>
         </div>
-
         <SidebarContext.Provider value={{ expanded }}>
-          <ul className="flex-1 px-3 space-y-1">{children}</ul>
+          <ul className="flex-1 px-3 flex flex-col gap-4">{children}</ul>
         </SidebarContext.Provider>
+        {expanded && (
+          <button className="bg-primary h-10 m-4 rounded-xl text-white hover:bg-orange-600 cursor-pointer">
+            Apply Filters
+          </button>
+        )}
       </nav>
     </aside>
   );
 }
 
-
 export function SidebarItem({ icon, text, active, checkList, range }) {
   const { expanded } = useContext(SidebarContext);
-  const [value, setValue] = useState(range ? range[0] : 0);
-
   return (
-    <li>
+    <li
+      className={`${
+        expanded && "bg-[#f8f8fa]"
+      } rounded-2xl py-2 pb-4 flex flex-col items-center`}
+    >
       <div
         className={`
-          flex items-center gap-3
-          py-2.5 px-3
-          rounded-xl
-          font-medium
-          transition-all
-          cursor-pointer
-          ${active
-            ? "bg-white text-[#ff6600] shadow-sm"
-            : "text-gray-700 hover:bg-white/70"
-          }
-        `}
+      relative flex items-center text-gray-600 px-3 my-1 font-medium rounded-md transition-colors ${
+        active
+          ? "bg-linear-to-tr from-orange-200 to-orange-100 text-orange-600"
+          : "hover:bg-gray-100"
+      } ${expanded && "ml-8 py-2"}
+      }`}
       >
-        <span className="p-2 rounded-lg bg-[#FFF2E6] text-[#ff6600]">
-          {icon}
-        </span>
-
-        <span
-          className={`overflow-hidden transition-all ${expanded ? "w-44 ml-1" : "w-0"
-            }`}
+        {icon}
+        <strong
+          className={`text-sm overflow-hidden transition-all ${
+            expanded ? "w-52 ml-3" : "w-0"
+          }`}
         >
           {text}
-        </span>
+        </strong>
       </div>
-
       <div
-        className={`transition-all ${expanded ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-          } overflow-hidden ml-12`}
+        className={`overflow-hidden transition-all ${
+          expanded ? "w-52" : "w-0"
+        }`}
       >
         {expanded &&
           checkList &&
           checkList.map((c) => (
-            <label
+            <div
               key={c}
-              className="
-                flex items-center gap-3
-                py-1.5 px-2
-                rounded-lg
-                text-sm text-gray-700
-                hover:bg-white/60
-                cursor-pointer
-              "
+              className="input-control flex items-center justify-between gap-3 w-full "
             >
+              <label className="text-sm text-gray-500" htmlFor={c}>
+                {c}
+              </label>
+              {/* <input type="checkbox" name={c} id={c} /> */}
               <input
+                id={c}
+                name={c}
                 type="checkbox"
-                className="
-                  w-4 h-4
-                  rounded
-                  border-gray-300
-                  text-[#ff6600]
-                  focus:ring-[#ff6600]/30
-                "
+                defaultChecked
+                className="appearance-none"
               />
-              {c}
-            </label>
+
+              <span className="">
+                <Check size={15} />
+              </span>
+            </div>
           ))}
 
         {expanded && range && (
-          <div className="relative w-full px-1 pt-6 pb-2">
-            {/* Price bubble */}
-            <div
-              className="
-        absolute -top-1 z-20
-        text-xs font-medium
-        bg-white px-2 py-1
-        rounded-md shadow
-        border border-orange-200
-        text-gray-700
-        pointer-events-none
-      "
-              style={{
-                left: `calc(${((value - range[0]) / (range[1] - range[0])) * 100}% - 16px)`
-              }}
-            >
-              ${value}
-            </div>
-
-            {/* Range input */}
+          <div className="input-control">
             <input
               type="range"
+              name={`${text}-range`}
+              id={`${text}-range`}
               min={range[0]}
               max={range[1]}
-              value={value}
-              onChange={(e) => setValue(Number(e.target.value))}
-              className="
-        w-full cursor-pointer
-        appearance-none
-        h-2 rounded-full
-        bg-linear-to-r from-orange-200 to-orange-400
-        accent-orange-500
-      "
             />
+            <label htmlFor={`${text}-range`} className="sr-only">
+              {text} Range
+            </label>
           </div>
         )}
-
       </div>
     </li>
   );

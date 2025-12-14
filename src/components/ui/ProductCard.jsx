@@ -28,12 +28,12 @@ export default function ProductCard({
   return (
     <Link className="product-link block h-full" href={`/shop/${productId}`}>
       {/* <article className="h-full flex flex-col overflow-hidden shadow-[0_24px_48px_rgba(0,0,0,0.075)] rounded-3xl max-w-[350px]"> */}
-      <article className="h-full flex flex-col overflow-hidden rounded-3xl shadow-[0_18px_40px_rgba(0,0,0,0.08)] w-full max-w-[300px] mx-auto bg-white">
+      <article className="h-full flex flex-col overflow-hidden rounded-3xl shadow-[0_18px_40px_rgba(0,0,0,0.15)] w-full max-w-[300px] mx-auto bg-white">
         <div className="relative">
           <div className="product-img-container rounded-3xl overflow-hidden rounded-br-none h-[250px]">
-            <img src={images[0]} alt={name} className="product-img" />
+            <img src={images[0]} alt={name} className="product-img w-full" />
           </div>
-          <button className="absolute top-0 right-0 w-[60px] h-[75px] bg-white flex items-center justify-center rounded-bl-4xl cursor-pointer">
+          <button className="absolute top-0 right-0 w-[60px] h-[75px] bg-white flex items-center justify-center rounded-bl-3xl cursor-pointer">
             <CiHeart className="text-2xl font-bold" />
           </button>
         </div>
@@ -54,7 +54,7 @@ export default function ProductCard({
             <p className="flex-1 text-center text-lg font-bold">
               ${price.toFixed(2)}
             </p>
-            <button className="flex-1 flex items-center justify-center gap-2 bg-primary text-white h-full rounded-tl-3xl rounded-br-4xl cursor-pointer hover:bg-orange-600">
+            <button className="flex-1 flex items-center justify-center gap-2 bg-primary text-white h-full rounded-tl-3xl rounded-br-3xl cursor-pointer hover:bg-orange-600">
               Add to Cart <CgShoppingCart className="text-bold text-lg" />
             </button>
           </div>

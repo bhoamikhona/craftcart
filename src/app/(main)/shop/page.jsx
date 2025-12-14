@@ -15,47 +15,46 @@ export default function Shop() {
     async function loadProducts() {
       setLoading(true);
 
-      const { data, error } = await supabase
-        .from("products")
-        .select("*");              
+      const { data, error } = await supabase.from("products").select("*");
 
       if (error) {
         console.error("Supabase error:", error);
         setProducts([]);
       } else {
-        const mapped = (data ?? []).map((p) => ({
-          productId: p.product_id,
-          name: p.name,
-          description: p.description,
-          measurements: p.measurements,
-          quantity: p.quantity,
-          inStock: p.in_stock,
-          price: p.price,
-          currency: p.currency,
-          images: p.images,
-          rating: p.rating,
-          reviewCount: p.review_count,
-          category: p.category,
-          createdAt: p.created_at,
-          material: p.material,
-          brand: p.brand,
-          onSale: p.on_sale,
-          discountPercent: p.discount_percent,
-          discountPrice: p.discount_price,
-          specs: p.specs,
-        }))
-        
-        .sort((a, b) => {
-          const numA =
-            typeof a.productId === "string"
-              ? parseInt(a.productId.replace(/\D/g, ""), 10)
-              : a.productId;
-          const numB =
-            typeof b.productId === "string"
-              ? parseInt(b.productId.replace(/\D/g, ""), 10)
-              : b.productId;
-          return numA - numB; 
-        });
+        const mapped = (data ?? [])
+          .map((p) => ({
+            productId: p.product_id,
+            name: p.name,
+            description: p.description,
+            measurements: p.measurements,
+            quantity: p.quantity,
+            inStock: p.in_stock,
+            price: p.price,
+            currency: p.currency,
+            images: p.images,
+            rating: p.rating,
+            reviewCount: p.review_count,
+            category: p.category,
+            createdAt: p.created_at,
+            material: p.material,
+            brand: p.brand,
+            onSale: p.on_sale,
+            discountPercent: p.discount_percent,
+            discountPrice: p.discount_price,
+            specs: p.specs,
+          }))
+
+          .sort((a, b) => {
+            const numA =
+              typeof a.productId === "string"
+                ? parseInt(a.productId.replace(/\D/g, ""), 10)
+                : a.productId;
+            const numB =
+              typeof b.productId === "string"
+                ? parseInt(b.productId.replace(/\D/g, ""), 10)
+                : b.productId;
+            return numA - numB;
+          });
 
         setProducts(mapped);
       }
