@@ -7,58 +7,50 @@ import supabase from "@/lib/supabaseClient";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
-
   const [product, setProduct] = useState(null);
   const [activeImage, setActiveImage] = useState("");
   const [quantity, setQuantity] = useState(0);
-  const [loading, setLoading] = useState(true);
 
-  // Fetch product from Supabase
   useEffect(() => {
-    async function fetchProduct() {
+    async function loadProduct() {
       const { data, error } = await supabase
         .from("products")
         .select("*")
         .eq("product_id", id)
         .single();
 
-      if (error) {
-        console.error("Supabase error:", error);
-        setLoading(false);
+      if (error || !data) {
+        console.error("Product not found:", error);
         return;
       }
 
-      setProduct(data);
-      setActiveImage(
-        Array.isArray(data.images) ? data.images[0] : data.images
+      // IMAGE FIX → Convert DB paths to PUBLIC paths
+      // DB: "images/products/prod-001/445x448/scissor-1.png"
+      // Needs: "/images/products/prod-001/445x448/scissor-1.png"
+      const fixedImages = data.images.map((img) =>
+        img.startsWith("/") ? img : "/" + img
       );
-      setLoading(false);
+
+      const fixedProduct = { ...data, images: fixedImages };
+
+      setProduct(fixedProduct);
+      setActiveImage(fixedImages[0]);
     }
 
-    fetchProduct();
+    loadProduct();
   }, [id]);
-
-  if (loading) {
-    return (
-      <div className="max-w-7xl mx-auto p-8 text-center text-gray-500">
-        Loading...
-      </div>
-    );
-  }
 
   if (!product) {
     return (
       <div className="max-w-7xl mx-auto p-8 text-center text-gray-500">
-        Product not found
+        Loading product...
       </div>
     );
   }
 
-  // Calculate discounted price
-  const discountedPrice =
-    product.on_sale && product.discount_price
-      ? product.discount_price
-      : product.price;
+  const discountedPrice = Math.round(
+    product.price * (1 - (product.discount_percent || 0) / 100)
+  );
 
   const handleAddToCart = () => {
     if (quantity === 0) return;
@@ -68,26 +60,24 @@ export default function ProductDetailPage() {
       name: product.name,
       price: discountedPrice,
       quantity,
-      image: activeImage
+      image: activeImage,
     };
 
     const existingCart =
       JSON.parse(localStorage.getItem("cart")) || [];
 
-    const existingItemIndex = existingCart.findIndex(
-      item => item.id === product.product_id
+    const index = existingCart.findIndex(
+      (item) => item.id === product.product_id
     );
 
-    if (existingItemIndex !== -1) {
-      existingCart[existingItemIndex].quantity += quantity;
+    if (index !== -1) {
+      existingCart[index].quantity += quantity;
     } else {
       existingCart.push(cartItem);
     }
 
     localStorage.setItem("cart", JSON.stringify(existingCart));
-
     setQuantity(0);
-
     window.location.href = "/cart";
   };
 
@@ -132,9 +122,7 @@ export default function ProductDetailPage() {
             {product.brand}
           </p>
 
-          <h1 className="text-4xl font-bold mt-4">
-            {product.name}
-          </h1>
+          <h1 className="text-4xl font-bold mt-4">{product.name}</h1>
 
           <p className="text-gray-500 mt-6 leading-relaxed">
             {product.description}
@@ -143,30 +131,26 @@ export default function ProductDetailPage() {
           {/* Price */}
           <div className="mt-8">
             <div className="flex items-center gap-4">
-              <span className="text-3xl font-bold">
-                ${discountedPrice}
-              </span>
-
-              {product.on_sale && (
+              <span className="text-3xl font-bold">${discountedPrice}.00</span>
+              {product.discount_percent > 0 && (
                 <span className="bg-orange-100 text-orange-500 font-semibold px-2 py-1 rounded-md text-sm">
-                  {product.discount_percent}% OFF
+                  {product.discount_percent}%
                 </span>
               )}
             </div>
 
-            {product.on_sale && (
+            {product.discount_percent > 0 && (
               <p className="line-through text-gray-400 mt-1">
-                ${product.price}
+                ${product.price}.00
               </p>
             )}
           </div>
 
           {/* Quantity + Add to cart */}
           <div className="flex gap-4 mt-10 flex-col sm:flex-row">
-            {/* Quantity box */}
             <div className="flex items-center justify-between bg-gray-100 rounded-lg px-4 py-3 w-full sm:w-40">
               <button
-                onClick={() => setQuantity(q => Math.max(0, q - 1))}
+                onClick={() => setQuantity((q) => Math.max(0, q - 1))}
                 disabled={quantity === 0}
                 className={`text-orange-500 text-xl font-bold ${
                   quantity === 0 ? "opacity-40 cursor-not-allowed" : ""
@@ -178,14 +162,13 @@ export default function ProductDetailPage() {
               <span className="font-semibold">{quantity}</span>
 
               <button
-                onClick={() => setQuantity(q => q + 1)}
+                onClick={() => setQuantity((q) => q + 1)}
                 className="text-orange-500 text-xl font-bold"
               >
                 +
               </button>
             </div>
 
-            {/* Add to cart */}
             <button
               disabled={quantity === 0}
               onClick={handleAddToCart}
