@@ -9,7 +9,8 @@ export default function Sidebar({ children }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <aside className="h-[85vh] fixed left-0 top-20 bg-white rounded-4xl">
+    // {/* <aside className="h-[85vh] fixed left-0 top-20 bg-white rounded-4xl"> */}
+    <aside className="absolute left-0 bg-white rounded-4xl">
       <nav className="sticky top-0 h-full flex flex-col shadow-[0_0_48px_rgba(0,0,0,0.15)] rounded-r-4xl">
         <div className="p-4 pb-2 flex justify-end items-center">
           <button

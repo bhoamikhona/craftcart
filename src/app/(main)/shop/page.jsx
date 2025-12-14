@@ -68,7 +68,7 @@ export default function Shop() {
   return (
     <main className="flex gap-6 my-12">
       {/* <main className="flex gap-10 my-12 w-full min-h-screen py-12 p-8"> */}
-      <div className="z-100">
+      <div className="z-10">
         <Sidebar>
           <SidebarItem
             icon={<LayoutGrid size={20} />}
