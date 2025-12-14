@@ -35,7 +35,7 @@ const { error, data } = await supabase
   .select("product_id");
 
 if (error) {
-  console.error("Seed failed:", error);
+  console.error("❌ Seed failed:", error);
   process.exit(1);
 }
 

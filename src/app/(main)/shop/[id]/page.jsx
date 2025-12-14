@@ -1,36 +1,72 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import supabase from "@/lib/supabaseClient";
+import Loader from "@/components/ui/loader.jsx";
 import { ShoppingCart } from "lucide-react";
 
-const PRODUCTS = [
-  {
-    id: "prod-001",
-    brand: "Nicpro",
-    name: "Acrylic Paint Metallic",
-    description:
-      "6 Colors Gold, Silver, Copper, Brass, Bronze, DeepGold, 24oz/720ml Gold Leaf Paint, Non Toxic, Non Fading Paints for Art Painting, Handcrafts, Ideal for Multi-surface.",
-    price: 25.99,
-    discountPercent: 8,
-    images: [
-      "/images/products/Paint.jpg",
-      "/images/products/color1.jpg",
-      "/images/products/color2.jpg",
-      "/images/products/color3.jpg",
-      "/images/products/color4.jpg"
-    ]
-  }
-];
-
-export default function ProductDetailPage() {
+export default function ProductDetail() {
   const { id } = useParams();
-  const product = PRODUCTS.find(p => p.id === id);
 
-  const [activeImage, setActiveImage] = useState(
-    product ? product.images[0] : ""
-  );
-  const [quantity, setQuantity] = useState(0);
+  const [product, setProduct] = useState(null);
+  const [activeImage, setActiveImage] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadProduct() {
+      if (!id) return;
+
+      setLoading(true);
+
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("product_id", id)
+        .single();
+
+      if (error) {
+        console.error("Supabase product fetch error:", error);
+        setProduct(null);
+        setActiveImage("");
+      } else {
+        const normalizeImg = (url) => {
+          if (!url) return url;
+          if (url.startsWith("http")) return url;
+          return url.startsWith("/") ? url : `/${url}`;
+        };
+
+        const mapped = {
+          id: data.product_id,
+          brand: data.brand,
+          name: data.name,
+          description: data.description,
+          price: Number(data.price ?? 0),
+
+          onSale: Boolean(data.on_sale),
+          discountPercent: Number(data.discount_percent ?? 0),
+          discountPrice:
+            data.discount_price == null ? null : Number(data.discount_price),
+
+          images: (Array.isArray(data.images) ? data.images : []).map(
+            normalizeImg
+          ),
+        };
+
+        setProduct(mapped);
+        setActiveImage(mapped.images?.[0] ?? "");
+      }
+
+      setLoading(false);
+    }
+
+    loadProduct();
+  }, [id]);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   if (!product) {
     return (
@@ -41,113 +77,96 @@ export default function ProductDetailPage() {
   }
 
   const discountedPrice = Math.round(
-    product.price * (1 - product.discountPercent / 100)
+    product.price * (1 - (product.discount_percent || 0) / 100)
   );
 
   const handleAddToCart = () => {
     if (quantity === 0) return;
 
     const cartItem = {
-      id: product.id,
+      id: product.product_id,
       name: product.name,
       price: discountedPrice,
       quantity,
-      image: activeImage
+      image: activeImage,
     };
 
-    const existingCart =
-      JSON.parse(localStorage.getItem("cart")) || [];
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    const existingItemIndex = existingCart.findIndex(
-      item => item.id === product.id
+    const index = existingCart.findIndex(
+      (item) => item.id === product.product_id
     );
 
-    if (existingItemIndex !== -1) {
-      existingCart[existingItemIndex].quantity += quantity;
+    if (index !== -1) {
+      existingCart[index].quantity += quantity;
     } else {
       existingCart.push(cartItem);
     }
 
     localStorage.setItem("cart", JSON.stringify(existingCart));
-
-    console.log("Added to cart:", cartItem);
-
     setQuantity(0);
-
-    // go to cart page
     window.location.href = "/cart";
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-
-        {/* LEFT — Images */}
-        <div>
-          <div className="rounded-2xl overflow-hidden bg-white border border-neutral-200 shadow-sm flex items-center justify-center h-[420px]">
-            <img
-              src={activeImage}
-              alt={product.name}
-              className="max-h-full object-contain"
-            />
+    <div className="max-w-7xl p-10 mx-auto mt-10 mb-12">
+      <div className="flex md:flex-row flex-col gap-8 md:gap-32 items-center justify-center max-w-[1020px] mx-auto">
+        <div className="product-left flex flex-col gap-8">
+          <div className="product-main-img rounded-3xl overflow-hidden h-[448px] w-[445px]">
+            <img src={activeImage} alt={product.name} />
           </div>
-
-          <div className="flex gap-4 mt-6">
-            {product.images.map((img, index) => (
-              <button
+          <div className="rest-imgs grid grid-cols-4 gap-8">
+            {product.images.slice(0, 4).map((img, index) => (
+              <div
                 key={index}
-                onClick={() => setActiveImage(img)}
-                className={`rounded-xl overflow-hidden border-2 transition ${
+                className={`w-[88px] h-[88px] rounded-2xl overflow-hidden cursor-pointer hover:border border-transparent duration-75 ease-in-out hover:shadow-[0_5px_15px_rgba(0,0,0,0.075)] ${
                   activeImage === img
                     ? "border-orange-500"
-                    : "border-transparent opacity-70 hover:opacity-100"
-                }`}
+                    : "opacity-70 hover:opacity-100"
+                }}`}
+                onClick={() => setActiveImage(img)}
               >
-                <img
-                  src={img}
-                  alt="Thumbnail"
-                  className="w-20 h-20 object-cover"
-                />
-              </button>
+                <img src={img} alt={product.name} />
+              </div>
             ))}
           </div>
+
+          <div className="product-rest-images"></div>
         </div>
-
-        {/* RIGHT — Info */}
-        <div className="flex flex-col justify-center">
-          <p className="uppercase tracking-widest text-sm text-orange-500 font-semibold">
+        <div className="product-right">
+          <h1 className="text-gray-500 uppercase tracking-[2px] text-[13px] font-bold mb-6">
             {product.brand}
-          </p>
-
-          <h1 className="text-4xl font-bold mt-4">
-            {product.name}
           </h1>
-
-          <p className="text-gray-500 mt-6 leading-relaxed">
+          <h2 className="text-[48px] font-bold leading-12 mb-8">
+            {product.name}
+          </h2>
+          <p className="text-base leading-[26px] text-gray-600 mb-8">
             {product.description}
           </p>
 
-          {/* Price */}
-          <div className="mt-8">
-            <div className="flex items-center gap-4">
-              <span className="text-3xl font-bold">
-                ${discountedPrice}.00
+          <div className="flex gap-4 items-start">
+            <div className="price-section flex flex-col gap-2">
+              <span className="text-[28px] leading-8 font-bold ">
+                ${product.onSale ? product.discountPrice : product.price}
               </span>
-              <span className="bg-orange-100 text-orange-500 font-semibold px-2 py-1 rounded-md text-sm">
-                {product.discountPercent}%
-              </span>
+
+              {product.onSale && (
+                <span className="font-bold leading-[26px] line-through text-gray-500">
+                  ${product.price}
+                </span>
+              )}
             </div>
-            <p className="line-through text-gray-400 mt-1">
-              ${product.price}.00
-            </p>
+            {product.onSale && (
+              <div className="bg-orange-100 text-orange-500 rounded-md text-sm inline-block w-[51px] h-[27px] text-center leading-[26px] font-bold">
+                {product.discountPercent}%
+              </div>
+            )}
           </div>
 
-          {/* Quantity + Add to cart */}
           <div className="flex gap-4 mt-10 flex-col sm:flex-row">
-            {/* Quantity box */}
             <div className="flex items-center justify-between bg-gray-100 rounded-lg px-4 py-3 w-full sm:w-40">
               <button
-                onClick={() => setQuantity(q => Math.max(0, q - 1))}
+                onClick={() => setQuantity((q) => Math.max(0, q - 1))}
                 disabled={quantity === 0}
                 className={`text-orange-500 text-xl font-bold ${
                   quantity === 0 ? "opacity-40 cursor-not-allowed" : ""
@@ -159,26 +178,24 @@ export default function ProductDetailPage() {
               <span className="font-semibold">{quantity}</span>
 
               <button
-                onClick={() => setQuantity(q => q + 1)}
+                onClick={() => setQuantity((q) => q + 1)}
                 className="text-orange-500 text-xl font-bold"
               >
                 +
               </button>
             </div>
 
-            {/* Add to cart */}
             <button
               disabled={quantity === 0}
               onClick={handleAddToCart}
-              className={`flex-1 rounded-lg px-8 py-4 flex items-center justify-center gap-3 font-semibold bg-orange-500 hover:bg-orange-600 text-white ${
+              className={`cursor-pointer flex-1 rounded-lg px-8 py-4 flex items-center justify-center gap-3 font-semibold bg-orange-500 hover:bg-orange-600 text-white ${
                 quantity === 0 ? "cursor-not-allowed opacity-70" : ""
               }`}
             >
-              <ShoppingCart size={20} className="stroke-white" />
               Add to cart
+              <ShoppingCart size={20} className="stroke-white" />
             </button>
           </div>
-
         </div>
       </div>
     </div>
