@@ -8,7 +8,7 @@ const SidebarContext = createContext();
 export default function Sidebar({ children, onApplyFilters }) {
   const [expanded, setExpanded] = useState(false);
 
-  // ⭐ NEW LOCAL FILTER STATE (no UI changes)
+  // NEW LOCAL FILTER STATE 
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedMaterials, setSelectedMaterials] = useState([]);
   const [selectedAvailability, setSelectedAvailability] = useState([]);
@@ -28,7 +28,7 @@ export default function Sidebar({ children, onApplyFilters }) {
           </button>
         </div>
 
-        {/* ⭐ We pass down setters BUT DO NOT CHANGE ANY UI */}
+        {/*  We pass down setters */}
         <SidebarContext.Provider
           value={{
             expanded,
@@ -118,7 +118,7 @@ export function SidebarItem({ icon, text, active, checkList, range }) {
           expanded ? "w-52 overflow-visible" : "w-0 overflow-hidden"
         }`}
       >
-        {/* CHECKBOXES — UI UNCHANGED */}
+        {/* CHECKBOXES  */}
         {expanded &&
           checkList &&
           checkList.map((c) => {
@@ -190,7 +190,7 @@ export function SidebarItem({ icon, text, active, checkList, range }) {
             );
           })}
 
-        {/* PRICE RANGE — UI UNCHANGED */}
+        {/* PRICE RANGE  */}
         {expanded &&
           range &&
           (() => {
