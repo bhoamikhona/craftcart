@@ -5,13 +5,19 @@ import { useContext, useState, createContext } from "react";
 
 const SidebarContext = createContext();
 
-export default function Sidebar({ children }) {
+export default function Sidebar({ children, onApplyFilters }) {
   const [expanded, setExpanded] = useState(false);
 
+  // ⭐ NEW LOCAL FILTER STATE (no UI changes)
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedMaterials, setSelectedMaterials] = useState([]);
+  const [selectedAvailability, setSelectedAvailability] = useState([]);
+  const [selectedPrice, setSelectedPrice] = useState(null);
+
   return (
-    // {/* <aside className="h-[85vh] fixed left-0 top-20 bg-white rounded-4xl"> */}
     <aside className="absolute left-0 bg-white rounded-4xl">
       <nav className="sticky top-0 h-full flex flex-col shadow-[0_0_48px_rgba(0,0,0,0.15)] rounded-r-4xl">
+
         <div className="p-4 pb-2 flex justify-end items-center">
           <button
             onClick={() => setExpanded((e) => !e)}
@@ -22,12 +28,35 @@ export default function Sidebar({ children }) {
           </button>
         </div>
 
-        <SidebarContext.Provider value={{ expanded }}>
+        {/* ⭐ We pass down setters BUT DO NOT CHANGE ANY UI */}
+        <SidebarContext.Provider
+          value={{
+            expanded,
+            selectedCategories,
+            setSelectedCategories,
+            selectedMaterials,
+            setSelectedMaterials,
+            selectedAvailability,
+            setSelectedAvailability,
+            selectedPrice,
+            setSelectedPrice,
+          }}
+        >
           <ul className="flex-1 px-3 flex flex-col gap-4">{children}</ul>
         </SidebarContext.Provider>
 
         {expanded && (
-          <button className="bg-primary h-10 m-4 rounded-xl text-white hover:bg-orange-600 cursor-pointer">
+          <button
+            className="bg-primary h-10 m-4 rounded-xl text-white hover:bg-orange-600 cursor-pointer"
+            onClick={() =>
+              onApplyFilters({
+                selectedCategories,
+                selectedMaterials,
+                selectedAvailability,
+                selectedPrice,
+              })
+            }
+          >
             Apply Filters
           </button>
         )}
@@ -37,7 +66,14 @@ export default function Sidebar({ children }) {
 }
 
 export function SidebarItem({ icon, text, active, checkList, range }) {
-  const { expanded } = useContext(SidebarContext);
+  const {
+    expanded,
+    setSelectedCategories,
+    setSelectedMaterials,
+    setSelectedAvailability,
+    setSelectedPrice,
+  } = useContext(SidebarContext);
+
   const [rangeValue, setRangeValue] = useState(range ? range[0] : 0);
 
   const makeId = (s) =>
@@ -82,6 +118,7 @@ export function SidebarItem({ icon, text, active, checkList, range }) {
           expanded ? "w-52 overflow-visible" : "w-0 overflow-hidden"
         }`}
       >
+        {/* CHECKBOXES — UI UNCHANGED */}
         {expanded &&
           checkList &&
           checkList.map((c) => {
@@ -95,6 +132,27 @@ export function SidebarItem({ icon, text, active, checkList, range }) {
                   type="checkbox"
                   name={c}
                   id={id}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+
+                    if (text === "Category") {
+                      setSelectedCategories((prev) =>
+                        checked ? [...prev, c] : prev.filter((x) => x !== c)
+                      );
+                    }
+
+                    if (text === "Material") {
+                      setSelectedMaterials((prev) =>
+                        checked ? [...prev, c] : prev.filter((x) => x !== c)
+                      );
+                    }
+
+                    if (text === "Availability") {
+                      setSelectedAvailability((prev) =>
+                        checked ? [...prev, c] : prev.filter((x) => x !== c)
+                      );
+                    }
+                  }}
                   className="peer
                     relative
                     appearance-none
@@ -132,6 +190,7 @@ export function SidebarItem({ icon, text, active, checkList, range }) {
             );
           })}
 
+        {/* PRICE RANGE — UI UNCHANGED */}
         {expanded &&
           range &&
           (() => {
@@ -161,18 +220,22 @@ export function SidebarItem({ icon, text, active, checkList, range }) {
                     min={min}
                     max={max}
                     value={rangeValue}
-                    onChange={(e) => setRangeValue(Number(e.target.value))}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      setRangeValue(val);
+                      setSelectedPrice(val);
+                    }}
                     className="w-full
-                    accent-orange-500
-                    cursor-pointer
-                    appearance-none
-                    h-2
-                    rounded-full
-                    bg-linear-to-r from-orange-200 to-orange-400
-                    hover:from-[#ffb366] hover:to-[#ff8533]
-                    transition-all
-                    duration-75
-                    ease-in-out"
+                      accent-orange-500
+                      cursor-pointer
+                      appearance-none
+                      h-2
+                      rounded-full
+                      bg-linear-to-r from-orange-200 to-orange-400
+                      hover:from-[#ffb366] hover:to-[#ff8533]
+                      transition-all
+                      duration-75
+                      ease-in-out"
                   />
                 </div>
 
