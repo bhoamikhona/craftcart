@@ -17,7 +17,12 @@ export default function CartItem({ item, updateQuantity }) {
 
         <QuantitySelector
           quantity={item.quantity}
-          onChange={(qty) => updateQuantity(item.id, qty)}
+          onChange={(qty) => {
+            updateQuantity(item.id, qty);
+
+            // Tell navbar the cart changed
+            window.dispatchEvent(new Event("cart-updated"));
+          }}
         />
       </div>
 
