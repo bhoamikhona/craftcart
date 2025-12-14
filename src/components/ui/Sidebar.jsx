@@ -8,7 +8,6 @@ const SidebarContext = createContext();
 export default function Sidebar({ children, onApplyFilters }) {
   const [expanded, setExpanded] = useState(false);
 
-  // NEW LOCAL FILTER STATE
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedMaterials, setSelectedMaterials] = useState([]);
   const [selectedAvailability, setSelectedAvailability] = useState([]);
@@ -27,7 +26,6 @@ export default function Sidebar({ children, onApplyFilters }) {
           </button>
         </div>
 
-        {/*  We pass down setters */}
         <SidebarContext.Provider
           value={{
             expanded,
@@ -46,6 +44,7 @@ export default function Sidebar({ children, onApplyFilters }) {
 
         {expanded && (
           <div className="flex flex-col">
+            {/* APPLY FILTERS */}
             <button
               className="bg-primary h-10 m-4 rounded-xl text-white hover:bg-orange-600 cursor-pointer"
               onClick={() =>
@@ -59,16 +58,33 @@ export default function Sidebar({ children, onApplyFilters }) {
             >
               Apply Filters
             </button>
+
+            {/* RESET FILTERS */}
             <button
               className="bg-gray-200 h-10 m-4 mt-0 rounded-xl text-gray-600 hover:bg-gray-300 hover:text-gray-900 cursor-pointer"
-              onClick={() =>
+              onClick={() => {
+                setSelectedCategories([]);
+                setSelectedMaterials([]);
+                setSelectedAvailability([]);
+                setSelectedPrice(null);
+
+                document
+                  .querySelectorAll("input[type='checkbox']")
+                  .forEach((el) => (el.checked = false));
+
+                document
+                  .querySelectorAll("input[type='range']")
+                  .forEach((el) => {
+                    el.value = el.min;
+                  });
+
                 onApplyFilters({
-                  selectedCategories,
-                  selectedMaterials,
-                  selectedAvailability,
-                  selectedPrice,
-                })
-              }
+                  selectedCategories: [],
+                  selectedMaterials: [],
+                  selectedAvailability: [],
+                  selectedPrice: null,
+                });
+              }}
             >
               Reset Filters
             </button>
@@ -132,7 +148,6 @@ export function SidebarItem({ icon, text, active, checkList, range }) {
           expanded ? "w-52 overflow-visible" : "w-0 overflow-hidden"
         }`}
       >
-        {/* CHECKBOXES  */}
         {expanded &&
           checkList &&
           checkList.map((c) => {
@@ -168,28 +183,11 @@ export function SidebarItem({ icon, text, active, checkList, range }) {
                     }
                   }}
                   className="peer
-                    relative
-                    appearance-none
-                    cursor-pointer
-                    w-3.5
-                    h-3.5
-                    border
-                    border-gray-500
-                    rounded-sm
-                    focus:outline-none
-                    checked:bg-primary
-                    checked:border-primary
-                    hover:border
-                    hover:border-primary
-                    after:content-['']
-                    after:w-full
-                    after:h-full
-                    after:absolute
-                    after:left-0
-                    after:top-0
-                    after:bg-no-repeat
-                    after:bg-center
-                    after:bg-size-[27px]
+                    relative appearance-none cursor-pointer w-3.5 h-3.5 border border-gray-500 rounded-sm
+                    focus:outline-none checked:bg-primary checked:border-primary
+                    hover:border hover:border-primary
+                    after:content-[''] after:w-full after:h-full after:absolute after:left-0 after:top-0
+                    after:bg-no-repeat after:bg-center after:bg-size-[27px]
                     after:bg-[url('data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjZmZmZmZmIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgdmVyc2lvbj0iMS4xIiB4PSIwcHgiIHk9IjBweCI+PHRpdGxlPmljb25fYnlfUG9zaGx5YWtvdjEwPC90aXRsZT48ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz48ZyBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48ZyBmaWxsPSIjZmZmZmZmIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNi4wMDAwMDAsIDI2LjAwMDAwMCkiPjxwYXRoIGQ9Ik0xNy45OTk5ODc4LDMyLjQgTDEwLjk5OTk4NzgsMjUuNCBDMTAuMjI2Nzg5MSwyNC42MjY4MDE0IDguOTczMTg2NDQsMjQuNjI2ODAxNCA4LjE5OTk4Nzc5LDI1LjQgTDguMTk5OTg3NzksMjUuNCBDNy40MjY3ODkxNCwyNi4xNzMxOTg2IDcuNDI2Nzg5MTQsMjcuNDI2ODAxNCA4LjE5OTk4Nzc5LDI4LjIgTDE2LjU4NTc3NDIsMzYuNTg1Nzg2NCBDMTcuMzY2ODIyOCwzNy4zNjY4MzUgMTguNjMzMTUyOCwzNy4zNjY4MzUgMTkuNDE0MjAxNCwzNi41ODU3ODY0IEw0MC41OTk5ODc4LDE1LjQgQzQxLjM3MzE4NjQsMTQuNjI2ODAxNCA0MS4zNzMxODY0LDEzLjM3MzE5ODYgNDAuNTk5OTg3OCwxMi42IEw0MC41OTk5ODc4LDEyLjYgQzM5LjgyNjc4OTEsMTEuODI2ODAxNCAzOC41NzMxODY0LDExLjgyNjgwMTQgMzcuNzk5OTg3OCwxMi42IEwxNy45OTk5ODc4LDMyLjQgWiI+PC9wYXRoPjwvZz48L2c+PC9nPjwvc3ZnPg==')]
                   "
                 />
@@ -204,7 +202,6 @@ export function SidebarItem({ icon, text, active, checkList, range }) {
             );
           })}
 
-        {/* PRICE RANGE  */}
         {expanded &&
           range &&
           (() => {
@@ -239,17 +236,7 @@ export function SidebarItem({ icon, text, active, checkList, range }) {
                       setRangeValue(val);
                       setSelectedPrice(val);
                     }}
-                    className="w-full
-                      accent-orange-500
-                      cursor-pointer
-                      appearance-none
-                      h-2
-                      rounded-full
-                      bg-linear-to-r from-orange-200 to-orange-400
-                      hover:from-[#ffb366] hover:to-[#ff8533]
-                      transition-all
-                      duration-75
-                      ease-in-out"
+                    className="w-full accent-orange-500 cursor-pointer appearance-none h-2 rounded-full bg-linear-to-r from-orange-200 to-orange-400 hover:from-[#ffb366] hover:to-[#ff8533] transition-all duration-75 ease-in-out"
                   />
                 </div>
 
