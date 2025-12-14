@@ -111,19 +111,45 @@
 
 // export default Navbar;
 
+
 "use client";
+
 import Link from "next/link.js";
-import { CgProfile } from "react-icons/cg";
-import { CgShoppingCart } from "react-icons/cg";
-import { CgLogIn } from "react-icons/cg";
+import { CgProfile, CgShoppingCart, CgLogIn } from "react-icons/cg";
 import "./layout.css";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const { data: session } = useSession();
   const pathname = usePathname();
   const isProfilePage = pathname === "/profile";
+
+  // CART BADGE STATE
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const loadCart = () => {
+      const stored = JSON.parse(localStorage.getItem("cart") || "[]");
+      const count = stored.reduce((sum, item) => sum + item.quantity, 0);
+      setCartCount(count);
+    };
+
+    // Load initial cart count
+    loadCart();
+
+    // Listen for custom cart-updated events from ProductCard / CartItem
+    window.addEventListener("cart-updated", loadCart);
+
+    // Listen for storage updates (for safety)
+    window.addEventListener("storage", loadCart);
+
+    return () => {
+      window.removeEventListener("cart-updated", loadCart);
+      window.removeEventListener("storage", loadCart);
+    };
+  }, []);
 
   return (
     <div className="sticky top-0 bg-white z-100">
@@ -159,10 +185,26 @@ export default function Navbar() {
         </div>
 
         <div className="nav__right flex justify-end items-center gap-2 md:gap-6">
-          <div className="cart">
+
+          {/* CART ICON WITH BADGE */}
+          <div className="cart relative">
             <Link className="nav__link" href="/cart">
               <CgShoppingCart className="text-xl md:text-2xl" />
             </Link>
+
+            {cartCount > 0 && (
+              <span
+                className="
+                  absolute -top-2 -right-3
+                  bg-orange-600 text-white
+                  text-xs font-bold
+                  w-5 h-5 rounded-full
+                  flex items-center justify-center
+                "
+              >
+                {cartCount}
+              </span>
+            )}
           </div>
 
           {session ? (
@@ -173,31 +215,23 @@ export default function Navbar() {
                     <CgProfile className="text-xl md:text-2xl hover:text-primary transition-colors duration-300 ease-in-out cursor-pointer" />
                   </Link>
                 </div>
+
                 <div className="profile-dropdown hidden group-hover:block rounded border-gray-500 bg-white p-2 py-4 pt-6 md:pt-8 absolute w-[150px] z-100 right-[-60] top-5 md:top-6 shadow-[0_2.4rem_4.8rem_rgba(0,0,0,0.075)]">
                   <ul className="flex flex-col items-center justify-center gap-2 ">
                     <li>
-                      <Link
-                        className="nav__link md:text-base text-sm"
-                        href="/profile"
-                      >
+                      <Link className="nav__link md:text-base text-sm" href="/profile">
                         Profile
                       </Link>
                     </li>
 
                     <li>
-                      <Link
-                        className="nav__link md:text-base text-sm"
-                        href="/orders"
-                      >
+                      <Link className="nav__link md:text-base text-sm" href="/orders">
                         Orders
                       </Link>
                     </li>
 
                     <li>
-                      <Link
-                        className="nav__link md:text-base text-sm"
-                        href="/settings"
-                      >
+                      <Link className="nav__link md:text-base text-sm" href="/settings">
                         Settings
                       </Link>
                     </li>
@@ -206,7 +240,6 @@ export default function Navbar() {
                       <button
                         onClick={() => signOut({ callbackUrl: "/" })}
                         className="nav__link md:text-base text-sm cursor-pointer"
-                        href="/"
                       >
                         Logout
                       </button>
@@ -231,3 +264,4 @@ export default function Navbar() {
     </div>
   );
 }
+
