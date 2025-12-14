@@ -71,7 +71,7 @@ export default function ProductDetail() {
   if (!product) {
     return (
       <div className="max-w-7xl mx-auto p-8 text-center text-gray-500">
-        Product not found
+        Loading product...
       </div>
     );
   }
