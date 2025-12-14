@@ -17,8 +17,7 @@ export default function Shop() {
 
       const { data, error } = await supabase
         .from("products")
-        .select("*")
-        .order("created_at", { ascending: false });
+        .select("*");              
 
       if (error) {
         console.error("Supabase error:", error);
@@ -44,7 +43,19 @@ export default function Shop() {
           discountPercent: p.discount_percent,
           discountPrice: p.discount_price,
           specs: p.specs,
-        }));
+        }))
+        
+        .sort((a, b) => {
+          const numA =
+            typeof a.productId === "string"
+              ? parseInt(a.productId.replace(/\D/g, ""), 10)
+              : a.productId;
+          const numB =
+            typeof b.productId === "string"
+              ? parseInt(b.productId.replace(/\D/g, ""), 10)
+              : b.productId;
+          return numA - numB; 
+        });
 
         setProducts(mapped);
       }
@@ -85,11 +96,7 @@ export default function Shop() {
           checkList={["In Stock", "Out of Stock"]}
         />
       </Sidebar>
-      {/* <div className="max-w-7xl mx-auto grid md:grid-cols-3 grid-cols-2 gap-24 items-stretch auto-rows-fr">
-        {data.map((p) => (
-          <ProductCard key={p.productId} product={p} />
-        ))}
-      </div> */}
+
       {loading ? (
         <Loader />
       ) : (

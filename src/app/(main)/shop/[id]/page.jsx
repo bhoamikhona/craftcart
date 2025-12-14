@@ -1,36 +1,50 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ShoppingCart } from "lucide-react";
-
-const PRODUCTS = [
-  {
-    id: "prod-001",
-    brand: "Nicpro",
-    name: "Acrylic Paint Metallic",
-    description:
-      "6 Colors Gold, Silver, Copper, Brass, Bronze, DeepGold, 24oz/720ml Gold Leaf Paint, Non Toxic, Non Fading Paints for Art Painting, Handcrafts, Ideal for Multi-surface.",
-    price: 25.99,
-    discountPercent: 8,
-    images: [
-      "/images/products/Paint.jpg",
-      "/images/products/color1.jpg",
-      "/images/products/color2.jpg",
-      "/images/products/color3.jpg",
-      "/images/products/color4.jpg"
-    ]
-  }
-];
+import supabase from "@/lib/supabaseClient";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
-  const product = PRODUCTS.find(p => p.id === id);
 
-  const [activeImage, setActiveImage] = useState(
-    product ? product.images[0] : ""
-  );
+  const [product, setProduct] = useState(null);
+  const [activeImage, setActiveImage] = useState("");
   const [quantity, setQuantity] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch product from Supabase
+  useEffect(() => {
+    async function fetchProduct() {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("product_id", id)
+        .single();
+
+      if (error) {
+        console.error("Supabase error:", error);
+        setLoading(false);
+        return;
+      }
+
+      setProduct(data);
+      setActiveImage(
+        Array.isArray(data.images) ? data.images[0] : data.images
+      );
+      setLoading(false);
+    }
+
+    fetchProduct();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto p-8 text-center text-gray-500">
+        Loading...
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -40,15 +54,17 @@ export default function ProductDetailPage() {
     );
   }
 
-  const discountedPrice = Math.round(
-    product.price * (1 - product.discountPercent / 100)
-  );
+  // Calculate discounted price
+  const discountedPrice =
+    product.on_sale && product.discount_price
+      ? product.discount_price
+      : product.price;
 
   const handleAddToCart = () => {
     if (quantity === 0) return;
 
     const cartItem = {
-      id: product.id,
+      id: product.product_id,
       name: product.name,
       price: discountedPrice,
       quantity,
@@ -59,7 +75,7 @@ export default function ProductDetailPage() {
       JSON.parse(localStorage.getItem("cart")) || [];
 
     const existingItemIndex = existingCart.findIndex(
-      item => item.id === product.id
+      item => item.id === product.product_id
     );
 
     if (existingItemIndex !== -1) {
@@ -70,11 +86,8 @@ export default function ProductDetailPage() {
 
     localStorage.setItem("cart", JSON.stringify(existingCart));
 
-    console.log("Added to cart:", cartItem);
-
     setQuantity(0);
 
-    // go to cart page
     window.location.href = "/cart";
   };
 
@@ -131,15 +144,21 @@ export default function ProductDetailPage() {
           <div className="mt-8">
             <div className="flex items-center gap-4">
               <span className="text-3xl font-bold">
-                ${discountedPrice}.00
+                ${discountedPrice}
               </span>
-              <span className="bg-orange-100 text-orange-500 font-semibold px-2 py-1 rounded-md text-sm">
-                {product.discountPercent}%
-              </span>
+
+              {product.on_sale && (
+                <span className="bg-orange-100 text-orange-500 font-semibold px-2 py-1 rounded-md text-sm">
+                  {product.discount_percent}% OFF
+                </span>
+              )}
             </div>
-            <p className="line-through text-gray-400 mt-1">
-              ${product.price}.00
-            </p>
+
+            {product.on_sale && (
+              <p className="line-through text-gray-400 mt-1">
+                ${product.price}
+              </p>
+            )}
           </div>
 
           {/* Quantity + Add to cart */}
