@@ -8,7 +8,7 @@ const SidebarContext = createContext();
 export default function Sidebar({ children, onApplyFilters }) {
   const [expanded, setExpanded] = useState(false);
 
-  // NEW LOCAL FILTER STATE 
+  // NEW LOCAL FILTER STATE
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedMaterials, setSelectedMaterials] = useState([]);
   const [selectedAvailability, setSelectedAvailability] = useState([]);
@@ -17,7 +17,6 @@ export default function Sidebar({ children, onApplyFilters }) {
   return (
     <aside className="absolute left-0 bg-white rounded-4xl">
       <nav className="sticky top-0 h-full flex flex-col shadow-[0_0_48px_rgba(0,0,0,0.15)] rounded-r-4xl">
-
         <div className="p-4 pb-2 flex justify-end items-center">
           <button
             onClick={() => setExpanded((e) => !e)}
@@ -46,19 +45,34 @@ export default function Sidebar({ children, onApplyFilters }) {
         </SidebarContext.Provider>
 
         {expanded && (
-          <button
-            className="bg-primary h-10 m-4 rounded-xl text-white hover:bg-orange-600 cursor-pointer"
-            onClick={() =>
-              onApplyFilters({
-                selectedCategories,
-                selectedMaterials,
-                selectedAvailability,
-                selectedPrice,
-              })
-            }
-          >
-            Apply Filters
-          </button>
+          <div className="flex flex-col">
+            <button
+              className="bg-primary h-10 m-4 rounded-xl text-white hover:bg-orange-600 cursor-pointer"
+              onClick={() =>
+                onApplyFilters({
+                  selectedCategories,
+                  selectedMaterials,
+                  selectedAvailability,
+                  selectedPrice,
+                })
+              }
+            >
+              Apply Filters
+            </button>
+            <button
+              className="bg-gray-200 h-10 m-4 mt-0 rounded-xl text-gray-600 hover:bg-gray-300 hover:text-gray-900 cursor-pointer"
+              onClick={() =>
+                onApplyFilters({
+                  selectedCategories,
+                  selectedMaterials,
+                  selectedAvailability,
+                  selectedPrice,
+                })
+              }
+            >
+              Reset Filters
+            </button>
+          </div>
         )}
       </nav>
     </aside>
