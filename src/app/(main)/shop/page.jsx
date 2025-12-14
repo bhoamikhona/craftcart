@@ -1,6 +1,6 @@
 import Sidebar, { SidebarItem } from "@/components/ui/Sidebar.jsx";
 import { LayoutGrid, Box, Tag, CheckCircle } from "lucide-react";
-import { productsData as data } from "@/data/newProductsData.js";
+import { productsData as data } from "@/data/newProductsData.mjs";
 import ProductCard from "@/components/ui/ProductCard.jsx";
 
 export default function Shop() {
@@ -8,8 +8,7 @@ export default function Shop() {
     // <main className="flex gap-6 my-12">
     <main
       className="
-     flex gap-10 my-12 w-full min-h-screen 
-      bg-orange-50/50 py-12
+     flex gap-10 my-12 w-full min-h-screen py-12
       p-8
     "
     >

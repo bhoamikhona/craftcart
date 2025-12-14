@@ -44,32 +44,6 @@ export default function ProductCard({
             {description}
           </p>
 
-          {/* <div className="grid grid-cols-3 gap-3 w-full mb-6 px-8">
-            <div className="flex flex-col items-center justify-center rounded-lg gap-2 bg-gray-200 py-2 px-4">
-              <LiaRulerHorizontalSolid className="text-lg text-gray-600" />
-              <span className="text-xs text-gray-600 text-center">
-                {specs[0]}
-              </span>
-            </div>
-            <div className="flex flex-col items-center justify-center rounded-lg gap-2 bg-gray-200 py-2 px-4">
-              <LiaRulerVerticalSolid className="text-lg text-gray-600" />
-              <span className="text-xs text-gray-600 text-center">
-                {specs[1]}
-              </span>
-            </div>
-            <div className="flex flex-col items-center justify-center rounded-lg gap-2 bg-gray-200 py-2 px-4">
-              <RxLayers className="text-lg text-gray-600" />
-              <span className="text-xs text-gray-600 text-center">
-                {specs[2]}
-              </span>
-            </div>
-             <div className="flex flex-col items-center justify-center rounded-lg gap-2 bg-gray-200 p-1">
-              <IoScaleOutline className="text-lg text-gray-600" />
-              <span className="text-xs text-gray-600 text-center">
-                {specs[3]}
-              </span>
-            </div> 
-          </div> */}
           <div className="grid grid-cols-3 gap-2 px-6 mb-6 mt-2">
             <Spec icon={<LiaRulerHorizontalSolid />} value={specs[0]} />
             <Spec icon={<LiaRulerVerticalSolid />} value={specs[1]} />
