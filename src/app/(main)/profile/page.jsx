@@ -75,20 +75,16 @@ export default function ProfilePage() {
   return (
     <main className="min-h-screen pt-16 pb-16 bg-background">
       <div className="max-w-7xl mx-auto px-6">
-
         {/* Profile header remains identical */}
         <div className="flex md:flex-row flex-col items-center justify-center gap-6 my-12">
-          <div className="border-20 rounded-full border-orange-100">
-            <Image
+          <div className="border-20 rounded-full border-orange-100 h-[180px] w-[180px] overflow-hidden">
+            <img
               src={
                 userData?.avatar_url
                   ? userData.avatar_url
                   : "/images/users/default-avatar.png"
               }
               alt={`${userData?.name}'s headshot`}
-              width={180}
-              height={180}
-              className="rounded-full"
             />
           </div>
 
@@ -141,8 +137,18 @@ export default function ProfilePage() {
         <div className="flex justify-end w-full mt-4">
           <Link href="/upload">
             <button className="btn-primary flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
               </svg>
               Post Tutorial
             </button>
@@ -181,7 +187,7 @@ export default function ProfilePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {userTutorials.length === 0 && (
                 <p className="text-center text-gray-500 col-span-full">
-                  You haven't uploaded any tutorials yet.
+                  You have not uploaded any tutorials yet.
                 </p>
               )}
 
@@ -191,7 +197,8 @@ export default function ProfilePage() {
                   tutorial={{
                     id: tutorial.tutorial_id,
                     title: tutorial.title,
-                    image_url: tutorial.thumbnail_url || "/images/thumbnail/craft.jpg",
+                    image_url:
+                      tutorial.thumbnail_url || "/images/thumbnail/craft.jpg",
                     duration: tutorial.duration || "00:00",
                     views: tutorial.likes || 0,
                   }}
