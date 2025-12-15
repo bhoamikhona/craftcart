@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { tutorials } from "@/data/tutorials";
 import {
   Carousel,
   CarouselContent,
@@ -8,6 +7,9 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "@/components/ui/carousel"; 
+import VideoCard from "@/components/ui/VideoCard.jsx";
+import { data } from "@/data/videos.js";
+
 export default function TutorialCarousel() {
   return (
     <section className="py-12 bg-background">
@@ -18,7 +20,7 @@ export default function TutorialCarousel() {
 
         <Carousel className="relative">
           <CarouselPrevious />
-          <CarouselContent className="flex gap-6">
+          {/* <CarouselContent className="flex gap-6">
             {tutorials.map((tut) => (
               <CarouselItem key={tut.id}>
                 <div
@@ -30,11 +32,6 @@ export default function TutorialCarousel() {
                 >
                   <div className="w-full aspect-video rounded-xl overflow-hidden mb-4">
                     <img src={tut.thumbnails[0]} alt={tut.title} className="w-full h-full object-cover group-hover:scale-105 transition" />
-                    {/* <img
-                      src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=800"
-                      alt={tut.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition"
-                    /> */}
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{tut.title}</h3>
                   <p className="text-sm text-gray-600 mb-3 line-clamp-2">
@@ -47,6 +44,16 @@ export default function TutorialCarousel() {
                     Watch Tutorial →
                   </a>
                 </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent> */}
+          <CarouselContent className="flex gap-8">
+            {data.map((v) => (
+              <CarouselItem
+                key={v.id}
+                className="basis-88 md:basis-104"
+              >
+                <VideoCard v={v} />
               </CarouselItem>
             ))}
           </CarouselContent>
