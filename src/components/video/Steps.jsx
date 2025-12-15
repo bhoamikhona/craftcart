@@ -1,54 +1,65 @@
 "use client";
 import { useState } from "react";
-import { ChevronDown, Check } from "lucide-react";
+import { Check } from "lucide-react";
 
-export default function Steps({ steps }) {
-  const [activeStep, setActiveStep] = useState(0);
+export default function Steps({ steps = [] }) {
+  const [done, setDone] = useState(() => new Set());
 
-  const toggleStep = (index) => {
-    setActiveStep(index === activeStep ? -1 : index);
+  const toggleDone = (num) => {
+    setDone((prev) => {
+      const next = new Set(prev);
+      if (next.has(num)) next.delete(num);
+      else next.add(num);
+      return next;
+    });
   };
 
   return (
-    // <div className="bg-white rounded-xl shadow-[0_0_28px_rgba(0,0,0,0.15)] p-6 w-full">
     <div className="border border-gray-200 rounded-xl p-6 w-full">
       <h2 className="text-md font-bold mb-6">How It Is Made:</h2>
+
       <div className="flex flex-col gap-4">
-        {steps.map((step, index) => {
-          const isActive = index === activeStep;
+        {steps.map((step) => {
+          const isDone = done.has(step.number);
+
           return (
-            <div
+            <button
               key={step.number}
-              className={`border rounded-xl p-2 cursor-pointer transition 
-                          ${
-                            isActive
-                              ? "bg-[#FFF4EA] border-[#F66322]"
-                              : "bg-white border-gray-200"
-                          }`}
-              onClick={() => toggleStep(index)}
+              type="button"
+              onClick={() => toggleDone(step.number)}
+              className={`border rounded-xl p-3 cursor-pointer transition text-left
+                ${
+                  isDone
+                    ? "bg-[#FFF4EA] border-[#F66322]"
+                    : "bg-white border-gray-200 hover:bg-gray-50"
+                }`}
             >
               <div className="flex items-center justify-between">
-                {/* Number Badge */}
                 <div
-                  className={`w-8 h-8 flex items-center justify-center rounded-full text-xs text-white font-semibold 
-                              ${isActive ? "bg-orange-500" : "bg-gray-300"}`}
+                  className={`w-8 h-8 flex items-center justify-center rounded-full text-xs text-white font-semibold
+                    ${isDone ? "bg-orange-500" : "bg-gray-300"}`}
                 >
                   {step.number}
                 </div>
 
                 <div className="flex-1 px-4">
-                  <p className="text-sm">{step.text}</p>
+                  <p className={`text-sm ${isDone ? "text-gray-600" : ""}`}>
+                    {step.text}
+                  </p>
                 </div>
 
-                <div>
-                  {isActive ? (
-                    <Check className="text-orange-500" />
-                  ) : (
-                    <ChevronDown className="text-gray-400" />
-                  )}
+                <div
+                  className={`w-7 h-7 flex items-center justify-center rounded-full border
+                    ${
+                      isDone
+                        ? "border-orange-500 bg-orange-500 text-white"
+                        : "border-gray-200 bg-white text-transparent"
+                    }`}
+                >
+                  <Check className="w-4 h-4" />
                 </div>
               </div>
-            </div>
+            </button>
           );
         })}
       </div>

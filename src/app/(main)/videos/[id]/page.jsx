@@ -131,7 +131,7 @@ export default function Video() {
         </div>
       </div>
       <div className="right-col max-w-sm">
-        <div className="p-4 bg-[#f8f8fa] rounded-2xl">
+        <div className="p-4 bg-orange-50 rounded-2xl">
           <h2 className="text-md font-bold mb-6 pl-4 pt-4">
             What You will Need:
           </h2>

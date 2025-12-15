@@ -6,7 +6,7 @@ export default function SmallProductCard({ product }) {
   return (
     <Link
       // className="product-link block h-full shadow-[0_0_48px_rgba(0,0,0,0.15)] p-4 rounded-xl"
-      className="product-link bg-[#f8f8fa] p-4 py-6 border-b border-gray-300 last:border-b-0"
+      className="product-link p-4 py-6 border-b border-orange-300 last:border-b-0"
       href={`/shop/${product.productId}`}
     >
       <div className="flex items-center justify-between gap-2">
@@ -19,7 +19,7 @@ export default function SmallProductCard({ product }) {
             <span className="text-sm text-gray-600">${product.price}</span>
           </div>
         </div>
-        <button className="cursor-pointer px-3 py-2 rounded-lg hover:bg-gray-200">
+        <button className="cursor-pointer px-3 py-2 rounded-lg hover:bg-orange-200">
           <ShoppingCart color="black" size={20} />
         </button>
       </div>
