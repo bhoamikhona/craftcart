@@ -47,12 +47,7 @@ export default function VideosPage() {
 
     setFiltered(
       videos.filter((v) =>
-        [
-          v.title,
-          v.category_name,
-          v.tags,
-          v.difficulty_level,
-        ]
+        [v.title, v.category_name, v.tags, v.difficulty_level]
           .filter(Boolean)
           .some((field) => field.toLowerCase().includes(q))
       )

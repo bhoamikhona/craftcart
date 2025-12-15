@@ -20,17 +20,11 @@ export default function VideoCard({ video, onClick }) {
       </div>
 
       <div className="p-4">
-        <h3 className="font-semibold text-sm line-clamp-2">
-          {video.title}
-        </h3>
+        <h3 className="font-semibold text-sm line-clamp-2">{video.title}</h3>
 
-        <p className="text-sm text-gray-600 mt-1">
-          {video.category_name}
-        </p>
+        <p className="text-sm text-gray-600 mt-1">{video.category_name}</p>
 
-        <p className="text-xs text-gray-500 mt-0.5">
-          {video.likes || 0} likes
-        </p>
+        <p className="text-xs text-gray-500 mt-0.5">{video.likes || 0} likes</p>
       </div>
     </div>
   );

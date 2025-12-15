@@ -124,3 +124,10 @@ a {
     padding-bottom: 8rem;
   } */
 }
+.video__profile-link:link,
+.video__profile-link:visited,
+.video__profile-link:hover,
+.video__profile-link:active {
+  color: #000;
+  font-weight: bold;
+}
