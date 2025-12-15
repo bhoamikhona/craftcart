@@ -1,121 +1,9 @@
-// 'use client';
-
-// import React from "react";
-// import Link from "next/link";
-// import { useSession, signOut } from "next-auth/react";
-// import { usePathname } from "next/navigation";
-
-// function Avatar({ name, image }) {
-//   if (image) {
-//     return (
-//       <img
-//         src={image}
-//         alt={name}
-//         className="w-8 h-8 rounded-full object-cover"
-//       />
-//     );
-//   }
-
-//   return (
-//     <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
-//       {name.charAt(0).toUpperCase()}
-//     </div>
-//   );
-// }
-
-// function Navbar() {
-//   const { data: session } = useSession();
-//   const pathname = usePathname();
-//   const isProfilePage = pathname === "/profile";
-
-//   return (
-//     <nav className="bg-background border-b border-border sticky top-0 z-50">
-//       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
-
-//         <div className="shrink-0">
-//           <Link href="/">
-//             <div className="text-2xl font-bold text-primary cursor-pointer">
-//               CraftCart
-//             </div>
-//           </Link>
-//         </div>
-
-//         <div className="hidden md:flex space-x-8 justify-center flex-1">
-//           <ul className="flex space-x-8 font-medium w-full justify-center">
-//             <Link href="/watch" passHref>
-//               <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
-//                 Watch
-//               </li>
-//             </Link>
-
-//             <Link href="/marketplace" passHref>
-//               <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
-//                 Marketplace
-//               </li>
-//             </Link>
-
-//             {/* <Link href="/studio" passHref>
-//               <li className="text-foreground hover:text-primary cursor-pointer transition-colors">
-//                 Studio
-//               </li>
-//             </Link> */}
-//           </ul>
-//         </div>
-
-//         <div className="hidden md:flex items-center space-x-4 shrink-0">
-
-//           {session ? (
-//             <>
-//               {/* Avatar + Username */}
-//               <Link href="/profile" className="flex items-center space-x-2">
-//                 <Avatar name={session.user.name} image={session.user.image} />
-//                 <span className="cursor-pointer font-medium hover:text-primary">
-//                   {session.user.name}
-//                 </span>
-//               </Link>
-
-//               {/* Sign Out ONLY on Profile Page */}
-//               {isProfilePage && (
-//                 <button
-//                   className="btn-primary"
-//                   onClick={() => signOut({ callbackUrl: "/" })}
-//                 >
-//                   Sign Out
-//                 </button>
-//               )}
-
-//               <div className="cursor-pointer text-2xl"
-//               onClick={() => (window.location.href = "/cart")}>🛒</div>
-//             </>
-//           ) : (
-//             <>
-//               <button
-//                 className="btn-primary"
-//                 onClick={() => (window.location.href = "/login")}
-//               >
-//                 Sign In
-//               </button>
-//               <div className="cursor-pointer text-2xl"
-//               onClick={() => (window.location.href = "/cart")}>🛒</div>
-
-//             </>
-//           )}
-
-//         </div>
-
-//         <div className="md:hidden text-2xl text-primary ml-auto cursor-pointer">☰</div>
-//       </div>
-//     </nav>
-//   );
-// }
-
-// export default Navbar;
-
-
 "use client";
 
 import Link from "next/link.js";
 import { CgProfile, CgShoppingCart, CgLogIn } from "react-icons/cg";
+import { CiHeart } from "react-icons/ci";
+import useWishlist from "@/hooks/useWishlist";
 import "./layout.css";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
@@ -126,8 +14,8 @@ export default function Navbar() {
   const pathname = usePathname();
   const isProfilePage = pathname === "/profile";
 
-  // CART BADGE STATE
   const [cartCount, setCartCount] = useState(0);
+  const { wishlist } = useWishlist();
 
   useEffect(() => {
     const loadCart = () => {
@@ -136,13 +24,8 @@ export default function Navbar() {
       setCartCount(count);
     };
 
-    // Load initial cart count
     loadCart();
-
-    // Listen for custom cart-updated events from ProductCard / CartItem
     window.addEventListener("cart-updated", loadCart);
-
-    // Listen for storage updates (for safety)
     window.addEventListener("storage", loadCart);
 
     return () => {
@@ -185,13 +68,10 @@ export default function Navbar() {
         </div>
 
         <div className="nav__right flex justify-end items-center gap-2 md:gap-6">
-
-          {/* CART ICON WITH BADGE */}
           <div className="cart relative">
             <Link className="nav__link" href="/cart">
               <CgShoppingCart className="text-xl md:text-2xl" />
             </Link>
-
             {cartCount > 0 && (
               <span
                 className="
@@ -203,6 +83,25 @@ export default function Navbar() {
                 "
               >
                 {cartCount}
+              </span>
+            )}
+          </div>
+
+          <div className="wishlist relative">
+            <Link className="nav__link" href="/wishlist">
+              <CiHeart className="text-xl md:text-2xl cursor-pointer" />
+            </Link>
+            {wishlist.length > 0 && (
+              <span
+                className="
+                  absolute -top-2 -right-3
+                  bg-orange-600 text-white
+                  text-xs font-bold
+                  w-5 h-5 rounded-full
+                  flex items-center justify-center
+                "
+              >
+                {wishlist.length}
               </span>
             )}
           </div>
@@ -264,4 +163,3 @@ export default function Navbar() {
     </div>
   );
 }
-
