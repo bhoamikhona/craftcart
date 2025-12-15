@@ -1,31 +1,46 @@
 "use client";
 
-export default function VideoCard({ video, onClick }) {
+import Link from "next/link.js";
+import "./ui-styles/ProductCard.css";
+import { timeAgo } from "@/scripts/helper-functions.js";
+import { Dot } from "lucide-react";
+
+export default function VideoCard({ v }) {
   return (
-    <div
-      onClick={onClick}
-      className="bg-white rounded-2xl overflow-hidden shadow-[0_6px_24px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.12)] transition-all cursor-pointer"
-    >
-      <div className="relative">
-        <img
-          src={video.thumbnail_url || "/placeholder.jpg"}
-          className="w-full h-52 object-cover"
-        />
+    <Link className="product-link" href={`/videos/${v.id}`}>
+      <div
+        className="
+          video-card relative w-100
+          after:content-['']
+          after:absolute
+          after:-top-6 after:-bottom-4 after:-left-4 after:-right-4
+          after:rounded-[1.2rem]
+          after:bg-orange-100
+          after:opacity-0
+          after:-z-10
+          hover:after:opacity-100
+          after:transition-opacity after:duration-300
+        "
+      >
+        <div className="video-card-img-container w-100 rounded-lg overflow-hidden mb-2.5">
+          <img className="h-[100%] w-[100%]" src={v.thumbnail} alt={v.title} />
+        </div>
 
-        {video.duration && (
-          <span className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-0.5 rounded">
-            {video.duration}
-          </span>
-        )}
+        <div className="flex gap-3 items-center">
+          <div className="avatar-img-container w-12 h-12 overflow-hidden rounded-full">
+            <img src={v.creator.avatar_url} alt={v.creator.full_name} />
+          </div>
+
+          <div>
+            <h2 className="font-bold">{v.title}</h2>
+            <div className="flex items-center gap-1 text-sm text-gray-600">
+              <span>{v.views} Views</span>
+              <Dot className="w-4 h-4" />
+              <span>{timeAgo(v.created_at)}</span>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div className="p-4">
-        <h3 className="font-semibold text-sm line-clamp-2">{video.title}</h3>
-
-        <p className="text-sm text-gray-600 mt-1">{video.category_name}</p>
-
-        <p className="text-xs text-gray-500 mt-0.5">{video.likes || 0} likes</p>
-      </div>
-    </div>
+    </Link>
   );
 }
