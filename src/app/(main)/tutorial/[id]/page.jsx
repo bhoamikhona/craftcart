@@ -3,6 +3,7 @@ import TutorialVideo from "@/components/tutorial/TutorialVideo";
 import TutorialInfoCard from "@/components/tutorial/TutorialInfoCard";
 import AuthorBox from "@/components/tutorial/AuthorBox";
 import SuppliesCard from "@/components/tutorial/SuppliesCard";
+import TutorialSteps from "@/components/tutorial/TutorialSteps.jsx";
 
 export default async function TutorialPage({ params }) {
   const { id } = await params;
@@ -26,14 +27,13 @@ export default async function TutorialPage({ params }) {
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="max-w-[1200px] mx-auto grid lg:grid-cols-3 gap-8 px-6">
-        
         <div className="lg:col-span-2 flex flex-col gap-6">
-          <TutorialVideo 
+          <TutorialVideo
             video={tutorial.video_url}
             thumbnails={[tutorial.thumbnail_url]}
           />
 
-          <TutorialInfoCard 
+          <TutorialInfoCard
             tutorial={{
               id: tutorial.tutorial_id,
               title: tutorial.title,
@@ -44,6 +44,22 @@ export default async function TutorialPage({ params }) {
           />
 
           <AuthorBox author={creator} />
+          <TutorialSteps
+            steps={
+              tutorial.steps || [
+                {
+                  stepNumber: 1,
+                  title: "Step 1",
+                  description: "Step 1 Description",
+                },
+                {
+                  stepNumber: 2,
+                  title: "Step 2",
+                  description: "Step 2 Description",
+                },
+              ]
+            }
+          />
         </div>
 
         <SuppliesCard products={[]} />
