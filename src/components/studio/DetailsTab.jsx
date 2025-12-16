@@ -1,6 +1,35 @@
 "use client";
 
-export default function DetailsTab({ video, setVideo, initialVideo }) {
+import { useRef } from "react";
+
+export default function DetailsTab({ video, setVideo }) {
+  const thumbInputRef = useRef(null);
+  const videoInputRef = useRef(null);
+
+  function onPickThumbnailFile(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const previewUrl = URL.createObjectURL(file);
+
+    setVideo((prev) => ({
+      ...prev,
+      thumbnailFile: file,
+      thumbnail: previewUrl,
+    }));
+  }
+
+  function onPickVideoFile(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setVideo((prev) => ({
+      ...prev,
+      videoFile: file,
+      videoFileName: file.name,
+    }));
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -39,23 +68,44 @@ export default function DetailsTab({ video, setVideo, initialVideo }) {
             placeholder="Write a short description..."
           />
         </div>
-      </div>
 
-      <div className="flex justify-end gap-2">
-        <button
-          type="button"
-          onClick={() => setVideo(initialVideo)}
-          className="rounded-xl border border-gray-200 px-4 py-2 text-sm hover:bg-gray-50"
-        >
-          Reset
-        </button>
+        <div className="flex flex-wrap gap-2 pt-2">
+          <input
+            ref={thumbInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={onPickThumbnailFile}
+          />
+          <button
+            type="button"
+            onClick={() => thumbInputRef.current?.click()}
+            className="rounded-xl border border-gray-200 px-4 py-2 text-sm hover:bg-gray-50"
+          >
+            Upload Thumbnail
+          </button>
 
-        <button
-          type="button"
-          className="rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
-        >
-          Save
-        </button>
+          <input
+            ref={videoInputRef}
+            type="file"
+            accept="video/*"
+            className="hidden"
+            onChange={onPickVideoFile}
+          />
+          <button
+            type="button"
+            onClick={() => videoInputRef.current?.click()}
+            className="rounded-xl border border-gray-200 px-4 py-2 text-sm hover:bg-gray-50"
+          >
+            Upload Video
+          </button>
+
+          {video.videoFileName ? (
+            <span className="text-sm text-gray-500 self-center">
+              {video.videoFileName}
+            </span>
+          ) : null}
+        </div>
       </div>
     </div>
   );
