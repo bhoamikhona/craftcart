@@ -57,6 +57,12 @@ function withTimeout(promise, ms, label = "Request") {
   return Promise.race([promise, timeout]).finally(() => clearTimeout(t));
 }
 
+function uuidFolder() {
+  if (typeof crypto !== "undefined" && crypto.randomUUID)
+    return crypto.randomUUID();
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
 export default function StudioPage() {
   const { data: session } = useSession();
 
@@ -94,7 +100,7 @@ export default function StudioPage() {
     }));
   }, [session]);
 
-  async function uploadToBucket(bucket, path, file) {
+  async function uploadToBucket(bucket, path, file, timeoutMs) {
     const uploadPromise = supabase.storage.from(bucket).upload(path, file, {
       cacheControl: "3600",
       upsert: true,
@@ -103,7 +109,7 @@ export default function StudioPage() {
 
     const { error: upErr } = await withTimeout(
       uploadPromise,
-      120000,
+      timeoutMs,
       `Upload to ${bucket}`
     );
     if (upErr) throw upErr;
@@ -113,7 +119,7 @@ export default function StudioPage() {
 
     if (!publicUrl) {
       throw new Error(
-        `Uploaded, but could not generate a public URL. Make sure bucket "${bucket}" is public (or use signed URLs).`
+        `Uploaded, but could not generate a public URL. Make sure bucket "${bucket}" is public (or switch to signed URLs).`
       );
     }
 
@@ -127,22 +133,54 @@ export default function StudioPage() {
     const description = (video.description || "").trim();
 
     if (!title) return toast.error("Title is required.");
-    if (!video.thumbnailFile) return toast.error("Please upload a thumbnail.");
     if (!video.videoFile) return toast.error("Please upload a video.");
-
-    const now = new Date().toISOString();
+    if (!video.thumbnailFile) return toast.error("Please upload a thumbnail.");
 
     setCreating(true);
     const toastId = toast.loading("Creating tutorial...");
 
+    const folder = uuidFolder();
+
     try {
-      toast.loading("Creating tutorial record...", { id: toastId });
+      toast.loading("Uploading video...", { id: toastId });
+
+      const vidExt = extFromName(video.videoFile.name) || "mp4";
+      const vidName = `${safeBaseName(
+        video.videoFile.name
+      )}-${Date.now()}.${vidExt}`;
+      const vidPath = `${folder}/${vidName}`;
+
+      const videoUrl = await uploadToBucket(
+        VIDEO_BUCKET,
+        vidPath,
+        video.videoFile,
+        240000
+      );
+
+      toast.loading("Uploading thumbnail...", { id: toastId });
+
+      const thumbExt = extFromName(video.thumbnailFile.name) || "jpg";
+      const thumbName = `${safeBaseName(
+        video.thumbnailFile.name
+      )}-${Date.now()}.${thumbExt}`;
+      const thumbPath = `${folder}/${thumbName}`;
+
+      const thumbnailUrl = await uploadToBucket(
+        THUMB_BUCKET,
+        thumbPath,
+        video.thumbnailFile,
+        60000
+      );
+
+      toast.loading("Saving tutorial...", { id: toastId });
+
+      const now = new Date().toISOString();
 
       const tutorialRow = {
         title,
         description: description || null,
-        video_url: null,
-        thumbnail_url: null,
+        video_url: videoUrl,
+        thumbnail_url: thumbnailUrl,
 
         creator_id: session?.user?.id ?? session?.id ?? null,
 
@@ -176,50 +214,7 @@ export default function StudioPage() {
 
       const tutorialId = inserted.tutorial_id;
 
-      const thumbExt = extFromName(video.thumbnailFile.name) || "jpg";
-      const vidExt = extFromName(video.videoFile.name) || "mp4";
-
-      const thumbName = `${safeBaseName(
-        video.thumbnailFile.name
-      )}-${Date.now()}.${thumbExt}`;
-      const vidName = `${safeBaseName(
-        video.videoFile.name
-      )}-${Date.now()}.${vidExt}`;
-
-      const thumbPath = `${tutorialId}/${thumbName}`;
-      const vidPath = `${tutorialId}/${vidName}`;
-
-      toast.loading("Uploading thumbnail...", { id: toastId });
-      const thumbnailUrl = await uploadToBucket(
-        THUMB_BUCKET,
-        thumbPath,
-        video.thumbnailFile
-      );
-
-      toast.loading("Uploading video...", { id: toastId });
-      const videoUrl = await uploadToBucket(
-        VIDEO_BUCKET,
-        vidPath,
-        video.videoFile
-      );
-
-      toast.loading("Finalizing tutorial...", { id: toastId });
-
-      const updatePromise = supabase
-        .from("tutorials")
-        .update({
-          thumbnail_url: thumbnailUrl,
-          video_url: videoUrl,
-          updated_at: now,
-        })
-        .eq("tutorial_id", tutorialId);
-
-      const { error: updErr } = await withTimeout(
-        updatePromise,
-        15000,
-        "Update tutorial"
-      );
-      if (updErr) throw updErr;
+      toast.loading("Saving steps & products...", { id: toastId });
 
       const stepsPayload = (video.steps || [])
         .map((s) => ({
@@ -267,6 +262,7 @@ export default function StudioPage() {
 
       toast.success("Created successfully", { id: toastId });
 
+      // reset draft
       setVideo({
         ...initialVideo,
         creator: {
@@ -281,7 +277,10 @@ export default function StudioPage() {
       setActiveTab("details");
     } catch (err) {
       console.error("Create failed:", err);
-      toast.error("Something went wrong.", { id: toastId });
+      toast.error("Something went wrong.", {
+        id: toastId,
+        duration: 7000,
+      });
     } finally {
       setCreating(false);
     }
@@ -289,8 +288,8 @@ export default function StudioPage() {
 
   const readyToCreate =
     (video.title || "").trim() &&
-    Boolean(video.thumbnailFile) &&
-    Boolean(video.videoFile);
+    Boolean(video.videoFile) &&
+    Boolean(video.thumbnailFile);
 
   return (
     <div className="max-w-7xl mx-auto p-6 mt-12 mb-20 flex flex-col md:flex-row gap-12">
@@ -307,11 +306,9 @@ export default function StudioPage() {
           {activeTab === "details" && (
             <DetailsTab video={video} setVideo={setVideo} />
           )}
-
           {activeTab === "products" && (
             <ProductsTab video={video} setVideo={setVideo} />
           )}
-
           {activeTab === "steps" && (
             <StepsTab video={video} setVideo={setVideo} />
           )}
