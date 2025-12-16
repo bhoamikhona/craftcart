@@ -44,6 +44,19 @@ function safeBaseName(name = "file") {
     .slice(0, 60);
 }
 
+function withTimeout(promise, ms, label = "Request") {
+  let t;
+  const timeout = new Promise((_, reject) => {
+    t = setTimeout(
+      () =>
+        reject(new Error(`${label} timed out after ${Math.round(ms / 1000)}s`)),
+      ms
+    );
+  });
+
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(t));
+}
+
 export default function StudioPage() {
   const { data: session } = useSession();
 
@@ -58,7 +71,7 @@ export default function StudioPage() {
       avatar_url:
         session?.avatar_url ??
         session?.user?.avatar_url ??
-        "/images/users/1.jpg",
+        "/images/users/default-avatar.png",
     },
   }));
 
@@ -76,24 +89,35 @@ export default function StudioPage() {
           session?.avatar_url ??
           session?.user?.avatar_url ??
           prev.creator.avatar_url ??
-          "/images/users/1.jpg",
+          "/images/users/default-avatar.png",
       },
     }));
   }, [session]);
 
   async function uploadToBucket(bucket, path, file) {
-    const { error: upErr } = await supabase.storage
-      .from(bucket)
-      .upload(path, file, {
-        cacheControl: "3600",
-        upsert: true,
-        contentType: file.type || undefined,
-      });
+    const uploadPromise = supabase.storage.from(bucket).upload(path, file, {
+      cacheControl: "3600",
+      upsert: true,
+      contentType: file.type || undefined,
+    });
 
+    const { error: upErr } = await withTimeout(
+      uploadPromise,
+      120000,
+      `Upload to ${bucket}`
+    );
     if (upErr) throw upErr;
 
     const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-    return data?.publicUrl || null;
+    const publicUrl = data?.publicUrl || null;
+
+    if (!publicUrl) {
+      throw new Error(
+        `Uploaded, but could not generate a public URL. Make sure bucket "${bucket}" is public (or use signed URLs).`
+      );
+    }
+
+    return publicUrl;
   }
 
   async function handleCreate() {
@@ -107,11 +131,13 @@ export default function StudioPage() {
     if (!video.videoFile) return toast.error("Please upload a video.");
 
     const now = new Date().toISOString();
-    const loadingId = toast.loading("Creating tutorial...");
 
     setCreating(true);
+    const toastId = toast.loading("Creating tutorial...");
 
     try {
+      toast.loading("Creating tutorial record...", { id: toastId });
+
       const tutorialRow = {
         title,
         description: description || null,
@@ -134,11 +160,17 @@ export default function StudioPage() {
         difficulty_level: null,
       };
 
-      const { data: inserted, error: tutErr } = await supabase
+      const insertPromise = supabase
         .from("tutorials")
         .insert([tutorialRow])
         .select("tutorial_id")
         .single();
+
+      const { data: inserted, error: tutErr } = await withTimeout(
+        insertPromise,
+        15000,
+        "Insert tutorial"
+      );
 
       if (tutErr) throw tutErr;
 
@@ -157,12 +189,23 @@ export default function StudioPage() {
       const thumbPath = `${tutorialId}/${thumbName}`;
       const vidPath = `${tutorialId}/${vidName}`;
 
-      const [thumbnailUrl, videoUrl] = await Promise.all([
-        uploadToBucket(THUMB_BUCKET, thumbPath, video.thumbnailFile),
-        uploadToBucket(VIDEO_BUCKET, vidPath, video.videoFile),
-      ]);
+      toast.loading("Uploading thumbnail...", { id: toastId });
+      const thumbnailUrl = await uploadToBucket(
+        THUMB_BUCKET,
+        thumbPath,
+        video.thumbnailFile
+      );
 
-      const { error: updErr } = await supabase
+      toast.loading("Uploading video...", { id: toastId });
+      const videoUrl = await uploadToBucket(
+        VIDEO_BUCKET,
+        vidPath,
+        video.videoFile
+      );
+
+      toast.loading("Finalizing tutorial...", { id: toastId });
+
+      const updatePromise = supabase
         .from("tutorials")
         .update({
           thumbnail_url: thumbnailUrl,
@@ -171,6 +214,11 @@ export default function StudioPage() {
         })
         .eq("tutorial_id", tutorialId);
 
+      const { error: updErr } = await withTimeout(
+        updatePromise,
+        15000,
+        "Update tutorial"
+      );
       if (updErr) throw updErr;
 
       const stepsPayload = (video.steps || [])
@@ -185,9 +233,14 @@ export default function StudioPage() {
         );
 
       if (stepsPayload.length) {
-        const { error: stepsErr } = await supabase
+        const stepsInsertPromise = supabase
           .from("tutorialsteps")
           .insert(stepsPayload);
+        const { error: stepsErr } = await withTimeout(
+          stepsInsertPromise,
+          15000,
+          "Insert steps"
+        );
         if (stepsErr) throw stepsErr;
       }
 
@@ -201,13 +254,18 @@ export default function StudioPage() {
       }));
 
       if (productsPayload.length) {
-        const { error: tpErr } = await supabase
+        const prodInsertPromise = supabase
           .from("tutorialproducts")
           .insert(productsPayload);
+        const { error: tpErr } = await withTimeout(
+          prodInsertPromise,
+          15000,
+          "Insert tutorial products"
+        );
         if (tpErr) throw tpErr;
       }
 
-      toast.success("Created Successfully");
+      toast.success("Created successfully", { id: toastId });
 
       setVideo({
         ...initialVideo,
@@ -217,13 +275,13 @@ export default function StudioPage() {
           avatar_url:
             session?.avatar_url ??
             session?.user?.avatar_url ??
-            "/images/users/1.jpg",
+            "/images/users/default-avatar.png",
         },
       });
       setActiveTab("details");
     } catch (err) {
       console.error("Create failed:", err);
-      toast.error("Something went wrong.");
+      toast.error("Something went wrong.", { id: toastId });
     } finally {
       setCreating(false);
     }

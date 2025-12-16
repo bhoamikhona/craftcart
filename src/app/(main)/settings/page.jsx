@@ -275,8 +275,13 @@ export default function Settings() {
         </SettingsSection>
 
         {/* DELETE ACCOUNT */}
-        <SettingsSection title="Delete Account" description="Permanently delete your account.">
-          <button type="button" className="text-rose-400">Delete Account</button>
+        <SettingsSection
+          title="Delete Account"
+          description="Permanently delete your account."
+        >
+          <button type="button" className="text-rose-400">
+            Delete Account
+          </button>
         </SettingsSection>
       </div>
 
