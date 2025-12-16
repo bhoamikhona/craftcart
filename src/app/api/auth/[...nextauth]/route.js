@@ -7,48 +7,49 @@ const handler = NextAuth({
   providers: [
     CredentialsProvider({
       name: "Credentials",
+
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
 
       async authorize(credentials) {
-        const email = credentials.email.toLowerCase(); // normalize
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+
+        // Normalize input
+        const email = credentials.email.toLowerCase();
         const password = credentials.password;
 
-        console.log("Received login:", { email, password });
-
-        // 1) Look up user
+        // Fetch user from Supabase
         const { data: user, error } = await supabase
           .from("users")
-          .select("*")
+          .select("user_id, name, email, password, avatar_url")
           .eq("email", email)
           .single();
 
-        console.log("User from Supabase:", user);
-        console.log("Supabase error:", error);
-
-        if (!user) {
-          console.log("❌ No user found");
+        if (error || !user) {
+          console.error("Authentication error:", error);
           return null;
         }
 
-        // 2) Compare hashed password
-        const isValid = await bcrypt.compare(password, user.password);
+        // Validate password
+        const isValidPassword = await bcrypt.compare(
+          password,
+          user.password
+        );
 
-        if (!isValid) {
-          console.log("❌ Invalid password");
+        if (!isValidPassword) {
           return null;
         }
 
-        console.log("✅ Login successful!");
-
-        // 3) Return user session object compatible with NextAuth
+        //  Return user object (triggers session + cookie creation)
         return {
           id: user.user_id,
           name: user.name,
           email: user.email,
-          avatar_url: user.avatar_url || null,
+          avatar_url: user.avatar_url ?? null,
         };
       },
     }),
@@ -58,9 +59,13 @@ const handler = NextAuth({
     signIn: "/login",
   },
 
-  session: { strategy: "jwt" },
+  // JWT-based session stored in secure HTTP-only cookie
+  session: {
+    strategy: "jwt",
+  },
 
   callbacks: {
+    // Runs whenever a JWT is created or updated
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -71,6 +76,7 @@ const handler = NextAuth({
       return token;
     },
 
+    // Expose custom fields to the client session
     async session({ session, token }) {
       session.user.id = token.id;
       session.user.name = token.name;
