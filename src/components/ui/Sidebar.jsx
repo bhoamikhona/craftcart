@@ -14,7 +14,7 @@ export default function Sidebar({ children, onApplyFilters }) {
   const [selectedPrice, setSelectedPrice] = useState(null);
 
   return (
-    <aside className="absolute left-0 bg-white rounded-4xl">
+    <aside className="absolute h-full left-0 bg-white rounded-4xl">
       <nav className="sticky top-0 h-full flex flex-col shadow-[0_0_48px_rgba(0,0,0,0.15)] rounded-r-4xl">
         <div className="p-4 pb-2 flex justify-end items-center">
           <button
