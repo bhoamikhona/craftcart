@@ -333,7 +333,7 @@
 //     createdAt: "2025-03-10T14:00:00Z",
 //   },
 // ];
-export const productsData = [
+export const products = [
   {
     productId: "prod-001",
     name: "Stainless Steel Scissors",
