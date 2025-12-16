@@ -4,36 +4,35 @@ import Link from "next/link.js";
 import "./ui-styles/ProductCard.css";
 import { timeAgo } from "@/scripts/helper-functions.js";
 import { Dot, Bookmark } from "lucide-react";
-import { useState } from "react";
+import useSavedVideos from "@/hooks/useSavedVideos";
 
 export default function VideoCard({ v }) {
-  const [saved, setSaved] = useState(false);
+  const { isSaved, saveVideo, unsaveVideo } = useSavedVideos();
+  const saved = isSaved(v.id);
+
+  const toggleSave = (e) => {
+    e.preventDefault(); // do not navigate
+    e.stopPropagation();
+
+    if (saved) {
+      unsaveVideo(v.id);
+    } else {
+      saveVideo(v);
+    }
+  };
 
   return (
     <Link className="product-link" href={`/videos/${v.id}`}>
-      <div
-        className="
-          video-card relative w-100
-          after:content-['']
-          after:absolute
-          after:-top-6 after:-bottom-4 after:-left-4 after:-right-4
-          after:rounded-[1.2rem]
-          after:bg-orange-100
-          after:opacity-0
-          after:-z-10
-          hover:after:opacity-100
-          after:transition-opacity after:duration-300
-        "
-      >
+      <div className="video-card relative w-100">
         <div className="relative">
           <div className="video-card-img-container w-100 rounded-lg overflow-hidden mb-2.5">
-            <img
-              className="h-[100%] w-[100%]"
-              src={v.thumbnail}
-              alt={v.title}
-            />
+            <img src={v.thumbnail} alt={v.title} />
           </div>
-          <div className="absolute top-0 right-0 bg-white h-12 w-10 rounded-bl-2xl  rounded-tr-md flex items-center justify-center">
+
+          <div
+            onClick={toggleSave}
+            className="absolute top-0 right-0 bg-white h-12 w-10 rounded-bl-2xl rounded-tr-md flex items-center justify-center cursor-pointer"
+          >
             {saved ? (
               <Bookmark fill="#ff6600" stroke="#ff6600" />
             ) : (

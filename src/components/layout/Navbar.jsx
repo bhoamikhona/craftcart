@@ -6,15 +6,14 @@ import {
   CgShoppingCart,
   CgLogIn,
   CgHeart,
-  CgBookmark,
 } from "react-icons/cg";
-import { BsBookmark } from "react-icons/bs";
+import { Bookmark } from "lucide-react";
 import useWishlist from "@/hooks/useWishlist";
+import useSavedVideos from "@/hooks/useSavedVideos";
 import "./layout.css";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Book, Bookmark } from "lucide-react";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -23,6 +22,7 @@ export default function Navbar() {
 
   const [cartCount, setCartCount] = useState(0);
   const { wishlist } = useWishlist();
+  const { savedVideos } = useSavedVideos();
 
   useEffect(() => {
     const loadCart = () => {
@@ -44,6 +44,7 @@ export default function Navbar() {
   return (
     <div className="sticky top-0 bg-white z-100">
       <nav className="p-6 max-w-7xl mx-auto flex items-center gap-2">
+        {/* LEFT */}
         <div className="nav__left">
           <div className="shrink-0">
             <Link href="/">
@@ -54,6 +55,7 @@ export default function Navbar() {
           </div>
         </div>
 
+        {/* CENTER */}
         <div className="nav__center flex-1">
           <ul className="flex gap-4 justify-center">
             <li>
@@ -74,16 +76,35 @@ export default function Navbar() {
           </ul>
         </div>
 
+        {/* RIGHT */}
         <div className="nav__right flex justify-end items-center gap-2 md:gap-6">
+          {/* SAVED VIDEOS */}
           <div className="wishlist relative">
             <Link className="nav__link" href="/saved">
               <Bookmark />
             </Link>
+
+            {savedVideos.length > 0 && (
+              <span
+                className="
+                  absolute -top-2 -right-3
+                  bg-orange-600 text-white
+                  text-xs font-bold
+                  w-5 h-5 rounded-full
+                  flex items-center justify-center
+                "
+              >
+                {savedVideos.length}
+              </span>
+            )}
           </div>
+
+          {/* WISHLIST */}
           <div className="wishlist relative">
             <Link className="nav__link" href="/wishlist">
               <CgHeart className="text-xl font-bold md:text-2xl cursor-pointer" />
             </Link>
+
             {wishlist.length > 0 && (
               <span
                 className="
@@ -99,10 +120,12 @@ export default function Navbar() {
             )}
           </div>
 
+          {/* CART */}
           <div className="cart relative">
             <Link className="nav__link" href="/cart">
               <CgShoppingCart className="text-xl md:text-2xl" />
             </Link>
+
             {cartCount > 0 && (
               <span
                 className="
@@ -118,6 +141,7 @@ export default function Navbar() {
             )}
           </div>
 
+          {/* AUTH */}
           {session ? (
             <div className="profile-wrapper flex gap-2 md:gap-6 items-center">
               <div className="profile relative group">
@@ -128,34 +152,22 @@ export default function Navbar() {
                 </div>
 
                 <div className="profile-dropdown hidden group-hover:block rounded border-gray-500 bg-white p-2 py-4 pt-6 md:pt-8 absolute w-[150px] z-100 right-[-60] top-5 md:top-6 shadow-[0_2.4rem_4.8rem_rgba(0,0,0,0.075)]">
-                  <ul className="flex flex-col items-center justify-center gap-2 ">
+                  <ul className="flex flex-col items-center justify-center gap-2">
                     <li>
-                      <Link
-                        className="nav__link md:text-base text-sm"
-                        href="/profile"
-                      >
+                      <Link className="nav__link md:text-base text-sm" href="/profile">
                         Profile
                       </Link>
                     </li>
-
                     <li>
-                      <Link
-                        className="nav__link md:text-base text-sm"
-                        href="/orders"
-                      >
+                      <Link className="nav__link md:text-base text-sm" href="/orders">
                         Orders
                       </Link>
                     </li>
-
                     <li>
-                      <Link
-                        className="nav__link md:text-base text-sm"
-                        href="/settings"
-                      >
+                      <Link className="nav__link md:text-base text-sm" href="/settings">
                         Settings
                       </Link>
                     </li>
-
                     <li>
                       <button
                         onClick={() => signOut({ callbackUrl: "/" })}
