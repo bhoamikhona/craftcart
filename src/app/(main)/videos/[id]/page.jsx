@@ -10,9 +10,7 @@ import VideoActions from "@/components/video/VideoActions.jsx";
 export default async function Video({ params }) {
   const { id } = await params;
 
-  const video = data.find(
-    (video) => String(video.id) === id
-  );
+  const video = data.find((video) => String(video.id) === id);
 
   if (!video) {
     return (
@@ -27,7 +25,6 @@ export default async function Video({ params }) {
 
   return (
     <div className="max-w-7xl p-10 mx-auto mt-10 mb-12 flex gap-8">
-      {/* LEFT COLUMN */}
       <div className="left-col flex-1">
         <div className="mb-4">
           <VideoPlayer video={video.src} thumbnail={video.thumbnail} />
@@ -36,7 +33,6 @@ export default async function Video({ params }) {
         <h1 className="text-[20px] font-bold mb-1">{video.title}</h1>
 
         <div className="flex justify-between items-center mb-2">
-          {/* CREATOR INFO */}
           <div className="user-info flex gap-4 items-center">
             <div className="user-avatar-container h-12.5 w-12.5 rounded-full overflow-hidden">
               <img
@@ -56,7 +52,6 @@ export default async function Video({ params }) {
             </div>
           </div>
 
-          {/* CLIENT ACTIONS */}
           <VideoActions video={video} />
         </div>
 
@@ -72,7 +67,6 @@ export default async function Video({ params }) {
         <Steps steps={video.steps} />
       </div>
 
-      {/* RIGHT COLUMN */}
       <div className="right-col max-w-sm">
         <div className="p-4 bg-orange-50 rounded-2xl">
           <h2 className="text-md font-bold mb-6 pl-4 pt-4">
