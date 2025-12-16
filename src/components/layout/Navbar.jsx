@@ -77,7 +77,6 @@ export default function Navbar() {
         <div className="nav__right flex justify-end items-center gap-2 md:gap-6">
           <div className="wishlist relative">
             <Link className="nav__link" href="/saved">
-              {/* <BsBookmark className="text-xl font-bold md:text-2xl cursor-pointer" /> */}
               <Bookmark />
             </Link>
           </div>

@@ -35,9 +35,9 @@ export default function VideoCard({ v }) {
           </div>
           <div className="absolute top-0 right-0 bg-white h-12 w-10 rounded-bl-2xl  rounded-tr-md flex items-center justify-center">
             {saved ? (
-              <Bookmark strokeWidth={1} fill="#ff6600" stroke="#ff6600" />
+              <Bookmark fill="#ff6600" stroke="#ff6600" />
             ) : (
-              <Bookmark strokeWidth={1} stroke="#ff6600" />
+              <Bookmark stroke="#ff6600" />
             )}
           </div>
         </div>
