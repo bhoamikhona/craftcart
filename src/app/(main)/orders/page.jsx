@@ -1,147 +1,174 @@
-import { products } from "@/data/products";
+"use client";
+
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import supabase from "@/lib/supabaseClient";
 import Image from "next/image";
 import Link from "next/link";
 import { RiArrowDropRightLine } from "react-icons/ri";
+import Loader from "@/components/ui/loader";
 
-// Dummy Order Data
-const ordersData = [
-  {
-    id: "ORD-2024-001",
-    date: "March 15, 2024",
-    status: "Delivered",
-    items: 2,
-    price: 77,
-    images: [
-      "/images/products/candle-containers.jpg",
-      "/images/products/candle-dye-chips.jpg",
-    ],
-    products: [
-      {
-        productId: 1,
-        name: "3mm Cotton Cord",
-        quantity: 1,
-        price: 8.99,
-        image: "/images/products/cotton-cord.jpg",
-      },
-      {
-        productId: 2,
-        name: "Wooden Dowel (12 inch)",
-        quantity: 10,
-        price: 3.99,
-        image: "/images/products/wooden-dowel.jpg",
-      },
-    ],
-  },
-  {
-    id: "ORD-2024-002",
-    date: "March 10, 2024",
-    status: "Shipped",
-    items: 1,
-    price: 78,
-    products: [
-      {
-        productId: 3,
-        name: "Hot Glue Gun",
-        quantity: 1,
-        price: 11.99,
-        image: "/images/products/hot-glue-gun.jpg",
-      },
-    ],
-  },
-  {
-    id: "ORD-2024-003",
-    date: "March 5, 2024",
-    status: "Processing",
-    items: 2,
-    price: 99,
-    products: [
-      {
-        productId: 3,
-        name: "Hot Glue Gun",
-        quantity: 1,
-        price: 11.99,
-        image: "/images/products/hot-glue-gun.jpg",
-      },
-      {
-        productId: 2,
-        name: "Wooden Dowel (12 inch)",
-        quantity: 4,
-        price: 3.99,
-        image: "/images/products/wooden-dowel.jpg",
-      },
-    ],
-  },
-];
+export default function OrdersPage() {
+  const { data: session, status } = useSession();
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export default function orders() {
+  useEffect(() => {
+    if (!session?.user?.email) return;
+
+    async function loadOrders() {
+      setLoading(true);
+
+      /* 1️⃣ get user_id from users table */
+      const { data: userData, error: userError } = await supabase
+        .from("users")
+        .select("user_id")
+        .eq("email", session.user.email)
+        .single();
+
+      if (userError || !userData) {
+        setLoading(false);
+        return;
+      }
+
+      /* 2️⃣ fetch orders for this user */
+      const { data: ordersData, error } = await supabase
+        .from("orders")
+        .select(`
+          order_id,
+          status,
+          created_at,
+          total_amount,
+          orderitems (
+            quantity,
+            price,
+            products (
+              name,
+              images
+            )
+          )
+        `)
+        .eq("user_id", userData.user_id)
+        .order("created_at", { ascending: false });
+
+      if (!error) {
+        setOrders(ordersData || []);
+      }
+
+      setLoading(false);
+    }
+
+    loadOrders();
+  }, [session]);
+
+  if (status === "loading" || loading) return <Loader />;
+  if (!session) {
+    return (
+      <p className="mt-10 text-center text-gray-500">
+        Please login to view your orders.
+      </p>
+    );
+  }
+
   return (
-    <div>
-      <div className=" max-w-6xl flex flex-col items-stretch justify-center mx-auto mb-10 mt-10">
-        <h1 className="self-start pl-4 text-4xl font-bold">Your Orders</h1>
+    <div className="max-w-6xl mx-auto mt-10 mb-10 px-4">
+      <h1 className="text-4xl font-bold mb-8">Your Orders</h1>
 
-        <ul className="flex flex-col p-4">
-          {ordersData.map((o) => (
-            <OrderItem
-              key={o.id}
-              id={o.id}
-              date={o.date}
-              status={o.status}
-              items={o.items}
-              price={o.price}
-              products={o.products}
-            />
+      {orders.length === 0 ? (
+        <p className="text-gray-500">You have no orders yet.</p>
+      ) : (
+        <ul className="flex flex-col gap-8">
+          {orders.map((order) => (
+            <OrderItem key={order.order_id} order={order} />
           ))}
         </ul>
-      </div>
+      )}
     </div>
   );
 }
 
-function OrderItem({ id, date, status, items, price, products }) {
+/* ============================
+   ORDER CARD
+============================ */
+function OrderItem({ order }) {
   return (
-    <li className="border-b border-gray-300 last:border-b-0 py-6">
-      <span className="text-sm text-gray-400">{date}</span>
-      <div className="flex justify-between mb-4">
-        <p className="font-bold text-gray-600 mb-3">{id}</p>
+    <li className="border-b border-gray-300 pb-6">
+      <span className="text-sm text-gray-400">
+        {new Date(order.created_at).toDateString()}
+      </span>
+
+      <div className="flex justify-between items-center mb-4">
+        <p className="font-bold text-gray-600">
+          Order #{order.order_id}
+        </p>
+
         <Link
-          className="flex items-center text-sm text-gray-300 footer__link"
-          href="/orders"
+          href={`/orders/${order.order_id}`}
+          className="flex items-center text-sm text-gray-400 hover:text-gray-600"
         >
           Details <RiArrowDropRightLine className="text-2xl" />
         </Link>
       </div>
 
+      <span className="inline-block mb-4 text-xs font-medium px-3 py-1 rounded-full bg-orange-100 text-orange-700">
+        {order.status}
+      </span>
+
       <ul className="flex flex-col gap-6">
-        {products.map((p) => (
-          <OrderProductItem
-            key={p.productId}
-            name={p.name}
-            quantity={p.quantity}
-            price={p.price}
-            image={p.image}
-          />
+        {order.orderitems.map((item, idx) => (
+          <OrderProductItem key={idx} item={item} />
         ))}
       </ul>
+
+      <p className="mt-4 font-semibold text-right text-gray-700">
+        Total: ${order.total_amount.toFixed(2)}
+      </p>
     </li>
   );
 }
 
-function OrderProductItem({ name, quantity, price, image }) {
+/* ============================
+   PRODUCT ROW (FIRST IMAGE)
+============================ */
+function OrderProductItem({ item }) {
+  const product = item.products;
+
+  let images = [];
+
+  if (Array.isArray(product?.images)) {
+    images = product.images;
+  } else if (typeof product?.images === "string") {
+    try {
+      images = JSON.parse(product.images);
+    } catch {
+      images = [];
+    }
+  }
+
+  const rawImage = images[0];
+  const imageSrc =
+    typeof rawImage === "string"
+      ? rawImage.startsWith("/")
+        ? rawImage
+        : `/${rawImage}`
+      : "/images/placeholder.png";
+
   return (
     <li className="flex items-center gap-4">
+      <Image
+        src={imageSrc}
+        alt={product?.name || "Product"}
+        width={50}
+        height={50}
+        className="rounded-md shadow-sm object-cover"
+      />
+
       <div>
-        <Image
-          className="rounded-md shadow-sm"
-          width={50}
-          height={50}
-          src={image}
-          alt={name}
-        />
-      </div>
-      <div>
-        <p className="font-medium text-gray-700">{name}</p>
+        <p className="font-medium text-gray-700">
+          {product?.name}
+        </p>
         <p className="text-sm text-gray-500">
-          Quantity: {quantity} | ${price}
+          Quantity: {item.quantity} · ${item.price}
         </p>
       </div>
     </li>
