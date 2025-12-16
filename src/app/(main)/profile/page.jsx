@@ -162,22 +162,20 @@ export default function ProfilePage() {
         {/* Tabs */}
         <div className="mt-8 flex justify-center gap-6 border-b border-gray-300 text-gray-600 mb-16">
           <span
-            className={`cursor-pointer pb-2 ${
-              activeTab === "MY_TUTORIALS"
+            className={`cursor-pointer pb-2 ${activeTab === "MY_TUTORIALS"
                 ? "font-bold border-b-2 border-primary text-black"
                 : "hover:text-black"
-            }`}
+              }`}
             onClick={() => setActiveTab("MY_TUTORIALS")}
           >
             MY TUTORIALS
           </span>
 
           <span
-            className={`cursor-pointer pb-2 ${
-              activeTab === "SAVED"
+            className={`cursor-pointer pb-2 ${activeTab === "SAVED"
                 ? "font-bold border-b-2 border-primary text-black"
                 : "hover:text-black"
-            }`}
+              }`}
             onClick={() => setActiveTab("SAVED")}
           >
             SAVED
@@ -187,7 +185,7 @@ export default function ProfilePage() {
         {/* Content */}
         <div className="mt-4">
           {/* MY TUTORIALS — REAL DATA */}
-          {activeTab === "MY_TUTORIALS" && (
+          {/* {activeTab === "MY_TUTORIALS" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {userTutorials.length === 0 && (
                 <p className="text-center text-gray-500 col-span-full">
@@ -209,7 +207,36 @@ export default function ProfilePage() {
                 />
               ))}
             </div>
+          )} */}
+          {activeTab === "MY_TUTORIALS" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {userTutorials.length === 0 && (
+                <p className="text-center text-gray-500 col-span-full">
+                  You have not uploaded any tutorials yet.
+                </p>
+              )}
+
+              {userTutorials.map((tutorial) => (
+                <VideoCard
+                  key={tutorial.tutorial_id}
+                  v={{
+                    id: tutorial.tutorial_id,
+                    title: tutorial.title,
+                    thumbnail:
+                      tutorial.thumbnail_url || "/images/thumbnail/craft.jpg",
+                    views: tutorial.likes || 0,
+                    created_at: tutorial.created_at,
+                    creator: {
+                      avatar_url:
+                        userData?.avatar_url || "/images/users/default-avatar.png",
+                      full_name: userData?.name || "Unknown Creator",
+                    },
+                  }}
+                />
+              ))}
+            </div>
           )}
+
 
           {activeTab === "SAVED" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
