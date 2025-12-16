@@ -79,27 +79,6 @@ export default function Navbar() {
 
         {/* RIGHT */}
         <div className="nav__right flex justify-end items-center gap-2 md:gap-6">
-          {/* SAVED VIDEOS */}
-          <div className="wishlist relative">
-            <Link className="nav__link" href="/wishlist">
-              <CgBookmark className="text-gray-600 font-bold text-2xl cursor-pointer" />
-            </Link>
-
-            {savedVideos.length > 0 && (
-              <span
-                className="
-                  absolute -top-2 -right-3
-                  bg-orange-600 text-white
-                  text-xs font-bold
-                  w-5 h-5 rounded-full
-                  hidden md:flex items-center justify-center
-                "
-              >
-                {savedVideos.length}
-              </span>
-            )}
-          </div>
-
           {/* WISHLIST */}
           <div className="wishlist relative">
             <Link className="nav__link" href="/wishlist">

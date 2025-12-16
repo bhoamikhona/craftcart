@@ -39,7 +39,7 @@ export default function VideoCard({ v }) {
         "
       >
         <div className="relative">
-          <div className="video-card-img-container w-100 rounded-lg overflow-hidden mb-2.5">
+          <div className="video-card-img-container w-full h-[225px] rounded-lg overflow-hidden mb-2.5">
             <img src={v.thumbnail} alt={v.title} />
           </div>
 
