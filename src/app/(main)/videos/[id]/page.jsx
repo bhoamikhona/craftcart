@@ -1,18 +1,176 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { useParams } from "next/navigation";
+import supabase from "@/lib/supabaseClient";
+
 import VideoPlayer from "@/components/video/VideoPlayer.jsx";
 import Link from "next/link.js";
 import { Dot } from "lucide-react";
 import { timeAgo } from "@/scripts/helper-functions.js";
 import Steps from "@/components/video/Steps.jsx";
 import SmallProductCard from "@/components/ui/SmallProductCard.jsx";
-import { data } from "@/data/videos.js";
 import VideoActions from "@/components/video/VideoActions.jsx";
 
-export default async function Video({ params }) {
-  const { id } = await params;
+function normalizePublicUrl(url) {
+  if (!url) return url;
+  if (url.startsWith("http")) return url;
+  if (url.startsWith("/")) return url;
+  return `/${url}`;
+}
 
-  const video = data.find((video) => String(video.id) === id);
+export default function Video() {
+  const { id } = useParams();
 
-  if (!video) {
+  const tutorialId = useMemo(() => {
+    const n = Number(id);
+    return Number.isFinite(n) ? n : null;
+  }, [id]);
+
+  const [video, setVideo] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let alive = true;
+
+    async function loadVideo() {
+      if (!tutorialId) {
+        setLoading(false);
+        setVideo(null);
+        return;
+      }
+
+      try {
+        setLoading(true);
+
+        const { data, error } = await supabase
+          .from("tutorials")
+          .select(
+            `
+            tutorial_id,
+            title,
+            description,
+            video_url,
+            thumbnail_url,
+            likes,
+            created_at,
+            creator_id,
+            users:creator_id (
+              user_id,
+              name,
+              avatar_url,
+              followers_count
+            ),
+            tutorialsteps (
+              step_number,
+              description
+            ),
+            tutorialproducts (
+              product_id,
+              products:product_id (
+                product_id,
+                name,
+                description,
+                measurements,
+                quantity,
+                in_stock,
+                price,
+                currency,
+                category,
+                rating,
+                review_count,
+                material,
+                brand,
+                images,
+                discount_percent,
+                discount_price,
+                on_sale,
+                specs
+              )
+            )
+          `
+          )
+          .eq("tutorial_id", tutorialId)
+          .single();
+
+        if (error) throw error;
+
+        const mapped = {
+          id: data.tutorial_id,
+          title: data.title,
+          description: data.description,
+          src: data.video_url,
+          thumbnail:
+            data.thumbnail_url || "/images/thumbnail/video-placeholder.png",
+          created_at: data.created_at,
+          likes: data.likes ?? 0,
+          views: data.views ?? 0,
+
+          creator: {
+            id: data.users?.user_id ?? data.creator_id ?? null,
+            full_name: data.users?.name ?? "Unknown",
+            avatar_url:
+              data.users?.avatar_url || "/images/users/default-avatar.png",
+            followers: data.users?.followers_count ?? 0,
+          },
+
+          steps: (data.tutorialsteps || [])
+            .slice()
+            .sort((a, b) => (a.step_number ?? 0) - (b.step_number ?? 0))
+            .map((s) => ({
+              number: s.step_number,
+              text: s.description,
+            })),
+
+          products: (data.tutorialproducts || [])
+            .map((tp) => tp.products)
+            .filter(Boolean)
+            .map((p) => {
+              const rawImages = Array.isArray(p.images)
+                ? p.images
+                : p.images
+                ? [p.images]
+                : [];
+
+              return {
+                productId: p.product_id,
+                name: p.name,
+                description: p.description,
+                measurements: p.measurements,
+                quantity: p.quantity,
+                inStock: p.in_stock,
+                price: p.price,
+                currency: p.currency,
+                category: p.category,
+                rating: p.rating,
+                reviewCount: p.review_count,
+                material: p.material,
+                brand: p.brand,
+                images: rawImages.map(normalizePublicUrl),
+                discountPercent: p.discount_percent ?? 0,
+                discountPrice: p.discount_price ?? null,
+                onSale: p.on_sale ?? false,
+                specs: p.specs ?? null,
+              };
+            }),
+        };
+
+        if (alive) setVideo(mapped);
+      } catch (err) {
+        console.error("Failed to load video:", err);
+        if (alive) setVideo(null);
+      } finally {
+        if (alive) setLoading(false);
+      }
+    }
+
+    loadVideo();
+    return () => {
+      alive = false;
+    };
+  }, [tutorialId]);
+
+  if (!loading && !video) {
     return (
       <div className="max-w-4xl mx-auto mt-20 text-center">
         <h1 className="text-2xl font-bold">Video not found</h1>
@@ -22,6 +180,8 @@ export default async function Video({ params }) {
       </div>
     );
   }
+
+  if (loading) return null;
 
   return (
     <div className="max-w-7xl p-10 mx-auto mt-10 mb-12 flex gap-8">
@@ -74,7 +234,7 @@ export default async function Video({ params }) {
           </h2>
           <div className="flex flex-col border-b border-gray-800 last:border-b-0">
             {video.products.map((p) => (
-              <SmallProductCard key={p.name} product={p} />
+              <SmallProductCard key={p.productId} product={p} />
             ))}
           </div>
         </div>
