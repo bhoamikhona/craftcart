@@ -102,12 +102,12 @@ function OrderItem({ order }) {
           Order #{order.order_id}
         </p>
 
-        <Link
+        {/* <Link
           href={`/orders/${order.order_id}`}
           className="flex items-center text-sm text-gray-400 hover:text-gray-600"
         >
           Details <RiArrowDropRightLine className="text-2xl" />
-        </Link>
+        </Link> */}
       </div>
 
       <span className="inline-block mb-4 text-xs font-medium px-3 py-1 rounded-full bg-orange-100 text-orange-700">

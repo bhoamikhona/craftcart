@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 
 /* original
 
@@ -58,7 +59,25 @@ export default function CartSummary({ cart }) {
         <span>${total.toFixed(2)}</span>
       </div>
 
-      <button className="btn-primary w-full py-3">Checkout</button>
+      {/* <button className="btn-primary w-full py-3">Checkout</button> */}
+      <Link
+        href="/checkout"
+        className="
+    block
+    text-center
+    bg-orange-600
+    !text-white
+    font-semibold
+    py-3
+    rounded-xl
+    mt-4
+    hover:bg-orange-700
+    transition
+  "
+      >
+        Proceed to Checkout
+      </Link>
+
     </div>
   );
 }
