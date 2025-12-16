@@ -39,7 +39,6 @@ export default function TutorialCarousel() {
                       overflow-hidden
                       transition
                       duration-300
-                      hover:-translate-y-1
                       hover:shadow-md
                     "
                   >
