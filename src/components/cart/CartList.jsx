@@ -54,6 +54,7 @@ export default function CartList({ cart, updateQuantity }) {
         <CartItem
           key={item.id}   // or item.product_id / order_item_id
           item={item}
+          updateQuantity={updateQuantity}
         />
       ))}
 
