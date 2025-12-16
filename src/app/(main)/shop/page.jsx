@@ -134,7 +134,7 @@ export default function Shop() {
             text="Material"
             checkList={["Paper", "Wood", "Fabric", "Plastic"]}
           />
-          <SidebarItem icon={<Tag size={20} />} text="Price" range={[0, 1000]} />
+          <SidebarItem icon={<Tag size={20} />} text="Price" range={[0, 50]} />
           <SidebarItem
             icon={<CheckCircle size={20} />}
             text="Availability"
