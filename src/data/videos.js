@@ -125,7 +125,7 @@ export const data = [
       },
     ],
     creator: {
-      id: 12,
+      id: 32,
       full_name: "Emma Rodriguez",
       avatar_url: "/images/users/1.jpg",
       followers: 415,
@@ -148,10 +148,10 @@ export const data = [
     ],
     products: [
       {
-        productId: "prod-041",
-        name: "Round Paint Brush Set",
+        productId: "prod-007",
+        name: "Flat Paint Brush Set",
         price: 15.2,
-        images: ["/images/products/prod-041/445x448/brush-1.png"],
+        images: ["/images/products/prod-007/445x448/paint-brush-1.png"],
       },
     ],
     creator: {

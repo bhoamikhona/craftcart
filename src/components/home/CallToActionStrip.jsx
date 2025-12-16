@@ -13,7 +13,7 @@ export default function CallToActionStrip() {
           Explore tutorials, shop all your craft supplies, and learn new skills
           — all in one place.
         </p>
-        <Link href="/watch" passHref>
+        <Link href="/videos" passHref>
           <button className="btn-primary mt-6 px-8 py-3 text-lg rounded-xl shadow-lg hover:opacity-95">
             Browse Tutorials
           </button>
