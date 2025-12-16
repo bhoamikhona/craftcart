@@ -3,9 +3,12 @@
 import Link from "next/link.js";
 import "./ui-styles/ProductCard.css";
 import { timeAgo } from "@/scripts/helper-functions.js";
-import { Dot } from "lucide-react";
+import { Dot, Bookmark } from "lucide-react";
+import { useState } from "react";
 
 export default function VideoCard({ v }) {
+  const [saved, setSaved] = useState(false);
+
   return (
     <Link className="product-link" href={`/videos/${v.id}`}>
       <div
@@ -22,11 +25,24 @@ export default function VideoCard({ v }) {
           after:transition-opacity after:duration-300
         "
       >
-        <div className="video-card-img-container w-100 rounded-lg overflow-hidden mb-2.5">
-          <img className="h-[100%] w-[100%]" src={v.thumbnail} alt={v.title} />
+        <div className="relative">
+          <div className="video-card-img-container w-100 rounded-lg overflow-hidden mb-2.5">
+            <img
+              className="h-[100%] w-[100%]"
+              src={v.thumbnail}
+              alt={v.title}
+            />
+          </div>
+          <div className="absolute top-0 right-0 bg-white h-12 w-10 rounded-bl-2xl  rounded-tr-md flex items-center justify-center">
+            {saved ? (
+              <Bookmark strokeWidth={1} fill="#ff6600" stroke="#ff6600" />
+            ) : (
+              <Bookmark strokeWidth={1} stroke="#ff6600" />
+            )}
+          </div>
         </div>
 
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-3 items-center w-full">
           <div className="avatar-img-container w-12 h-12 overflow-hidden rounded-full">
             <img src={v.creator.avatar_url} alt={v.creator.full_name} />
           </div>
