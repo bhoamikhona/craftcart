@@ -1,40 +1,33 @@
 "use client";
 
-import Link from "next/link.js";
+import Link from "next/link";
 import {
   CgProfile,
   CgShoppingCart,
   CgLogIn,
   CgHeart,
-  CgBookmark,
 } from "react-icons/cg";
-import { BsBookmark } from "react-icons/bs";
+import { Bookmark } from "lucide-react";
 import useWishlist from "@/hooks/useWishlist";
-import "./layout.css";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Book, Bookmark } from "lucide-react";
 
 export default function Navbar() {
   const { data: session } = useSession();
   const pathname = usePathname();
-  const isProfilePage = pathname === "/profile";
-
-  const [cartCount, setCartCount] = useState(0);
   const { wishlist } = useWishlist();
+  const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
     const loadCart = () => {
       const stored = JSON.parse(localStorage.getItem("cart") || "[]");
-      const count = stored.reduce((sum, item) => sum + item.quantity, 0);
-      setCartCount(count);
+      setCartCount(stored.reduce((sum, item) => sum + item.quantity, 0));
     };
 
     loadCart();
     window.addEventListener("cart-updated", loadCart);
     window.addEventListener("storage", loadCart);
-
     return () => {
       window.removeEventListener("cart-updated", loadCart);
       window.removeEventListener("storage", loadCart);
@@ -42,145 +35,75 @@ export default function Navbar() {
   }, []);
 
   return (
-    <div className="sticky top-0 bg-white z-100">
-      <nav className="p-6 max-w-7xl mx-auto flex items-center gap-2">
-        <div className="nav__left">
-          <div className="shrink-0">
-            <Link href="/">
-              <div className="text-2xl md:text-3xl font-bold text-primary cursor-pointer">
-                craftcart
-              </div>
-            </Link>
-          </div>
-        </div>
+    <header className="sticky top-0 z-50 bg-white">
+      <nav className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center">
+        {/* Logo */}
+        <Link href="/" className="text-2xl font-bold text-primary shrink-0">
+          craftcart
+        </Link>
 
-        <div className="nav__center flex-1">
-          <ul className="flex gap-4 justify-center">
-            <li>
-              <Link className="nav__link md:text-base text-sm" href="/videos">
-                Explore
-              </Link>
-            </li>
-            <li>
-              <Link className="nav__link md:text-base text-sm" href="/shop">
-                Shop
-              </Link>
-            </li>
-            <li>
-              <Link className="nav__link md:text-base text-sm" href="/studio">
-                Create
-              </Link>
-            </li>
-          </ul>
-        </div>
+        {/* Center links (hide on mobile) */}
+        <ul className="hidden md:flex flex-1 justify-center gap-6">
+          <li><Link className="nav__link" href="/videos">Explore</Link></li>
+          <li><Link className="nav__link" href="/shop">Shop</Link></li>
+          <li><Link className="nav__link" href="/studio">Create</Link></li>
+        </ul>
 
-        <div className="nav__right flex justify-end items-center gap-2 md:gap-6">
-          <div className="wishlist relative">
-            <Link className="nav__link" href="/saved">
-              <Bookmark />
-            </Link>
-          </div>
-          <div className="wishlist relative">
-            <Link className="nav__link" href="/wishlist">
-              <CgHeart className="text-xl font-bold md:text-2xl cursor-pointer" />
+        {/* Right actions */}
+        <div className="flex items-center gap-4 ml-auto">
+          {/* Saved */}
+          <Link href="/saved" className="nav__link">
+            <Bookmark className="w-5 h-5" />
+          </Link>
+
+          {/* Wishlist */}
+          <div className="relative">
+            <Link href="/wishlist" className="nav__link">
+              <CgHeart className="w-5 h-5" />
             </Link>
             {wishlist.length > 0 && (
-              <span
-                className="
-                  absolute -top-2 -right-3
-                  bg-orange-600 text-white
-                  text-xs font-bold
-                  w-5 h-5 rounded-full
-                  flex items-center justify-center
-                "
-              >
+              <span className="absolute -top-2 -right-2 bg-orange-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                 {wishlist.length}
               </span>
             )}
           </div>
 
-          <div className="cart relative">
-            <Link className="nav__link" href="/cart">
-              <CgShoppingCart className="text-xl md:text-2xl" />
+          {/* Cart */}
+          <div className="relative">
+            <Link href="/cart" className="nav__link">
+              <CgShoppingCart className="w-5 h-5" />
             </Link>
             {cartCount > 0 && (
-              <span
-                className="
-                  absolute -top-2 -right-3
-                  bg-orange-600 text-white
-                  text-xs font-bold
-                  w-5 h-5 rounded-full
-                  flex items-center justify-center
-                "
-              >
+              <span className="absolute -top-2 -right-2 bg-orange-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                 {cartCount}
               </span>
             )}
           </div>
 
+          {/* Profile / Login */}
           {session ? (
-            <div className="profile-wrapper flex gap-2 md:gap-6 items-center">
-              <div className="profile relative group">
-                <div className="profile-btn">
-                  <Link className="nav__link" href="/profile">
-                    <CgProfile className="text-xl md:text-2xl hover:text-primary transition-colors duration-300 ease-in-out cursor-pointer" />
-                  </Link>
-                </div>
+            <div className="relative group">
+              <CgProfile className="w-5 h-5 cursor-pointer" />
 
-                <div className="profile-dropdown hidden group-hover:block rounded border-gray-500 bg-white p-2 py-4 pt-6 md:pt-8 absolute w-[150px] z-100 right-[-60] top-5 md:top-6 shadow-[0_2.4rem_4.8rem_rgba(0,0,0,0.075)]">
-                  <ul className="flex flex-col items-center justify-center gap-2 ">
-                    <li>
-                      <Link
-                        className="nav__link md:text-base text-sm"
-                        href="/profile"
-                      >
-                        Profile
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link
-                        className="nav__link md:text-base text-sm"
-                        href="/orders"
-                      >
-                        Orders
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link
-                        className="nav__link md:text-base text-sm"
-                        href="/settings"
-                      >
-                        Settings
-                      </Link>
-                    </li>
-
-                    <li>
-                      <button
-                        onClick={() => signOut({ callbackUrl: "/" })}
-                        className="nav__link md:text-base text-sm cursor-pointer"
-                      >
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="greeting">
-                <p className="md:text-base text-sm">
-                  Hi, {session.user.name.split(" ")[0]}!
-                </p>
+              <div className="hidden group-hover:block absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border p-3">
+                <Link href="/profile" className="block nav__link py-1">Profile</Link>
+                <Link href="/orders" className="block nav__link py-1">Orders</Link>
+                <Link href="/settings" className="block nav__link py-1">Settings</Link>
+                <button
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="block nav__link py-1 text-left w-full"
+                >
+                  Logout
+                </button>
               </div>
             </div>
           ) : (
-            <Link className="nav__link" href="/login">
-              <CgLogIn className="text-xl md:text-2xl" />
+            <Link href="/login" className="nav__link">
+              <CgLogIn className="w-5 h-5" />
             </Link>
           )}
         </div>
       </nav>
-    </div>
+    </header>
   );
 }
