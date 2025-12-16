@@ -22,8 +22,22 @@ export default function VideoCard({ v }) {
   };
 
   return (
-    <Link className="product-link" href={`/videos/${v.id}`}>
-      <div className="video-card relative w-100">
+    <Link className="product-link group" href={`/videos/${v.id}`}>
+      <div
+        className="
+          video-card relative w-100
+          after:content-['']
+          after:absolute
+          after:-top-6 after:-bottom-4 after:-left-4 after:-right-4
+          after:rounded-[1.2rem]
+          after:bg-orange-100
+          after:opacity-0
+          after:-z-10
+          group-hover:after:opacity-100
+          after:transition-opacity
+          after:duration-300
+        "
+      >
         <div className="relative">
           <div className="video-card-img-container w-100 rounded-lg overflow-hidden mb-2.5">
             <img src={v.thumbnail} alt={v.title} />
