@@ -1,19 +1,65 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import supabase from "@/lib/supabaseClient";
+import { X } from "lucide-react";
 
-export default function ProductsTab({ video, setVideo }) {
+function normalizeImg(url) {
+  if (!url) return "";
+  if (url.startsWith("http")) return url;
+  return url.startsWith("/") ? url : `/${url}`;
+}
+
+function mapRowToProduct(p) {
+  const id = p.product_id ?? p.productId ?? p.id;
+  const name = p.name ?? p.title ?? "";
+  const price = Number(p.price ?? 0);
+
+  const imgsRaw = Array.isArray(p.images)
+    ? p.images
+    : p.images
+    ? [p.images]
+    : [];
+
+  const images = imgsRaw.filter(Boolean).map(normalizeImg);
+
+  return { productId: id, name, price, images };
+}
+
+export default function ProductsTab(props) {
+  // supports BOTH parent styles:
+  // 1) selectedProducts/setSelectedProducts
+  // 2) video/setVideo
+  const selectedProducts =
+    props.selectedProducts ?? props.video?.products ?? [];
+  const setSelectedProducts = props.setSelectedProducts;
+  const setVideo = props.setVideo;
+
+  const updateSelected = (updater) => {
+    if (setSelectedProducts) {
+      setSelectedProducts((prev = []) => updater(prev));
+      return;
+    }
+    if (setVideo) {
+      setVideo((prev) => ({
+        ...prev,
+        products: updater(prev.products ?? []),
+      }));
+    }
+  };
+
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [errMsg, setErrMsg] = useState("");
+
+  const q = useMemo(() => query.trim(), [query]);
 
   const debounceRef = useRef(null);
   const containerRef = useRef(null);
   const activeReqRef = useRef(0);
 
+  // click outside closes results
   useEffect(() => {
     function onDocMouseDown(e) {
       if (!containerRef.current) return;
@@ -23,202 +69,193 @@ export default function ProductsTab({ video, setVideo }) {
     return () => document.removeEventListener("mousedown", onDocMouseDown);
   }, []);
 
+  // ✅ only run effect when query has text (no empty-case setState here)
   useEffect(() => {
-    const q = query.trim();
+    if (!q) return;
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
-
-    if (!q) return;
 
     const reqId = ++activeReqRef.current;
 
     debounceRef.current = setTimeout(async () => {
-      setLoading(true);
-      setErrMsg("");
+      try {
+        setLoading(true);
 
-      let resp = await supabase
-        .from("products")
-        .select("*")
-        .ilike("name", `%${q}%`)
-        .limit(8);
-
-      if (resp.error) {
-        const resp2 = await supabase
+        let resp = await supabase
           .from("products")
-          .select("*")
-          .ilike("title", `%${q}%`)
+          .select("product_id, name, price, images")
+          .ilike("name", `%${q}%`)
           .limit(8);
 
-        resp = resp2;
-      }
+        // optional fallback (kept)
+        if (resp.error) {
+          const resp2 = await supabase
+            .from("products")
+            .select("product_id, name, price, images")
+            .ilike("title", `%${q}%`)
+            .limit(8);
+          resp = resp2;
+        }
 
-      if (reqId !== activeReqRef.current) return;
+        if (reqId !== activeReqRef.current) return;
 
-      setLoading(false);
+        if (resp.error) {
+          console.error("Supabase product search error:", resp.error);
+          setResults([]);
+          setOpen(true);
+          return;
+        }
 
-      if (resp.error) {
-        console.error("Supabase product search error:", resp.error);
-        setErrMsg(resp.error.message);
-        setResults([]);
+        setResults((resp.data ?? []).map(mapRowToProduct));
         setOpen(true);
-        return;
+      } finally {
+        if (reqId === activeReqRef.current) setLoading(false);
       }
-
-      setResults(resp.data || []);
-      setOpen(true);
     }, 250);
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [query]);
+  }, [q]);
 
-  function handleQueryChange(e) {
+  // ✅ clear state on user input change (NOT inside effect)
+  const handleQueryChange = (e) => {
     const next = e.target.value;
     setQuery(next);
 
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
     if (!next.trim()) {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
+      // user cleared input → reset UI state here
+      activeReqRef.current += 1; // cancel any in-flight responses
       setLoading(false);
-      setErrMsg("");
       setResults([]);
       setOpen(false);
-    }
-  }
-
-  function removeProduct(productId) {
-    setVideo((prev) => ({
-      ...prev,
-      products: prev.products.filter((p) => p.productId !== productId),
-    }));
-  }
-
-  function addProduct(p) {
-    const id = p.product_id ?? p.productId ?? p.id;
-    const name = p.name ?? p.title;
-    const price = p.price ?? 0;
-
-    if (!id || !name) return;
-
-    const alreadyAdded = video.products.some((x) => x.productId === id);
-    if (alreadyAdded) {
-      setQuery("");
-      setOpen(false);
-      setResults([]);
-      setErrMsg("");
       return;
     }
 
-    setVideo((prev) => ({
-      ...prev,
-      products: [...prev.products, { productId: id, name, price, images: [] }],
-    }));
+    // show dropdown while typing (same behavior as before)
+    setOpen(true);
+  };
+
+  const addProduct = (p) => {
+    if (!p?.productId) return;
+
+    const already = selectedProducts.some((x) => x.productId === p.productId);
+    if (already) {
+      setQuery("");
+      setResults([]);
+      setOpen(false);
+      setLoading(false);
+      return;
+    }
+
+    updateSelected((prev) => [...prev, p]);
 
     setQuery("");
     setResults([]);
     setOpen(false);
-    setErrMsg("");
-  }
+    setLoading(false);
+  };
+
+  const removeProduct = (productId) => {
+    updateSelected((prev) => prev.filter((p) => p.productId !== productId));
+  };
 
   return (
     <div className="space-y-6" ref={containerRef}>
       <div>
-        <h3 className="text-lg font-semibold">Products</h3>
-        <p className="text-sm text-gray-500 mt-1">
-          Search products from your database and add them to this tutorial.
-        </p>
-      </div>
-
-      <div className="grid gap-3">
-        {video.products.map((p) => (
-          <div
-            key={p.productId}
-            className="flex items-center justify-between rounded-2xl border border-gray-200 p-4"
-          >
-            <div className="min-w-0">
-              <p className="font-medium truncate">{p.name}</p>
-              <p className="text-sm text-gray-500">
-                ${Number(p.price || 0).toFixed(2)}
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => removeProduct(p.productId)}
-              className="rounded-xl border border-gray-200 px-3 py-2 text-sm hover:bg-gray-50"
-            >
-              Remove
-            </button>
-          </div>
-        ))}
-      </div>
-
-      <div className="relative">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block font-medium font-semibold mb-2">
           Add product
         </label>
-
         <input
           value={query}
           onChange={handleQueryChange}
-          onFocus={() => query.trim() && setOpen(true)}
-          className="w-full rounded-xl border border-gray-200 px-4 py-2 outline-none focus:ring-2 focus:ring-orange-200"
+          onFocus={() => q && setOpen(true)}
           placeholder="Search products..."
+          className="w-full px-4 py-3 rounded-xl border border-gray-300 outline-none"
         />
-
-        {open && (
-          <div className="absolute z-50 mt-2 w-full rounded-2xl border border-gray-200 bg-white shadow-lg overflow-hidden">
-            {loading && (
-              <div className="px-4 py-3 text-sm text-gray-500">Searching…</div>
-            )}
-
-            {!loading && errMsg && (
-              <div className="px-4 py-3 text-sm text-red-600">{errMsg}</div>
-            )}
-
-            {!loading && !errMsg && results.length === 0 && (
-              <div className="px-4 py-3 text-sm text-gray-500">
-                No matches found.
-              </div>
-            )}
-
-            {!loading &&
-              !errMsg &&
-              results.map((p) => {
-                const id =
-                  p.product_id ?? p.productId ?? p.id ?? p.name ?? p.title;
-                const name = p.name ?? p.title ?? "Untitled";
-                const price = p.price ?? 0;
-
-                const disabled = video.products.some((x) => x.productId === id);
-
-                return (
-                  <button
-                    key={String(id)}
-                    type="button"
-                    disabled={disabled}
-                    onClick={() => addProduct(p)}
-                    className={`w-full text-left px-4 py-3 transition hover:bg-orange-50 ${
-                      disabled ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="font-medium truncate">{name}</p>
-                        <p className="text-xs text-gray-500 truncate">
-                          {String(id)}
-                        </p>
-                      </div>
-                      <div className="text-sm font-semibold">
-                        ${Number(price || 0).toFixed(2)}
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-          </div>
-        )}
       </div>
+
+      {open && (
+        <div className="space-y-3">
+          {loading && <p className="text-sm text-gray-500">Searching…</p>}
+
+          {!loading && results.length > 0 && (
+            <div className="flex flex-col gap-4">
+              {results.map((p) => (
+                <button
+                  key={p.productId}
+                  onClick={() => addProduct(p)}
+                  className="text-left rounded-xl p-4 shadow-[0_0_12px_rgba(0,0,0,0.15)] hover:bg-orange-200 transition cursor-pointer"
+                  type="button"
+                >
+                  <div className="flex gap-4 items-center">
+                    <div className="w-[60px] h-[60px] rounded-lg overflow-hidden bg-gray-100">
+                      {p.images?.[0] ? (
+                        <img
+                          src={p.images[0]}
+                          alt={p.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : null}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold">{p.name}</h4>
+                      <p className="text-sm text-gray-600">
+                        ${Number(p.price ?? 0).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {!loading && q && results.length === 0 && (
+            <p className="text-sm text-gray-500">No matches found.</p>
+          )}
+        </div>
+      )}
+
+      {selectedProducts.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-sm">Added products</h3>
+
+          {selectedProducts.map((p) => (
+            <div
+              key={p.productId}
+              className="flex items-center justify-between p-4 rounded-xl shadow-[0_0_12px_rgba(0,0,0,0.12)] bg-white cursor-pointer hover:bg-orange-200"
+            >
+              <div className="flex gap-4 items-center">
+                <div className="w-[50px] h-[50px] rounded-lg overflow-hidden bg-gray-100">
+                  {p.images?.[0] ? (
+                    <img
+                      src={p.images[0]}
+                      alt={p.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : null}
+                </div>
+                <div>
+                  <h4 className="font-medium">{p.name}</h4>
+                  <p className="text-sm text-gray-600">
+                    ${Number(p.price ?? 0).toFixed(2)}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => removeProduct(p.productId)}
+                className="p-2 rounded-full hover:bg-orange-200"
+                type="button"
+              >
+                <X size={18} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
