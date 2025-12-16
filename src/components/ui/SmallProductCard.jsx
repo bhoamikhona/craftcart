@@ -1,11 +1,48 @@
 import Link from "next/link.js";
 import "./ui-styles/ProductCard.css";
 import { ShoppingCart } from "lucide-react";
+import { toast } from "react-hot-toast";
 
 export default function SmallProductCard({ product }) {
+  const handleAddToCart = (e) => {
+    e.preventDefault(); // stop Link navigation
+    e.stopPropagation(); // stop bubbling
+
+    try {
+      const cartItem = {
+        id: product.productId,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+        image: product.images?.[0] ?? "",
+      };
+
+      const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      const index = existingCart.findIndex(
+        (item) => item.id === product.productId
+      );
+
+      if (index !== -1) {
+        existingCart[index].quantity += 1;
+      } else {
+        existingCart.push(cartItem);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(existingCart));
+
+      // 🔔 notify the app immediately
+      window.dispatchEvent(new Event("cart-updated"));
+
+      toast.success("Successfully added");
+    } catch (err) {
+      console.error("Add to cart failed:", err);
+      toast.error("Could not add to cart");
+    }
+  };
+
   return (
     <Link
-      // className="product-link block h-full shadow-[0_0_48px_rgba(0,0,0,0.15)] p-4 rounded-xl"
       className="product-link p-4 py-6 border-b border-orange-300 last:border-b-0"
       href={`/shop/${product.productId}`}
     >
@@ -19,7 +56,11 @@ export default function SmallProductCard({ product }) {
             <span className="text-sm text-gray-600">${product.price}</span>
           </div>
         </div>
-        <button className="cursor-pointer px-3 py-2 rounded-lg hover:bg-orange-200">
+
+        <button
+          onClick={handleAddToCart}
+          className="cursor-pointer px-3 py-2 rounded-lg hover:bg-orange-200"
+        >
           <ShoppingCart color="black" size={20} />
         </button>
       </div>
