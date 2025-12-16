@@ -8,6 +8,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { CiLocationOn, CiGlobe } from "react-icons/ci";
 import Loader from "@/components/ui/loader";
+import useSavedVideos from "@/hooks/useSavedVideos";
+import VideoCard from "@/components/ui/VideoCard";
 
 // SAVED dummy tutorials remain
 const savedTutorialsData = [
@@ -42,6 +44,8 @@ export default function ProfilePage() {
   const [userData, setUserData] = useState(null);
   const [userTutorials, setUserTutorials] = useState([]); // NEW
   const [activeTab, setActiveTab] = useState("MY_TUTORIALS");
+
+  const { savedVideos } = useSavedVideos();
 
   useEffect(() => {
     if (!session?.user?.email) return;
@@ -135,7 +139,7 @@ export default function ProfilePage() {
 
         {/* Post Tutorial Button */}
         <div className="flex justify-end w-full mt-4">
-          <Link href="/upload">
+          <Link href="/studio">
             <button className="btn-primary flex items-center gap-2">
               <svg
                 className="w-5 h-5"
@@ -207,14 +211,28 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* SAVED — dummy data stays */}
+          {activeTab === "SAVED" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {savedVideos.length === 0 && (
+                <p className="text-center text-gray-500 col-span-full">
+                  No saved videos yet.
+                </p>
+              )}
+
+              {savedVideos.map((v) => (
+                <VideoCard key={v.id} v={v} />
+              ))}
+            </div>
+          )}
+
+          {/* SAVED — dummy data stays
           {activeTab === "SAVED" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {savedTutorialsData.map((tutorial) => (
                 <ProfileTutorialCard key={tutorial.id} tutorial={tutorial} />
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </main>

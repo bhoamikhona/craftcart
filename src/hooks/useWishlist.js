@@ -2,38 +2,51 @@
 
 import { useState, useEffect } from "react";
 
+const STORAGE_KEY = "wishlist";
+
 export default function useWishlist() {
   const [wishlist, setWishlist] = useState([]);
 
-  // Load from localStorage
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("wishlist") || "[]");
-    setWishlist(stored);
+    const loadWishlist = () => {
+      const stored = JSON.parse(
+        localStorage.getItem(STORAGE_KEY) || "[]"
+      );
+      setWishlist(stored);
+    };
+
+    loadWishlist();
+
+    window.addEventListener("wishlist-updated", loadWishlist);
+    window.addEventListener("storage", loadWishlist);
+
+    return () => {
+      window.removeEventListener("wishlist-updated", loadWishlist);
+      window.removeEventListener("storage", loadWishlist);
+    };
   }, []);
 
-  // Save to localStorage
-  const saveWishlist = (items) => {
-    setWishlist(items);
-    localStorage.setItem("wishlist", JSON.stringify(items));
-    window.dispatchEvent(new Event("wishlist-updated"));
-  };
-
   const toggleWishlist = (product) => {
-    const exists = wishlist.find((i) => i.id === product.id);
-
     let updated;
-    if (exists) {
+
+    if (wishlist.some((i) => i.id === product.id)) {
       updated = wishlist.filter((i) => i.id !== product.id);
     } else {
       updated = [...wishlist, product];
     }
 
-    saveWishlist(updated);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    setWishlist(updated);
+    window.dispatchEvent(new Event("wishlist-updated"));
   };
 
   const isWishlisted = (id) => {
     return wishlist.some((item) => item.id === id);
   };
 
-  return { wishlist, toggleWishlist, isWishlisted };
+  return {
+    wishlist,
+    toggleWishlist,
+    isWishlisted,
+  };
 }
