@@ -39,8 +39,8 @@ export default function StudioPage() {
   const [video, setVideo] = useState(initialVideo);
 
   return (
-    <div className="max-w-7xl mx-auto p-6 mt-12 mb-20 flex flex-col lg:flex-row gap-12">
-      <div className="w-full lg:w-[420px] shrink-0">
+    <div className="max-w-7xl mx-auto p-6 mt-12 mb-20 flex flex-col md:flex-row gap-12">
+      <div className="w-full md:w-[420px] shrink-0">
         <Preview video={video} />
       </div>
 

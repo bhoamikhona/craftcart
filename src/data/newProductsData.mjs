@@ -15,14 +15,13 @@ export const productsData = [
     ],
     rating: 4.7,
     reviewCount: 132,
-    category: "Cutting Tools",
+    category: "Tools", // ✅ fixed (matches filter list)
     createdAt: "2025-01-10T14:22:00Z",
     material: "Stainless steel, ABS handle",
     brand: "craftcart",
     onSale: false,
     discountPercent: 0,
     discountPrice: null,
-    // [length, width, quantity, weight]
     specs: ["8 in", "3 mm", "1 pc", "120 g"],
   },
   {
@@ -42,7 +41,7 @@ export const productsData = [
     ],
     rating: 4.4,
     reviewCount: 76,
-    category: "Office Tools",
+    category: "Tools", // ✅ fixed
     createdAt: "2025-01-12T09:15:00Z",
     material: "Metal and ABS plastic",
     brand: "craftcart",
@@ -69,7 +68,7 @@ export const productsData = [
     ],
     rating: 4.8,
     reviewCount: 64,
-    category: "Paper & Card",
+    category: "Paper & Card", // ✅ already correct
     createdAt: "2025-01-18T11:02:00Z",
     material: "Acid-free cardstock",
     brand: "craftcart",
@@ -96,7 +95,7 @@ export const productsData = [
     ],
     rating: 4.5,
     reviewCount: 151,
-    category: "Tools",
+    category: "Tools", // ✅ already correct
     createdAt: "2025-01-20T16:45:00Z",
     material: "Heat-resistant plastic, metal nozzle",
     brand: "craftcart",
@@ -122,7 +121,7 @@ export const productsData = [
     ],
     rating: 4.4,
     reviewCount: 73,
-    category: "Adhesives",
+    category: "Adhesives", // ✅ already correct
     createdAt: "2025-01-08T10:00:00Z",
     material: "PE foam, acrylic adhesive",
     brand: "craftcart",
@@ -131,33 +130,33 @@ export const productsData = [
     discountPrice: null,
     specs: ["5 m", "10 mm", "1 roll", "40 g"],
   },
-  // {
-  //   productId: "prod-006",
-  //   name: "Acrylic Paint Set – Basic 12 Colors",
-  //   description:
-  //     "Student-grade acrylic paints with good coverage and blendability, suitable for canvas, wood, paper and primed surfaces.",
-  //   measurements: "12 x 22 ml tubes",
-  //   quantity: "12 tubes",
-  //   inStock: true,
-  //   price: 19.99,
-  //   currency: "USD",
-  //   images: [
-  //     "images/products/prod-006/paint-set-1.png",
-  //     "images/products/prod-006/paint-set-2.png",
-  //     "images/products/prod-006/paint-set-3.png",
-  //     "images/products/prod-006/paint-set-4.png",
-  //     "images/products/prod-006/paint-set-5.png",
-  //   ],
-  //   rating: 4.3,
-  //   reviewCount: 210,
-  //   category: "Paint & Color",
-  //   createdAt: "2025-01-05T08:40:00Z",
-  //   material: "Water-based acrylic",
-  //   brand: "craftcart",
-  //   onSale: false,
-  //   discountPercent: 0,
-  //   discountPrice: null,
-  // },
+  {
+    productId: "prod-006",
+    name: "Acrylic Paint Set",
+    description:
+      "Student-grade acrylic paints with good coverage and blendability, suitable for canvas, wood, paper and primed surfaces.",
+    measurements: "12 x 22 ml tubes",
+    quantity: "12 tubes",
+    inStock: true,
+    price: 19.99,
+    currency: "USD",
+    images: [
+      "images/products/prod-006/445x448/paint-set-1.png",
+      "images/products/prod-006/445x448/paint-set-2.png",
+      "images/products/prod-006/445x448/paint-set-3.png",
+      "images/products/prod-006/445x448/paint-set-4.png",
+      "images/products/prod-006/445x448/paint-set-5.png",
+    ],
+    rating: 4.3,
+    reviewCount: 210,
+    category: "Paint & Colors", // ✅ fixed (plural)
+    createdAt: "2025-01-05T08:40:00Z",
+    material: "Water-based acrylic",
+    brand: "craftcart",
+    onSale: false,
+    discountPercent: 0,
+    discountPrice: null,
+  },
   {
     productId: "prod-007",
     name: "Flat Paint Brush",
@@ -176,44 +175,42 @@ export const productsData = [
     ],
     rating: 4.5,
     reviewCount: 62,
-    category: "Paint & Color",
+    category: "Paint & Colors", // ✅ fixed (plural)
     createdAt: "2025-01-26T14:20:00Z",
     material: "Synthetic bristles, plastic handle, metal ferrule",
     brand: "craftcart",
     onSale: false,
     discountPercent: 0,
     discountPrice: null,
-
-    // [length, width, quantity, weight]
     specs: ["8 in", "1.5 in", "1 pc", "45 g"],
   },
-  // {
-  //   productId: "prod-008",
-  //   name: "Air-Dry Modeling Clay – White",
-  //   description:
-  //     "Smooth, lightweight air-dry clay suitable for small sculptures, embellishments and home décor accents. No baking required.",
-  //   measurements: "1 kg block",
-  //   quantity: "1 block",
-  //   inStock: true,
-  //   price: 9.95,
-  //   currency: "USD",
-  //   images: [
-  //     "images/products/prod-008/clay-1.png",
-  //     "images/products/prod-008/clay-2.png",
-  //     "images/products/prod-008/clay-3.png",
-  //     "images/products/prod-008/clay-4.png",
-  //     "images/products/prod-008/clay-5.png",
-  //   ],
-  //   rating: 4.2,
-  //   reviewCount: 98,
-  //   category: "Clay & Resin",
-  //   createdAt: "2025-01-14T07:55:00Z",
-  //   material: "Cellulose-based air-dry clay",
-  //   brand: "craftcart",
-  //   onSale: false,
-  //   discountPercent: 0,
-  //   discountPrice: null,
-  // },
+  {
+    productId: "prod-008",
+    name: "Air-Dry Modeling Clay",
+    description:
+      "Smooth, lightweight air-dry clay suitable for small sculptures, embellishments and home décor accents. No baking required.",
+    measurements: "1 kg block",
+    quantity: "1 block",
+    inStock: true,
+    price: 9.95,
+    currency: "USD",
+    images: [
+      "images/products/prod-008/445x448/clay-1.png",
+      "images/products/prod-008/445x448/clay-2.png",
+      "images/products/prod-008/445x448/clay-3.png",
+      "images/products/prod-008/445x448/clay-4.png",
+      "images/products/prod-008/445x448/clay-5.png",
+    ],
+    rating: 4.2,
+    reviewCount: 98,
+    category: "Clay & Resin", // ✅ already correct
+    createdAt: "2025-01-14T07:55:00Z",
+    material: "Cellulose-based air-dry clay",
+    brand: "craftcart",
+    onSale: false,
+    discountPercent: 0,
+    discountPrice: null,
+  },
   {
     productId: "prod-009",
     name: "Retractable Measuring Tape",
@@ -232,7 +229,7 @@ export const productsData = [
     ],
     rating: 4.5,
     reviewCount: 132,
-    category: "Tools",
+    category: "Tools", // ✅ already correct
     createdAt: "2025-01-09T18:10:00Z",
     material: "Steel tape with ABS housing",
     brand: "craftcart",
@@ -259,15 +256,13 @@ export const productsData = [
     ],
     rating: 4.6,
     reviewCount: 58,
-    category: "Fabric & Yarn",
+    category: "Fabric & Yarn", // ✅ already correct
     createdAt: "2025-01-22T11:10:00Z",
     material: "100% cotton",
     brand: "craftcart",
     onSale: false,
     discountPercent: 0,
     discountPrice: null,
-
-    // [length, width, quantity, weight]
     specs: ["80 m", "3 mm", "3 balls", "300 g"],
   },
   {
@@ -287,7 +282,7 @@ export const productsData = [
     ],
     rating: 4.4,
     reviewCount: 28,
-    category: "Tools",
+    category: "Tools", // ✅ already correct
     createdAt: "2025-01-11T15:50:00Z",
     material: "Natural wood",
     brand: "craftcart",
@@ -296,33 +291,33 @@ export const productsData = [
     discountPrice: null,
     specs: ["10 cm", "25 mm", "1 pc", "15 g"],
   },
-  // {
-  //   productId: "prod-012",
-  //   name: "Birch Plywood Craft Panel",
-  //   description:
-  //     "Smooth birch plywood panel suitable for painting, decoupage, wood burning and mixed media work.",
-  //   measurements: "12 in x 16 in, 6 mm thickness",
-  //   quantity: "1 panel",
-  //   inStock: true,
-  //   price: 10.99,
-  //   currency: "USD",
-  //   images: [
-  //     "images/products/prod-012/plywood-1.png",
-  //     "images/products/prod-012/plywood-2.png",
-  //     "images/products/prod-012/plywood-3.png",
-  //     "images/products/prod-012/plywood-4.png",
-  //     "images/products/prod-012/plywood-5.png",
-  //   ],
-  //   rating: 4.7,
-  //   reviewCount: 61,
-  //   category: "Wood & Boards",
-  //   createdAt: "2025-01-04T10:18:00Z",
-  //   material: "Birch plywood",
-  //   brand: "craftcart",
-  //   onSale: false,
-  //   discountPercent: 0,
-  //   discountPrice: null,
-  // },
+  {
+    productId: "prod-012",
+    name: "Birch Plywood Craft Panel",
+    description:
+      "Smooth birch plywood panel suitable for painting, decoupage, wood burning and mixed media work.",
+    measurements: "12 in x 16 in, 6 mm thickness",
+    quantity: "1 panel",
+    inStock: true,
+    price: 10.99,
+    currency: "USD",
+    images: [
+      "images/products/prod-012/445x448/plywood-1.png",
+      "images/products/prod-012/445x448/plywood-2.png",
+      "images/products/prod-012/445x448/plywood-3.png",
+      "images/products/prod-012/445x448/plywood-4.png",
+      "images/products/prod-012/445x448/plywood-5.png",
+    ],
+    rating: 4.7,
+    reviewCount: 61,
+    category: "Wood & Boards", // ✅ already correct
+    createdAt: "2025-01-04T10:18:00Z",
+    material: "Birch plywood",
+    brand: "craftcart",
+    onSale: false,
+    discountPercent: 0,
+    discountPrice: null,
+  },
   {
     productId: "prod-013",
     name: "Basswood Craft Sticks",
@@ -342,7 +337,7 @@ export const productsData = [
     ],
     rating: 4.1,
     reviewCount: 39,
-    category: "Wood & Boards",
+    category: "Wood & Boards", // ✅ already correct
     createdAt: "2025-01-02T09:00:00Z",
     material: "Basswood",
     brand: "craftcart",
@@ -370,7 +365,7 @@ export const productsData = [
     ],
     rating: 4.5,
     reviewCount: 54,
-    category: "Art Supplies",
+    category: "Paint & Colors", // ✅ fixed (was "Art Supplies")
     createdAt: "2025-01-16T17:30:00Z",
     material: "Wood-cased pigment core",
     brand: "craftcart",
@@ -397,15 +392,13 @@ export const productsData = [
     ],
     rating: 4.4,
     reviewCount: 53,
-    category: "Fabric & Yarn",
+    category: "Fabric & Yarn", // ✅ already correct
     createdAt: "2025-01-07T19:12:00Z",
     material: "Polyester thread",
     brand: "craftcart",
     onSale: false,
     discountPercent: 0,
     discountPrice: null,
-
-    // [length, width, quantity, weight]
     specs: ["200 m", "0.25 mm", "5 spools", "120 g"],
   },
   {
@@ -424,18 +417,15 @@ export const productsData = [
     ],
     rating: 4.4,
     reviewCount: 41,
-    category: "Office Tools",
+    category: "Tools", // ✅ fixed (was "Office Tools")
     createdAt: "2025-01-24T10:30:00Z",
     material: "Steel clips, plastic-coated push pins",
     brand: "craftcart",
     onSale: false,
     discountPercent: 0,
     discountPrice: null,
-
-    // [length, width, quantity, weight]
     specs: ["33 mm", "19 mm", "16 pcs", "85 g"],
   },
-
   // {
   //   productId: "prod-017",
   //   name: "Precision Craft Knife with Safety Cap",
@@ -474,15 +464,13 @@ export const productsData = [
     ],
     rating: 4.6,
     reviewCount: 92,
-    category: "Tools",
+    category: "Tools", // ✅ already correct
     createdAt: "2025-01-15T10:05:00Z",
     material: "Carbon steel head, fiberglass handle, rubber grip",
     brand: "craftcart",
     onSale: false,
     discountPercent: 0,
     discountPrice: null,
-
-    // [length, width, quantity, weight]
     specs: ["13 in", "16 oz", "1 pc", "600 g"],
   },
   {
@@ -503,15 +491,13 @@ export const productsData = [
     ],
     rating: 4.2,
     reviewCount: 34,
-    category: "Beads & Decor",
+    category: "Beads & Decor", // ✅ already correct
     createdAt: "2025-01-19T12:20:00Z",
     material: "Polyester ribbon",
     brand: "craftcart",
     onSale: false,
     discountPercent: 0,
     discountPrice: null,
-
-    // [length, width, quantity, weight]
     specs: ["5 m", "6 mm", "4 rolls", "45 g"],
   },
   {
@@ -531,15 +517,13 @@ export const productsData = [
     ],
     rating: 4.5,
     reviewCount: 68,
-    category: "Tools",
+    category: "Tools", // ✅ already correct
     createdAt: "2025-01-28T09:40:00Z",
     material: "Hardened steel body, rubberized grip",
     brand: "craftcart",
     onSale: false,
     discountPercent: 0,
     discountPrice: null,
-
-    // [length, width, quantity, weight]
     specs: ["8 in", "25 mm", "1 pc", "420 g"],
   },
 ];

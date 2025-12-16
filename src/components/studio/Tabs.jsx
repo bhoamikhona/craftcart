@@ -1,8 +1,7 @@
 "use client";
 
 export default function Tabs({ activeTab, setActiveTab }) {
-  const tabBase =
-    "px-4 py-2 rounded-full text-sm font-medium transition-colors border";
+  const tabBase = "px-4 py-2 rounded-full transition-colors cursor-pointer";
   const active = "bg-orange-200 border-orange-200 text-gray-900";
   const inactive = "bg-white border-gray-200 text-gray-600 hover:bg-gray-50";
 

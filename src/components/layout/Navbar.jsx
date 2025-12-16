@@ -1,12 +1,20 @@
 "use client";
 
 import Link from "next/link.js";
-import { CgProfile, CgShoppingCart, CgLogIn, CgHeart } from "react-icons/cg";
+import {
+  CgProfile,
+  CgShoppingCart,
+  CgLogIn,
+  CgHeart,
+  CgBookmark,
+} from "react-icons/cg";
+import { BsBookmark } from "react-icons/bs";
 import useWishlist from "@/hooks/useWishlist";
 import "./layout.css";
 import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Book, Bookmark } from "lucide-react";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -67,6 +75,11 @@ export default function Navbar() {
         </div>
 
         <div className="nav__right flex justify-end items-center gap-2 md:gap-6">
+          <div className="wishlist relative">
+            <Link className="nav__link" href="/saved">
+              <Bookmark />
+            </Link>
+          </div>
           <div className="wishlist relative">
             <Link className="nav__link" href="/wishlist">
               <CgHeart className="text-xl font-bold md:text-2xl cursor-pointer" />
