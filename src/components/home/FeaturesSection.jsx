@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import Link from "next/link"; 
-import { tutorials } from "@/data/tutorials"; 
+import Link from "next/link";
+import { tutorials } from "@/data/tutorials";
 import { ArrowRight } from "lucide-react";
 import { HeartIcon, ChatBubbleLeftIcon } from "@heroicons/react/24/solid";
 import VideoCard from "@/components/ui/VideoCard.jsx";
@@ -79,11 +79,11 @@ export default function FeaturedSection() {
     }, []); 
   const featured = videos.slice(2,5);
   return (
-    <section className="py-16 bg-muted">
+    <section className="py-16">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-primary">
-            Featured Tutorials
+          <h2 className="text-4xl font-bold">
+            Let{"'"}s Make Something Beautiful
           </h2>
           <p className="text-gray-500 mt-2 text-lg">
             Hand-picked projects to spark your creativity

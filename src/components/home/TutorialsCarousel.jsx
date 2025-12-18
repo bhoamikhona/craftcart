@@ -83,7 +83,7 @@ export default function TutorialCarousel() {
     <section className="py-12 bg-background">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-3xl font-bold text-center mb-10">
-          Popular Tutorials
+          Creativity Begins Here
         </h2>
 
         <Carousel className="relative mt-12 mb-20">
@@ -105,16 +105,12 @@ export default function TutorialCarousel() {
                     className="
                       rounded-2xl
                       overflow-hidden
-                      transition
-                      duration-300
-                      hover:shadow-md
                     "
                   >
                     <VideoCard v={v} />
                   </div>
                 </div>
               </CarouselItem>
-
             ))}
           </CarouselContent>
           <CarouselNext />
