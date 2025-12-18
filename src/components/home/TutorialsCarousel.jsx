@@ -90,7 +90,7 @@ export default function TutorialCarousel() {
           <CarouselPrevious />
           <CarouselContent className="flex gap-8">
             {videos.map((v) => (
-              <CarouselItem key={v.id} className="basis-88 md:basis-104">
+              <CarouselItem key={v.id} className="basis-85 sm:basis-95 lg:basis-107.75">
                 <div
                   className="
                     rounded-3xl
@@ -100,6 +100,7 @@ export default function TutorialCarousel() {
                     transition-colors
                     duration-300
                   "
+                  style={{ width: "431px" }}
                 >
                   <div
                     className="
@@ -111,6 +112,7 @@ export default function TutorialCarousel() {
                   </div>
                 </div>
               </CarouselItem>
+
             ))}
           </CarouselContent>
           <CarouselNext />
