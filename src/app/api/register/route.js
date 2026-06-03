@@ -6,8 +6,12 @@ export async function POST(req) {
   try {
     const { name, email, password, phone, address } = await req.json();
 
-    // ALWAYS normalize email
     const normalizedEmail = email.toLowerCase();
+
+    // Split name into first/last
+    const parts = (name || "").trim().split(" ");
+    const first_name = parts[0] || "";
+    const last_name = parts.slice(1).join(" ") || "";
 
     // 1. Check if user exists
     const { data: existingUser } = await supabase
@@ -19,7 +23,7 @@ export async function POST(req) {
     if (existingUser) {
       return NextResponse.json(
         { message: "User already exists" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -30,6 +34,8 @@ export async function POST(req) {
     const { error } = await supabase.from("users").insert([
       {
         name,
+        first_name,
+        last_name,
         email: normalizedEmail,
         password: hashedPassword,
         phone,
@@ -40,18 +46,18 @@ export async function POST(req) {
     if (error) {
       return NextResponse.json(
         { message: "Error creating user", error },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     return NextResponse.json(
       { message: "User created successfully" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     return NextResponse.json(
       { message: "Something went wrong", error: err.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
